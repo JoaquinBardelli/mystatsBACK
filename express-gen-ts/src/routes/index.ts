@@ -3,7 +3,8 @@ import jetValidator from 'jet-validator';
 
 import Paths from '../common/Paths';
 import User from '@src/models/User';
-import UserRoutes from './UserRoutes';
+import Usuario from '@src/models/Usuario';
+import UsuarioRoutes from './UsuarioRoutes';
 
 
 // **** Variables **** //
@@ -18,33 +19,39 @@ const userRouter = Router();
 
 // Get all users
 userRouter.get(
-  Paths.Users.Get,
-  UserRoutes.getAll,
+  Paths.Usuarios.Get,
+  UsuarioRoutes.getAll,
 );
 
 // Add one user
 userRouter.post(
-  Paths.Users.Add,
-  validate(['user', User.isUser]),
-  UserRoutes.add,
+  Paths.Usuarios.Add,
+  validate(['user', Usuario.isUsuario]),
+  UsuarioRoutes.add,
 );
 
 // Update one user
 userRouter.put(
-  Paths.Users.Update,
-  validate(['user', User.isUser]),
-  UserRoutes.update,
+  Paths.Usuarios.Update,
+  validate(['user', Usuario.isUsuario]),
+  UsuarioRoutes.update,
+);
+
+userRouter.put(
+  Paths.Usuarios.AgregarDatos,
+  validate(['user', Usuario.isUsuario]),
+  UsuarioRoutes.agregarDatos,
 );
 
 // Delete one user
 userRouter.delete(
-  Paths.Users.Delete,
+  Paths.Usuarios.Delete,
   validate(['id', 'number', 'params']),
-  UserRoutes.delete,
+  UsuarioRoutes.delete,
 );
 
 // Add UserRouter
-apiRouter.use(Paths.Users.Base, userRouter);
+apiRouter.use(Paths.Usuarios.Base, userRouter);
 
 
 // **** Export default **** //

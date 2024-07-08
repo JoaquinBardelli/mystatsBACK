@@ -5,10 +5,11 @@
 
 export default {
   Base: '/api',
-  Users: {
-    Base: '/users',
+  Usuarios: {
+    Base: '/usuarios',
     Get: '/all',
     Add: '/add',
+    AgregarDatos: '/agregarDatos',
     Update: '/update',
     Delete: '/delete/:id',
   },
