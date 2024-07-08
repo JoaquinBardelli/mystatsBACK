@@ -1,5 +1,6 @@
-import { IPartido } from './Partido';
 import moment from 'moment';
+
+
 // **** Variables **** //
 
 const INVALID_CONSTRUCTOR_PARAM = 'nameOrObj arg must a string or an object ' + 
@@ -8,16 +9,16 @@ const INVALID_CONSTRUCTOR_PARAM = 'nameOrObj arg must a string or an object ' +
 
 // **** Types **** //
 
-export interface IJugador {
-  id: number;
-  nombre: string;
-  apellido: string;
-  nacimiento: Date;
-  club: string;
-  dorsal: number;
-  altura: number;
-  peso: number;
-  partidos: Set<IPartido>;
+export interface ITiros {
+    tirosDeCampo: number;
+    tirosDeCampoConvertidos: number;
+    tirosDeDos: number;
+    tirosDeDosConvertidos: number;
+    tirosDeTres: number;
+    tirosDeTresConvertidos: number;
+    tirosLibres: number;
+    tirosLibresConvertidos: number;
+    
 }
 
 
@@ -27,16 +28,18 @@ export interface IJugador {
  * Create new User.
  */
 function new_(
-    nombre: string,
-    apellido: string,
-    nacimiento: Date,
-    club: string,
-    dorsal: number,
-    altura: number,
-    peso: number,
-    partidos: Set<IPartido>,
+    minutosJugados: number,
+    segundosJugados: number,
+    puntos: number,
+    rebotes: number,
+    asistencias: number,
+    faltas: number,
+    tapones: number,
+    perdidas: number,
+    recuperaciones: number,
+    valoracion: number,
     id?: number, // id last cause usually set by db
-): IJugador {
+): IEstadisticas {
   return {
     id: (id ?? -1),
     nombre: (nombre ?? ''),
@@ -46,8 +49,7 @@ function new_(
     dorsal: (dorsal ?? -1),
     altura: (altura ?? -1),
     peso: (peso ?? -1),
-    partidos: (partidos ?? new Set()),
-  };
+};
 }
 
 /**
@@ -58,7 +60,7 @@ function from(param: object): IJugador {
     throw new Error(INVALID_CONSTRUCTOR_PARAM);
   }
   const p = param as IJugador;
-  return new_(p.nombre, p.apellido, p.nacimiento, p.club, p.dorsal, p.altura, p.peso, p.estadisticas, p.id);
+  return new_(p.nombre, p.apellido, p.nacimiento, p.club, p.dorsal, p.altura, p.peso, p.id);
 }
 
 /**
@@ -71,12 +73,11 @@ function isJugador(arg: unknown): boolean {
     'id' in arg && typeof arg.id === 'number' && 
     'apellido' in arg && typeof arg.apellido === 'string' && 
     'nombre' in arg && typeof arg.nombre === 'string' &&
-    'nacimiento' in arg && moment(arg.nacimiento as string | Date).isValid() &&
+    'created' in arg && moment(arg.created as string | Date).isValid() &&
     'club' in arg && typeof arg.club === 'string' &&
     'dorsal' in arg && typeof arg.dorsal === 'number' &&
     'altura' in arg && typeof arg.altura === 'number' &&
-    'peso' in arg && typeof arg.peso === 'number' &&
-    'estadisticas' in arg && typeof arg.estadisticas === 'object' 
+    'peso' in arg && typeof arg.peso === 'number'
   );
 }
 
