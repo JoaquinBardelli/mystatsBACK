@@ -58,7 +58,7 @@ function from(param: object): IJugador {
     throw new Error(INVALID_CONSTRUCTOR_PARAM);
   }
   const p = param as IJugador;
-  return new_(p.nombre, p.apellido, p.nacimiento, p.club, p.dorsal, p.altura, p.peso, p.estadisticas, p.id);
+  return new_(p.nombre, p.apellido, p.nacimiento, p.club, p.dorsal, p.altura, p.peso, p.partidos, p.id);
 }
 
 /**

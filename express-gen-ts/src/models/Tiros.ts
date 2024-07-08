@@ -18,7 +18,6 @@ export interface ITiros {
     tirosDeTresConvertidos: number;
     tirosLibres: number;
     tirosLibresConvertidos: number;
-    
 }
 
 
@@ -28,56 +27,54 @@ export interface ITiros {
  * Create new User.
  */
 function new_(
-    minutosJugados: number,
-    segundosJugados: number,
-    puntos: number,
-    rebotes: number,
-    asistencias: number,
-    faltas: number,
-    tapones: number,
-    perdidas: number,
-    recuperaciones: number,
-    valoracion: number,
-    id?: number, // id last cause usually set by db
-): IEstadisticas {
+    tirosDeCampo: number,
+    tirosDeCampoConvertidos: number,
+    tirosDeDos: number,
+    tirosDeDosConvertidos: number,
+    tirosDeTres: number,
+    tirosDeTresConvertidos: number,
+    tirosLibres: number,
+    tirosLibresConvertidos: number,
+): ITiros {
   return {
-    id: (id ?? -1),
-    nombre: (nombre ?? ''),
-    apellido: (apellido ?? ''),
-    nacimiento: (nacimiento ?? ''),
-    club: (club ?? ''),
-    dorsal: (dorsal ?? -1),
-    altura: (altura ?? -1),
-    peso: (peso ?? -1),
+    tirosDeCampo: (tirosDeCampo ?? -1),
+    tirosDeCampoConvertidos: (tirosDeCampoConvertidos ?? -1),
+    tirosDeDos: (tirosDeDos ?? -1),
+    tirosDeDosConvertidos: (tirosDeDosConvertidos ?? -1),
+    tirosDeTres: (tirosDeTres ?? -1),
+    tirosDeTresConvertidos: (tirosDeTresConvertidos ?? -1),
+    tirosLibres: (tirosLibres ?? -1),
+    tirosLibresConvertidos: (tirosLibresConvertidos ?? -1),
+  };
 };
-}
+
 
 /**
  * Get user instance from object.
  */
-function from(param: object): IJugador {
-  if (!isJugador(param)) {
+function from(param: object): ITiros {
+  if (!isTiro(param)) {
     throw new Error(INVALID_CONSTRUCTOR_PARAM);
   }
-  const p = param as IJugador;
-  return new_(p.nombre, p.apellido, p.nacimiento, p.club, p.dorsal, p.altura, p.peso, p.id);
+  const p = param as ITiros;
+  return new_(p.tirosDeCampo, p.tirosDeCampoConvertidos, p.tirosDeDos, p.tirosDeDosConvertidos, p.tirosDeTres, p.tirosDeTresConvertidos, p.tirosLibres, p.tirosLibresConvertidos);
 }
 
 /**
  * See if the param meets criteria to be a user.
  */
-function isJugador(arg: unknown): boolean {
+function isTiro(arg: unknown): boolean {
   return (
     !!arg &&
     typeof arg === 'object' &&
-    'id' in arg && typeof arg.id === 'number' && 
-    'apellido' in arg && typeof arg.apellido === 'string' && 
-    'nombre' in arg && typeof arg.nombre === 'string' &&
-    'created' in arg && moment(arg.created as string | Date).isValid() &&
-    'club' in arg && typeof arg.club === 'string' &&
-    'dorsal' in arg && typeof arg.dorsal === 'number' &&
-    'altura' in arg && typeof arg.altura === 'number' &&
-    'peso' in arg && typeof arg.peso === 'number'
+    'tirosDeCampo' in arg && typeof arg.tirosDeCampo === 'number' &&
+    'tirosDeCampoConvertidos' in arg && typeof arg.tirosDeCampoConvertidos === 'number' &&
+    'tirosDeDos' in arg && typeof arg.tirosDeDos === 'number' &&
+    'tirosDeDosConvertidos' in arg && typeof arg.tirosDeDosConvertidos === 'number' &&
+    'tirosDeTres' in arg && typeof arg.tirosDeTres === 'number' &&
+    'tirosDeTresConvertidos' in arg && typeof arg.tirosDeTresConvertidos === 'number' &&
+    'tirosLibres' in arg && typeof arg.tirosLibres === 'number' &&
+    'tirosLibresConvertidos' in arg && typeof arg.tirosLibresConvertidos === 'number'
   );
 }
 
@@ -87,5 +84,5 @@ function isJugador(arg: unknown): boolean {
 export default {
   new: new_,
   from,
-  isJugador,
+  isTiro,
 } as const;
