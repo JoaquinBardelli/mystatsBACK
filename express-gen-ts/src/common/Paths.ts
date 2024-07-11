@@ -1,8 +1,3 @@
-/**
- * Express router paths go here.
- */
-
-
 export default {
   Base: '/api',
   Usuarios: {
@@ -12,5 +7,7 @@ export default {
     AgregarDatos: '/agregarDatos',
     Update: '/update',
     Delete: '/delete/:id',
+    Login: '/login',
+    Logout: '/logout',
   },
 } as const;
