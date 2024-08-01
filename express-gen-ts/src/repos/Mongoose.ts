@@ -8,7 +8,7 @@ import  { IJugador } from "@src/models/Jugador";
 
 // **** Variables **** //
 const mongoose = require('mongoose');
-var uniqueValidator = require('mongoose-unique-validator');
+//var uniqueValidator = require('mongoose-unique-validator');
 // **** Types **** //
 const jugadorSchema: Schema = new Mongoose.Schema({
 
@@ -29,9 +29,9 @@ usuarioSchema.methods.toJSON = function() {   let user = this;
     delete userObject.password;   return userObject;
 };
 
-usuarioSchema.plugin(uniqueValidator, {
+/*usuarioSchema.plugin(uniqueValidator, {
     message: '{PATH} debe de ser único'
-})
+})*/
 module.exports = mongoose.model('Usuario', usuarioSchema);
 
 // **** Functions **** //
