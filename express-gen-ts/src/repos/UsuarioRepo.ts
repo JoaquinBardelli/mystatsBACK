@@ -28,6 +28,7 @@ async function login(usuario: IUsuario): Promise<string> {
     });
     tokenReal = token;
   });
+  
   return tokenReal;
 }
 
