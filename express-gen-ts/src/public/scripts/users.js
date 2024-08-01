@@ -19,7 +19,7 @@ displayUsers();
  */
 function displayUsers() {
   Http
-    .get('/api/users/all')
+    .get('/api/usuarios/all')
     .then(resp => resp.json())
     .then(resp => {
       var allUsersTemplate = document.getElementById('all-users-template'),

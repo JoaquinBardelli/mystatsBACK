@@ -2,7 +2,6 @@ import { Router } from 'express';
 import jetValidator from 'jet-validator';
 
 import Paths from '../common/Paths';
-import User from '@src/models/User';
 import Usuario from '@src/models/Usuario';
 import UsuarioRoutes from './UsuarioRoutes';
 
@@ -48,6 +47,16 @@ userRouter.delete(
   Paths.Usuarios.Delete,
   validate(['id', 'number', 'params']),
   UsuarioRoutes.delete,
+);
+
+userRouter.post(
+  Paths.Usuarios.Login,
+  UsuarioRoutes.login,
+);
+
+userRouter.post(
+  Paths.Usuarios.Register,
+  UsuarioRoutes.add,
 );
 
 // Add UserRouter

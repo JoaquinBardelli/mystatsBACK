@@ -1,10 +1,56 @@
 import { IUsuario } from '@src/models/Usuario';
 import { getRandomInt } from '@src/util/misc';
 import orm from './MockOrm';
+import { usuarioModel } from './Mongoose';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+import EnvVars from '@src/common/EnvVars';
+import { token } from 'morgan';
  
  
 // **** Functions **** //
- 
+async function login(usuario: IUsuario): Promise<string> {
+  let tokenReal = '';
+  usuarioModel.findOne({ email: usuario.email }, (err: any, user: IUsuario) => {
+    if (err) {
+      return err;
+    }
+    if (!user) {
+      return 'Usuario no encontrado';
+    }
+    if (!bcrypt.compareSync(usuario.password, user.password)) {
+      return 'Contraseña incorrecta';
+    }
+    let token = jwt.sign({ 
+      usuario: user,
+    }, EnvVars.Jwt.Secret, {
+      expiresIn: "48h"
+    });
+    tokenReal = token;
+  });
+  return tokenReal;
+}
+
+async function register(usuario: IUsuario): Promise<string> {
+  let tokenReal = '';
+  usuarioModel.findOne({ email: usuario.email }, (err: any, user: IUsuario) => {
+    if (err) {
+      return err;
+    }
+    if (user) {
+      return 'Usuario ya existe';
+    }
+    let salt = bcrypt.genSaltSync(10);
+    usuario.password = bcrypt.hashSync(usuario.password, salt);
+    let token = jwt.sign({ 
+      usuario: usuario,
+    }, EnvVars.Jwt.Secret, {
+      expiresIn: "48h"
+    });
+    tokenReal = token;
+  });
+  return tokenReal;
+}
 /**
 * Get one usuario.
 */
@@ -60,7 +106,7 @@ async function update(usuario: IUsuario): Promise<void> {
       db.usuarios[i] = {
         ...dbusuario,
         email: usuario.email,
-        name: usuario.password,
+        password: usuario.password,
       };
       return orm.saveDb(db);
     }
@@ -101,4 +147,6 @@ export default {
   update,
   delete: delete_,
   getLogeado,
+  login,
+  register,
 } as const

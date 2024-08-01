@@ -13,7 +13,7 @@ const DB_FILE_NAME = 'database.json';
 // **** Types **** //
 
 interface IDb {
-  users: IUsuario[];
+  usuarios: IUsuario[];
 }
 
 

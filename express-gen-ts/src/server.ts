@@ -2,6 +2,9 @@
  * Setup express server.
  */
 
+import cors from 'cors';
+import apiRouter from '@src/routes/index';
+
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import path from 'path';
@@ -11,18 +14,33 @@ import logger from 'jet-logger';
 
 import 'express-async-errors';
 
-import BaseRouter from '@src/routes';
-
+import BaseRouter from '@src/routes/index';
 import Paths from '@src/common/Paths';
+
 import EnvVars from '@src/common/EnvVars';
 import HttpStatusCodes from '@src/common/HttpStatusCodes';
-import RouteError from '@src/common/RouteError';
+
 import { NodeEnvs } from '@src/common/misc';
+import { RouteError } from '@src/common/classes';
 
 
 // **** Variables **** //
 
+
+
 const app = express();
+app.use(cors());
+
+const origenesPermitidos = ['http://localhost:4200'];
+
+const options: cors.CorsOptions = {
+  origin: origenesPermitidos,
+};
+
+app.use(cors(options));
+app.use(express.json());
+app.use('/api', apiRouter);
+
 
 
 // **** Setup **** //
@@ -64,7 +82,7 @@ app.use((
 });
 
 
-// **** Front-End Content **** //
+// ** Front-End Content ** //
 
 // Set views directory (html)
 const viewsDir = path.join(__dirname, 'views');

@@ -2,74 +2,80 @@ import RouteError from '@src/common/RouteError';
 import HttpStatusCodes from '@src/common/HttpStatusCodes';
 
 import UsuarioRepo from '@src/repos/UsuarioRepo';
-import { IUser } from '@src/models/User';
+import { IUsuario } from '@src/models/Usuario';
 import { IJugador } from '@src/models/Jugador';
 
 
 // **** Variables **** //
 
-export const USER_NOT_FOUND_ERR = 'User not found';
+export const usuario_NOT_FOUND_ERR = 'usuario not found';
 
 
 // **** Functions **** //
+function login(usuario: IUsuario): Promise<string> {
+  return UsuarioRepo.login(usuario);
+}
 
+function register(usuario: IUsuario): Promise<string> {
+  return UsuarioRepo.register(usuario);
+}
 /**
- * Get all users.
+ * Get all usuarios.
  */
-function getAll(): Promise<IUser[]> {
+function getAll(): Promise<IUsuario[]> {
   return UsuarioRepo.getAll();
 }
 
 /**
- * Add one user.
+ * Add one usuario.
  */
-function addOne(user: IUser): Promise<void> {
-  return UsuarioRepo.add(user);
+function addOne(usuario: IUsuario): Promise<void> {
+  return UsuarioRepo.add(usuario);
 }
 
 /**
- * Update one user.
+ * Update one usuario.
  */
-async function updateOne(user: IUser): Promise<void> {
-  const persists = await UsuarioRepo.persists(user.id);
+async function updateOne(usuario: IUsuario): Promise<void> {
+  const persists = await UsuarioRepo.persists(usuario.id);
   if (!persists) {
     throw new RouteError(
       HttpStatusCodes.NOT_FOUND,
-      USER_NOT_FOUND_ERR,
+      usuario_NOT_FOUND_ERR,
     );
   }
-  // Return user
-  return UsuarioRepo.update(user);
+  // Return usuario
+  return UsuarioRepo.update(usuario);
 }
 
 /**
- * Delete a user by their id.
+ * Delete a usuario by their id.
  */
 async function _delete(id: number): Promise<void> {
   const persists = await UsuarioRepo.persists(id);
   if (!persists) {
     throw new RouteError(
       HttpStatusCodes.NOT_FOUND,
-      USER_NOT_FOUND_ERR,
+      usuario_NOT_FOUND_ERR,
     );
   }
-  // Delete user
+  // Delete usuario
   return UsuarioRepo.delete(id);
 }
 
 /**
- * Add IJugador data to the user.
+ * Add IJugador data to the usuario.
  */
 async function agregarDatos(jugador: IJugador): Promise<void> {
-  const user = await UsuarioRepo.getLogeado();
-  if (!user) {
+  const usuario = await UsuarioRepo.getLogeado();
+  if (!usuario) {
     throw new RouteError(
       HttpStatusCodes.NOT_FOUND,
-      USER_NOT_FOUND_ERR,
+      usuario_NOT_FOUND_ERR,
     );
   }
-  user.jugador = jugador;
-  return UsuarioRepo.update(user);
+  usuario.jugador = jugador;
+  return UsuarioRepo.update(usuario);
 }
 
 // **** Export default **** //
@@ -80,4 +86,7 @@ export default {
   updateOne,
   delete: _delete,
   agregarDatos,
+  login,
+  register,
+
 } as const;

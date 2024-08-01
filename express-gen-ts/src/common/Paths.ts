@@ -8,6 +8,7 @@ export default {
     Update: '/update',
     Delete: '/delete/:id',
     Login: '/login',
+    Register: '/register',
     Logout: '/logout',
   },
 } as const;
