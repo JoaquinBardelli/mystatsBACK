@@ -56,7 +56,7 @@ userRouter.post(
 
 userRouter.post(
   Paths.Usuarios.Register,
-  UsuarioRoutes.add,
+  UsuarioRoutes.register,
 );
 
 // Add UserRouter

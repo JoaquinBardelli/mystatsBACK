@@ -32,7 +32,6 @@ usuarioSchema.methods.toJSON = function() {   let user = this;
 /*usuarioSchema.plugin(uniqueValidator, {
     message: '{PATH} debe de ser único'
 })*/
-module.exports = mongoose.model('Usuario', usuarioSchema);
 
 // **** Functions **** //
 
@@ -44,6 +43,7 @@ const db: Connection = Mongoose.createConnection(
 );
 
 export const usuarioModel = db.model<IUsuario>("usuarios", usuarioSchema);
+
 
 //HACER QUE HAYA UNA FUNCION QUE ABRA LA COLECCION COMIDAAS Y OTRA PERSONAS
 

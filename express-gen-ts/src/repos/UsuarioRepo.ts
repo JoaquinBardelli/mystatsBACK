@@ -10,47 +10,37 @@ import { token } from 'morgan';
  
 // **** Functions **** //
 async function login(usuario: IUsuario): Promise<string> {
-  let tokenReal = '';
-  usuarioModel.findOne({ email: usuario.email }, (err: any, user: IUsuario) => {
-    if (err) {
-      return err;
-    }
-    if (!user) {
-      return 'Usuario no encontrado';
-    }
-    if (!bcrypt.compareSync(usuario.password, user.password)) {
-      return 'Contraseña incorrecta';
-    }
-    let token = jwt.sign({ 
-      usuario: user,
-    }, EnvVars.Jwt.Secret, {
-      expiresIn: "48h"
-    });
-    tokenReal = token;
+  const user = await usuarioModel.findOne({ email: usuario.email }).exec();
+  if (!user) {
+    throw new Error('Usuario no encontrado');
+  }
+  if (!bcrypt.compareSync(usuario.password, user.password)) {
+    throw new Error('Contraseña incorrecta');
+  }
+  const token = jwt.sign({ 
+    usuario: user,
+  }, EnvVars.Jwt.Secret, {
+    expiresIn: "48h"
   });
-  
-  return tokenReal;
+  return token;
 }
 
+
 async function register(usuario: IUsuario): Promise<string> {
-  let tokenReal = '';
-  usuarioModel.findOne({ email: usuario.email }, (err: any, user: IUsuario) => {
-    if (err) {
-      return err;
-    }
-    if (user) {
-      return 'Usuario ya existe';
-    }
-    let salt = bcrypt.genSaltSync(10);
-    usuario.password = bcrypt.hashSync(usuario.password, salt);
-    let token = jwt.sign({ 
-      usuario: usuario,
-    }, EnvVars.Jwt.Secret, {
-      expiresIn: "48h"
-    });
-    tokenReal = token;
+  const existingUser = await usuarioModel.findOne({ email: usuario.email }).exec();
+  if (existingUser) {
+    throw new Error('Usuario ya existe');
+  }
+  const salt = bcrypt.genSaltSync(10);
+  usuario.password = bcrypt.hashSync(usuario.password, salt);
+  const newUser = new usuarioModel(usuario);
+  await newUser.save();
+  const token = jwt.sign({ 
+    usuario: newUser,
+  }, EnvVars.Jwt.Secret, {
+    expiresIn: "48h"
   });
-  return tokenReal;
+  return token;
 }
 /**
 * Get one usuario.
