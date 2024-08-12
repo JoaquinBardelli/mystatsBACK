@@ -60,12 +60,14 @@ function isUsuario(arg: unknown): boolean {
   return (
     !!arg &&
     typeof arg === 'object' &&
-    'id' in arg && typeof arg.id === 'number' && 
-    'email' in arg && typeof arg.email === 'string' && 
-    'password' in arg && typeof arg.password === 'string' &&
-    'created' in arg && moment(arg.created as string | Date).isValid() &&
-    'logeado' in arg && typeof arg.logeado === 'boolean' &&
-    'jugador' in arg && typeof arg.jugador === 'object'
+    'id' in arg && typeof (arg as any).id === 'number' &&
+    'email' in arg && typeof (arg as any).email === 'string' &&
+    'password' in arg && typeof (arg as any).password === 'string' &&
+    'created' in arg && (
+      (arg as any).created instanceof Date || 
+      (typeof (arg as any).created === 'string' && moment((arg as any).created, moment.ISO_8601, true).isValid())
+    ) &&
+    'jugador' in arg && typeof (arg as any).jugador === 'object'
   );
 }
 

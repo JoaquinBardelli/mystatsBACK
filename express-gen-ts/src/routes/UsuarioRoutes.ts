@@ -18,11 +18,31 @@ async function login(req: IReq<{ usuario: IUsuario }>, res: IRes) {
     return res.status(HttpStatusCodes.OK).json({ token });
 }
 
-async function register(req: IReq<{ usuario: IUsuario }>, res: IRes) {
+/*async function register(req: IReq<{ usuario: IUsuario }>, res: IRes) {
+    console.log(req.body);
     const { usuario } = req.body;
+    console.log(usuario);
     const token = await UsuarioService.register(usuario);
     return res.status(HttpStatusCodes.OK).json({ token });
+}*/
+async function register(req: IReq<{ usuarios: IUsuario }>, res: IRes) {
+    console.log(req.body);
+    const { usuarios: usuario } = req.body; // Access the 'usuarios' key correctly
+    console.log(usuario);
+
+    if (!usuario) {
+        return res.status(HttpStatusCodes.BAD_REQUEST).json({ error: "Usuario data is missing" });
+    }
+
+    try {
+        const token = await UsuarioService.register(usuario);
+        return res.status(HttpStatusCodes.OK).json({ token });
+    } catch (err) {
+        return res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ error: err.message });
+    }
 }
+
+
 
 async function getAll(_: IReq, res: IRes) {
     const usuarios = await UsuarioService.getAll();

@@ -2,9 +2,12 @@
   "usuarios": [
     {
       "id": 1,
-      "nombre": "João",
       "email": "João@gmail.com",
-      "password": "123456"
+      "password": "123456",
+      "created": "8/12/2024, 2:02:29 PM",
+      "jugador":{
+        
+      } 
     }
   ]
 }

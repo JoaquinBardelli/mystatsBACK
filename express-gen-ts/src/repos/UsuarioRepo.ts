@@ -27,7 +27,9 @@ async function login(usuario: IUsuario): Promise<string> {
 
 
 async function register(usuario: IUsuario): Promise<string> {
-  const existingUser = await usuarioModel.findOne({ email: usuario.email }).exec();
+  console.log(usuario);
+  const existingUser = "";
+  console.log(await usuarioModel.findOne({ email: usuario.email }).exec());
   if (existingUser) {
     throw new Error('Usuario ya existe');
   }

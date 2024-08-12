@@ -56,6 +56,7 @@ userRouter.post(
 
 userRouter.post(
   Paths.Usuarios.Register,
+  validate(['usuarios', Usuario.isUsuario]),
   UsuarioRoutes.register,
 );
 
