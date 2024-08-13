@@ -1,13 +1,21 @@
 {
-  "usuarios": [
-    {
-      "id": 1,
-      "email": "João@gmail.com",
-      "password": "123456",
-      "created": "8/12/2024, 2:02:29 PM",
-      "jugador":{
+  "usuarios": {
+    "id": 1,
+    "email": "JoaquinBardelli@gmail.com",
+    "password": "123456",
+    "created": "2024-08-12T14:02:29Z",
+    "jugador": {
+      "id":1,
+      "nombre": "Joaquin",
+      "apellido": "Bardelli",
+      "nacimiento": "2006-03-29T14:02:29Z",
+      "club": "Club Arquitectura",
+      "dorsal": 44,
+      "altura": 184,
+      "peso": 84,
+      "partidos":{
         
-      } 
+      }
     }
-  ]
+  }
 }

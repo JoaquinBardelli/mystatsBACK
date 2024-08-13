@@ -13,6 +13,7 @@ export const usuario_NOT_FOUND_ERR = 'usuario not found';
 
 // **** Functions **** //
 function login(usuario: IUsuario): Promise<string> {
+  console.log("Usuario en service " + usuario);
   return UsuarioRepo.login(usuario);
 }
 

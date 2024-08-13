@@ -10,12 +10,21 @@ import { token } from 'morgan';
  
 // **** Functions **** //
 async function login(usuario: IUsuario): Promise<string> {
+  //traer los datos de mongo del usuario con ese email  
+  const usuarios = await usuarioModel.findOne({ email: usuario.email }).exec();
+  console.log("Datos traidos de mongo" + usuarios);
+  //console.log(usuarios.get); 
+  console.log("Usuario en repo" + usuario);
   const user = await usuarioModel.findOne({ email: usuario.email }).exec();
+  console.log("Resultado de findone" + user);
   if (!user) {
     throw new Error('Usuario no encontrado');
   }
   if (!bcrypt.compareSync(usuario.password, user.password)) {
     throw new Error('Contraseña incorrecta');
+  }else{
+    console.log("Contraseña correcta");
+    console.log("Usuario logeado: " + user);
   }
   const token = jwt.sign({ 
     usuario: user,

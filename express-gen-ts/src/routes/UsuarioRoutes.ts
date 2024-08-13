@@ -12,8 +12,9 @@ import { IJugador } from '@src/models/Jugador';
  * Get all usuarios.
  */
 
-async function login(req: IReq<{ usuario: IUsuario }>, res: IRes) {
-    const { usuario } = req.body;
+async function login(req: IReq<{ usuarios: IUsuario }>, res: IRes) {
+    const { usuarios: usuario } = req.body;
+    console.log("Usuario en routes " + usuario);
     const token = await UsuarioService.login(usuario);
     return res.status(HttpStatusCodes.OK).json({ token });
 }

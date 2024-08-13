@@ -10,8 +10,167 @@ import  { IJugador } from "@src/models/Jugador";
 const mongoose = require('mongoose');
 //var uniqueValidator = require('mongoose-unique-validator');
 // **** Types **** //
-const jugadorSchema: Schema = new Mongoose.Schema({
+const tirosSchema = new Mongoose.Schema({
+    tirosDeCampo: {
+      type: Number,
+      required: true
+    },
+    tirosDeCampoConvertidos: {
+      type: Number,
+      required: true
+    },
+    tirosDeDos: {
+      type: Number,
+      required: true
+    },
+    tirosDeDosConvertidos: {
+      type: Number,
+      required: true
+    },
+    tirosDeTres: {
+      type: Number,
+      required: true
+    },
+    tirosDeTresConvertidos: {
+      type: Number,
+      required: true
+    },
+    tirosLibres: {
+      type: Number,
+      required: true
+    },
+    tirosLibresConvertidos: {
+      type: Number,
+      required: true
+    }
+});
 
+const estadisticasSchema = new Mongoose.Schema({
+  minutosJugados: {
+    type: Number,
+    required: true
+  },
+  segundosJugados: {
+    type: Number,
+    required: true
+  },
+  puntos: {
+    type: Number,
+    required: true
+  },
+  rebotesOfensivos: {
+    type: Number,
+    required: true
+  },
+  rebotesDefensivos: {
+    type: Number,
+    required: true
+  },
+  asistencias: {
+    type: Number,
+    required: true
+  },
+  faltasCometidas: {
+    type: Number,
+    required: true
+  },
+  faltasRecibidas: {
+    type: Number,
+    required: true
+  },
+  taponesCometidos: {
+    type: Number,
+    required: true
+  },
+  taponesRecibidos: {
+    type: Number,
+    required: true
+  },
+  perdidas: {
+    type: Number,
+    required: true
+  },
+  recuperaciones: {
+    type: Number,
+    required: true
+  },
+  valoracion: {
+    type: Number,
+    required: true
+  },
+  tiros: {
+    type: tirosSchema,  // Incluye el esquema de `tiros`
+    required: false
+  }
+});
+
+
+const partidoSchema = new Mongoose.Schema({
+  id: {
+    type: Number,
+    required: true
+  },
+  fecha: {
+    type: Date,
+    required: true
+  },
+  adversario: {
+    type: String,
+    required: true
+  },
+  puntosPropioClub: {
+    type: Number,
+    required: true
+  },
+  puntosAdversario: {
+    type: Number,
+    required: true
+  },
+  estadisticas: {
+    type: [estadisticasSchema],  // Suponiendo que "partidos" es una lista de objetos
+    default: [],
+    required: false
+  }
+});
+
+const jugadorSchema = new Mongoose.Schema({
+  id: {
+    type: Number,
+    required: true
+  },
+  nombre: {
+    type: String,
+    required: true
+  },
+  apellido: {
+    type: String,
+    required: true
+  },
+  nacimiento: {
+    type: Date,
+    required: true
+  },
+  club: {
+    type: String,
+    required: true
+  },
+  dorsal: {
+    type: Number,
+    required: true
+  },
+  altura: {
+    type: Number,
+    required: true
+  },
+  peso: {
+    type: Number,
+    required: true
+  },
+  partidos: {
+    type: [partidoSchema],  // Suponiendo que "partidos" es una lista de objetos
+    default: [],
+    required: false
+  }
 });
 process.env.CADUCIDAD_TOKEN = '48h';
 process.env.SEED_AUTENTICACION = process.env.SEED_AUTENTICACION ||  'este-es-el-seed-desarrollo';

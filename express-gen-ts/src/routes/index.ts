@@ -51,6 +51,7 @@ userRouter.delete(
 
 userRouter.post(
   Paths.Usuarios.Login,
+  validate(['usuarios', Usuario.isUsuario]),
   UsuarioRoutes.login,
 );
 
