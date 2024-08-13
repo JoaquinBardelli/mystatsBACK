@@ -26,8 +26,8 @@ async function login(usuario: IUsuario): Promise<string> {
 }
 
 
-async function register(usuario: IUsuario): Promise<string> {
-  console.log(usuario);
+/*async function register(usuario: IUsuario): Promise<string> {
+  console.log("Usuario en repo" + usuario);
   const existingUser = "";
   console.log(await usuarioModel.findOne({ email: usuario.email }).exec());
   if (existingUser) {
@@ -43,7 +43,40 @@ async function register(usuario: IUsuario): Promise<string> {
     expiresIn: "48h"
   });
   return token;
+}*/
+
+async function register(usuario: IUsuario): Promise<string> {
+  console.log("Usuario en repo", usuario);
+
+  // Busca si el usuario ya existe en la base de datos
+  const existingUser = await usuarioModel.findOne({ email: usuario.email }).exec();
+  console.log("Lo que encuentra en findOne "+ existingUser);
+
+  if (existingUser) {
+    throw new Error('Usuario ya existe');
+  }
+
+  // Hashea la contraseña
+  const salt = bcrypt.genSaltSync(10);
+  usuario.password = bcrypt.hashSync(usuario.password, salt);
+
+  // Crea una nueva instancia del modelo y guarda en la base de datos
+  const newUser = new usuarioModel(usuario);
+  await newUser.save()
+  .then(() => console.log('Usuario guardado correctamente'))
+  .catch(err => console.error('Error al guardar el usuario:', err));
+
+  // Genera un token JWT
+  const token = jwt.sign({ 
+    usuario: newUser,
+  }, EnvVars.Jwt.Secret, {
+    expiresIn: "48h"
+  });
+
+  return token;
 }
+
+
 /**
 * Get one usuario.
 */

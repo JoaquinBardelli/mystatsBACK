@@ -19,8 +19,8 @@ process.env.SEED_AUTENTICACION = process.env.SEED_AUTENTICACION ||  'este-es-el-
 const usuarioSchema: Schema = new Mongoose.Schema({
     id: { type: Number, required: true },
     email: { type: String, required: true },
-    password: { type: Date, required: true },
-    created: { type: Number, required: true },
+    password: { type: String, required: true },
+    created: { type: Date, required: true },
     jugador: {  type: jugadorSchema, required: true },
 });
 

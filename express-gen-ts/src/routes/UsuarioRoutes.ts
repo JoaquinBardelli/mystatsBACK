@@ -28,7 +28,7 @@ async function login(req: IReq<{ usuario: IUsuario }>, res: IRes) {
 async function register(req: IReq<{ usuarios: IUsuario }>, res: IRes) {
     console.log(req.body);
     const { usuarios: usuario } = req.body; // Access the 'usuarios' key correctly
-    console.log(usuario);
+    console.log("Usuario en routes: "+ usuario);
 
     if (!usuario) {
         return res.status(HttpStatusCodes.BAD_REQUEST).json({ error: "Usuario data is missing" });
