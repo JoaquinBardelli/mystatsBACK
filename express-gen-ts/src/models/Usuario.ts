@@ -70,6 +70,15 @@ function isUsuario(arg: unknown): boolean {
     'jugador' in arg && typeof (arg as any).jugador === 'object'
   );
 }
+
+function isLogin(arg: unknown): boolean {
+  return (
+    !!arg &&
+    typeof arg === 'object' &&
+    'email' in arg && typeof (arg as any).email === 'string' &&
+    'password' in arg && typeof (arg as any).password === 'string'
+  );
+}
 /*function isUsuario(arg: unknown): boolean {
   console.log('Argumento recibido:', arg);
   if (!arg || typeof arg !== 'object') return false;
@@ -126,4 +135,5 @@ export default {
   new: new_,
   from,
   isUsuario,
+  isLogin,
 } as const;

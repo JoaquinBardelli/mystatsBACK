@@ -1,53 +1,39 @@
-/**
- * Setup express server.
- */
-
 import cors from 'cors';
-import apiRouter from '@src/routes/index';
-
+import express, { Request, Response, NextFunction } from 'express';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import path from 'path';
 import helmet from 'helmet';
-import express, { Request, Response, NextFunction } from 'express';
 import logger from 'jet-logger';
 
-import 'express-async-errors';
-
+import apiRouter from '@src/routes/index';
 import BaseRouter from '@src/routes/index';
 import Paths from '@src/common/Paths';
-
 import EnvVars from '@src/common/EnvVars';
 import HttpStatusCodes from '@src/common/HttpStatusCodes';
-
 import { NodeEnvs } from '@src/common/misc';
 import { RouteError } from '@src/common/classes';
 
-
 // **** Variables **** //
-
-
-
 const app = express();
-app.use(cors());
 
-const origenesPermitidos = ['http://localhost:4200'];
+const origenesPermitidos = ['http://localhost:3000', 'http://localhost:3001'];
 
 const options: cors.CorsOptions = {
   origin: origenesPermitidos,
 };
 
+// Aplicar CORS con opciones específicas
 app.use(cors(options));
+
 app.use(express.json());
 app.use('/api', apiRouter);
-
-
 
 // **** Setup **** //
 
 // Basic middleware
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser(EnvVars.CookieProps.Secret));
 
 // Show routes called in console during development
@@ -68,7 +54,6 @@ app.use((
   err: Error,
   _: Request,
   res: Response,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next: NextFunction,
 ) => {
   if (EnvVars.NodeEnv !== NodeEnvs.Test.valueOf()) {
@@ -80,7 +65,6 @@ app.use((
   }
   return res.status(status).json({ error: err.message });
 });
-
 
 // ** Front-End Content ** //
 
@@ -102,7 +86,5 @@ app.get('/users', (_: Request, res: Response) => {
   return res.sendFile('users.html', { root: viewsDir });
 });
 
-
 // **** Export default **** //
-
 export default app;
