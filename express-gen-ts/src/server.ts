@@ -15,7 +15,7 @@ import { NodeEnvs } from '@src/common/misc';
 import { RouteError } from '@src/common/classes';
 
 // **** Variables **** //
-const app = express();
+export const app = express();
 
 const origenesPermitidos = ['http://localhost:3000', 'http://localhost:3001'];
 
@@ -32,7 +32,7 @@ app.use('/api', apiRouter);
 // **** Setup **** //
 
 // Basic middleware
-app.use(express.json());
+//app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser(EnvVars.CookieProps.Secret));
 
