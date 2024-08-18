@@ -16,6 +16,7 @@ afterAll(async () => {
 
 describe('GET /api/usuarios/all', () => {
   it('should return 200 OK', async () => {
+    // Usa supertest para hacer una solicitud al servidor
     const res = await request(server).get('/api/usuarios/all'); // Usa el servidor en lugar de app
     expect(res.status).toBe(200);
   });
