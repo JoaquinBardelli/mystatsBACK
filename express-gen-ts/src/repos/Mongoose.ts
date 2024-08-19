@@ -13,90 +13,90 @@ const mongoose = require('mongoose');
 const tirosSchema = new Mongoose.Schema({
     tirosDeCampo: {
       type: Number,
-      required: true
+      required: false
     },
     tirosDeCampoConvertidos: {
       type: Number,
-      required: true
+      required: false
     },
     tirosDeDos: {
       type: Number,
-      required: true
+      required: false
     },
     tirosDeDosConvertidos: {
       type: Number,
-      required: true
+      required: false
     },
     tirosDeTres: {
       type: Number,
-      required: true
+      required: false
     },
     tirosDeTresConvertidos: {
       type: Number,
-      required: true
+      required: false
     },
     tirosLibres: {
       type: Number,
-      required: true
+      required: false
     },
     tirosLibresConvertidos: {
       type: Number,
-      required: true
+      required: false
     }
 });
 
 const estadisticasSchema = new Mongoose.Schema({
   minutosJugados: {
     type: Number,
-    required: true
+    required: false
   },
   segundosJugados: {
     type: Number,
-    required: true
+    required: false
   },
   puntos: {
     type: Number,
-    required: true
+    required: false
   },
   rebotesOfensivos: {
     type: Number,
-    required: true
+    required: false
   },
   rebotesDefensivos: {
     type: Number,
-    required: true
+    required: false
   },
   asistencias: {
     type: Number,
-    required: true
+    required: false
   },
   faltasCometidas: {
     type: Number,
-    required: true
+    required: false
   },
   faltasRecibidas: {
     type: Number,
-    required: true
+    required: false
   },
   taponesCometidos: {
     type: Number,
-    required: true
+    required: false
   },
   taponesRecibidos: {
     type: Number,
-    required: true
+    required: false
   },
   perdidas: {
     type: Number,
-    required: true
+    required: false
   },
   recuperaciones: {
     type: Number,
-    required: true
+    required: false
   },
   valoracion: {
     type: Number,
-    required: true
+    required: false
   },
   tiros: {
     type: tirosSchema,  // Incluye el esquema de `tiros`
@@ -108,23 +108,23 @@ const estadisticasSchema = new Mongoose.Schema({
 const partidoSchema = new Mongoose.Schema({
   id: {
     type: Number,
-    required: true
+    required: false
   },
   fecha: {
     type: Date,
-    required: true
+    required: false
   },
   adversario: {
     type: String,
-    required: true
+    required: false
   },
   puntosPropioClub: {
     type: Number,
-    required: true
+    required: false
   },
   puntosAdversario: {
     type: Number,
-    required: true
+    required: false
   },
   estadisticas: {
     type: [estadisticasSchema],  // Suponiendo que "partidos" es una lista de objetos

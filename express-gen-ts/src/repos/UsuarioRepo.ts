@@ -20,20 +20,20 @@ async function login(usuario: IUsuario): Promise<string> {
   if (!user) {
     throw new Error('Usuario no encontrado');
   }
-  if (usuario.password !== user.password) {
+  /*if (usuario.password !== user.password) {
     throw new Error('Contraseña incorrecta');
   } else {
     console.log("Contraseña correcta");
     console.log("Usuario logeado: " + user);
     // Aquí puedes continuar con el proceso de login, como generar un token JWT.
     return "Login exitoso";
-  }
-  /*if (!bcrypt.compareSync(usuario.password, user.password)) {
+  }*/
+  if (!bcrypt.compareSync(usuario.password, user.password)) {
     throw new Error('Contraseña incorrecta');
   }else{
     console.log("Contraseña correcta");
     console.log("Usuario logeado: " + user);
-  }*/
+  }
   const token = jwt.sign({ 
     usuario: user,
   }, EnvVars.Jwt.Secret, {
