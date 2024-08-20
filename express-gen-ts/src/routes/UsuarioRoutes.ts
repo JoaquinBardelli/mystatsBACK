@@ -43,6 +43,14 @@ async function register(req: IReq<{ usuarios: IUsuario }>, res: IRes) {
     }
 }
 
+async function promedio(req: IReq<{ usuarios: IUsuario }>, res: IRes) {
+    const { usuarios : usuario  } = req.body;
+    console.log(req.body);
+    console.log("Usuario en routes promedio" + usuario);
+    const promedio = await UsuarioService.promedio(usuario);
+    return res.status(HttpStatusCodes.OK).json({ promedio });
+}
+
 
 
 async function getAll(_: IReq, res: IRes) {
@@ -85,10 +93,13 @@ async function agregarDatos(req: IReq<{ jugador: IJugador }>, res: IRes) {
 }
 
 
+
+
 // **** Export default **** //
 
 export default {
     getAll,
+    promedio,
     add,
     update,
     delete: delete_,

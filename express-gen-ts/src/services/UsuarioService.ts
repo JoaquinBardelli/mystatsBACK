@@ -4,6 +4,7 @@ import HttpStatusCodes from '@src/common/HttpStatusCodes';
 import UsuarioRepo from '@src/repos/UsuarioRepo';
 import { IUsuario } from '@src/models/Usuario';
 import { IJugador } from '@src/models/Jugador';
+import { IEstadisticas } from '@src/models/Estadisticas';
 
 
 // **** Variables **** //
@@ -79,6 +80,12 @@ async function agregarDatos(jugador: IJugador): Promise<void> {
   return UsuarioRepo.update(usuario);
 }
 
+// **** Promedio **** //
+async function promedio(usuario : IUsuario): Promise<IEstadisticas>{
+  console.log("Usuario en service promedio" + usuario);
+  return UsuarioRepo.getPromedioEstadisticas(usuario);
+}
+
 // **** Export default **** //
 
 export default {
@@ -89,5 +96,6 @@ export default {
   agregarDatos,
   login,
   register,
+  promedio,
 
 } as const;

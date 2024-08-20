@@ -10,5 +10,6 @@ export default {
     Login: '/login',
     Register: '/register',
     Logout: '/logout',
+    Promedio: '/promedio',
   },
 } as const;

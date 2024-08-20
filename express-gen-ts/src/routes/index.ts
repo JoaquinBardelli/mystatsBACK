@@ -61,6 +61,17 @@ userRouter.post(
   UsuarioRoutes.register,
 );
 
+userRouter.post(
+  Paths.Usuarios.Logout,
+);
+
+userRouter.get(
+  Paths.Usuarios.Promedio,
+  validate(['usuarios', Usuario.isUsuario]),
+  UsuarioRoutes.promedio,
+);
+
+
 // Add UserRouter
 apiRouter.use(Paths.Usuarios.Base, userRouter);
 
