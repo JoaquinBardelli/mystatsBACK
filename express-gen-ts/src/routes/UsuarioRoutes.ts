@@ -4,6 +4,9 @@ import UsuarioService from '@src/services/UsuarioService';
 import { IUsuario } from '@src/models/Usuario';
 import { IReq, IRes } from './types/express/misc';
 import { IJugador } from '@src/models/Jugador';
+import { IPartido } from '@src/models/Partido';
+import EnvVars from '@src/common/EnvVars';
+import jwt from 'jsonwebtoken';
 
 
 // **** Functions **** //
@@ -51,7 +54,29 @@ async function promedio(req: IReq<{ usuarios: IUsuario }>, res: IRes) {
     return res.status(HttpStatusCodes.OK).json({ promedio });
 }
 
+async function agregarPartido(req: IReq<{ partido: IPartido }>, res: IRes) {
+    try {
+        // Obtener el token del encabezado de autorización
+        const token = req.headers.authorization?.split(' ')[1];
+        if (!token) {
+            return res.status(HttpStatusCodes.UNAUTHORIZED).json({ error: 'Token no proporcionado' });
+        }
 
+        // Decodificar el token para obtener la información del usuario
+        const decodedToken = jwt.verify(token, EnvVars.Jwt.Secret) as { usuario: IUsuario };
+        const usuario = decodedToken.usuario;
+
+        // Obtener el partido de la solicitud
+        const { partido } = req.body;
+
+        // Llamar al servicio para agregar el partido al usuario
+        await UsuarioService.agregarPartido(usuario.email, partido);
+
+        return res.status(HttpStatusCodes.OK).json({ message: 'Partido agregado correctamente' });
+    } catch (err) {
+        return res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ error: err.message });
+    }
+}
 
 async function getAll(_: IReq, res: IRes) {
     const usuarios = await UsuarioService.getAll();
@@ -106,4 +131,5 @@ export default {
     agregarDatos,
     login,
     register,
+    agregarPartido,
 } as const ;

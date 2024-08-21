@@ -5,6 +5,7 @@ import UsuarioRepo from '@src/repos/UsuarioRepo';
 import { IUsuario } from '@src/models/Usuario';
 import { IJugador } from '@src/models/Jugador';
 import { IEstadisticas } from '@src/models/Estadisticas';
+import { IPartido } from '@src/models/Partido';
 
 
 // **** Variables **** //
@@ -20,6 +21,10 @@ function login(usuario: IUsuario): Promise<string> {
 
 function register(usuario: IUsuario): Promise<string> {
   return UsuarioRepo.register(usuario);
+}
+
+function agregarPartido(email:string ,partido: IPartido): Promise<void> {
+  return UsuarioRepo.agregarPartido(email, partido);
 }
 /**
  * Get all usuarios.
@@ -97,5 +102,5 @@ export default {
   login,
   register,
   promedio,
-
+  agregarPartido,
 } as const;

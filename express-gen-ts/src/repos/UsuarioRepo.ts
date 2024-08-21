@@ -97,6 +97,57 @@ async function register(usuario: IUsuario): Promise<string> {
   return token;
 }
 
+async function agregarPartido(email: string, partido: IPartido): Promise<void> {
+  const usuario = await usuarioModel.findOne({ email }).exec();
+  if (!usuario) {
+      throw new Error('Usuario no encontrado');
+  }
+
+  usuario.jugador.partidos.add(partido);
+  await usuario.save();
+}
+/*
+
+async function agregarPartido(req: Request, res: Response) {
+  // Extraer el token del header de autorización
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ message: 'Token no proporcionado' });
+  }
+
+  try {
+    // Verificar y decodificar el token JWT
+    const decoded = jwt.verify(token, EnvVars.Jwt.Secret) as { usuario: any };
+
+    // Extraer el ID del usuario desde el token decodificado
+    const userId = decoded.usuario._id;
+
+    // Buscar al usuario en la base de datos
+    const user = await usuarioModel.findById(userId).exec();
+
+    if (!user) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    // Agregar el partido al usuario
+    const partido: IPartido = req.body;
+    user.jugador.partidos.add(partido);
+
+    // Guardar los cambios en la base de datos
+    await user.save();
+
+    res.status(200).json({ message: 'Partido agregado correctamente' });
+  } catch (err) {
+    console.error('Error al agregar el partido:', err);
+    res.status(500).json({ message: 'Error al agregar el partido' });
+  }
+}
+
+};
+ */
+
 async function getPromedioEstadisticas(usuario: IUsuario): Promise<IEstadisticas> {
   console.log("Usuario en repo promedio" + usuario);
   console.log("Usuario en repo promedio" + usuario.email);
@@ -202,6 +253,9 @@ function calcularPorcentajes(tiros:ITiros){
   porcentajes.porcLibres = tiros.tirosLibresConvertidos / tiros.tirosLibres;
   return porcentajes;
 }
+
+
+
 /**
 * Get one usuario.
 */
@@ -301,4 +355,5 @@ export default {
   login,
   register,
   getPromedioEstadisticas,
+  agregarPartido,
 } as const

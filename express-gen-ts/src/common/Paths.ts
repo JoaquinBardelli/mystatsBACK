@@ -11,5 +11,6 @@ export default {
     Register: '/register',
     Logout: '/logout',
     Promedio: '/promedio',
+    AgregarPartido : '/agregarPartido',
   },
 } as const;

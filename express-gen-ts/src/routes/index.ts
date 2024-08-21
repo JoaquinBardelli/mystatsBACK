@@ -4,6 +4,7 @@ import jetValidator from 'jet-validator';
 import Paths from '../common/Paths';
 import Usuario from '@src/models/Usuario';
 import UsuarioRoutes from './UsuarioRoutes';
+import Partido from '@src/models/Partido';
 
 
 // **** Variables **** //
@@ -69,6 +70,12 @@ userRouter.get(
   Paths.Usuarios.Promedio,
   validate(['usuarios', Usuario.isUsuario]),
   UsuarioRoutes.promedio,
+);
+
+userRouter.post(
+  Paths.Usuarios.AgregarPartido,
+  validate(['partidos', Partido.isPartido]),
+  UsuarioRoutes.agregarPartido,
 );
 
 
