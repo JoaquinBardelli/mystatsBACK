@@ -69,15 +69,28 @@ function isPartido(arg: any): boolean {
     'minutosJugados' in arg.estadisticas && typeof arg.estadisticas.minutosJugados === 'number' &&
     'segundosJugados' in arg.estadisticas && typeof arg.estadisticas.segundosJugados === 'number' &&
     'puntos' in arg.estadisticas && typeof arg.estadisticas.puntos === 'number' &&
-    'rebotes' in arg.estadisticas && typeof arg.estadisticas.rebotes === 'number' &&
+    'rebotesOfensivos' in arg.estadisticas && typeof arg.estadisticas.rebotesOfensivos === 'number' &&
+    'rebotesDefensivos' in arg.estadisticas && typeof arg.estadisticas.rebotesDefensivos === 'number' &&
     'asistencias' in arg.estadisticas && typeof arg.estadisticas.asistencias === 'number' &&
-    'faltas' in arg.estadisticas && typeof arg.estadisticas.faltas === 'number' &&
-    'tapones' in arg.estadisticas && typeof arg.estadisticas.tapones === 'number' &&
+    'faltasCometidas' in arg.estadisticas && typeof arg.estadisticas.faltasCometidas === 'number' &&
+    'faltasRecibidas' in arg.estadisticas && typeof arg.estadisticas.faltasRecibidas === 'number' &&
+    'taponesRecibidos' in arg.estadisticas && typeof arg.estadisticas.taponesRecibidos === 'number' &&
+    'taponesRealizados' in arg.estadisticas && typeof arg.estadisticas.taponesRealizados === 'number' &&
     'perdidas' in arg.estadisticas && typeof arg.estadisticas.perdidas === 'number' &&
     'recuperaciones' in arg.estadisticas && typeof arg.estadisticas.recuperaciones === 'number' &&
-    'valoracion' in arg.estadisticas && typeof arg.estadisticas.valoracion === 'number'
+    'valoracion' in arg.estadisticas && typeof arg.estadisticas.valoracion === 'number' &&
+    'tiros' in arg.estadisticas && typeof arg.estadisticas.tiros === 'object' &&
+    'tirosDeCampo' in arg.estadisticas.tiros && typeof arg.estadisticas.tiros.tirosDeCampo === 'number' &&
+    'tirosDeCampoConvertidos' in arg.estadisticas.tiros && typeof arg.estadisticas.tiros.tirosDeCampoConvertidos === 'number' &&
+    'tirosDeDos' in arg.estadisticas.tiros && typeof arg.estadisticas.tiros.tirosDeDos === 'number' &&
+    'tirosDeDosConvertidos' in arg.estadisticas.tiros && typeof arg.estadisticas.tiros.tirosDeDosConvertidos === 'number' &&
+    'tirosDeTres' in arg.estadisticas.tiros && typeof arg.estadisticas.tiros.tirosDeTres === 'number' &&
+    'tirosDeTresConvertidos' in arg.estadisticas.tiros && typeof arg.estadisticas.tiros.tirosDeTresConvertidos === 'number' &&
+    'tirosLibres' in arg.estadisticas.tiros && typeof arg.estadisticas.tiros.tirosLibres === 'number' &&
+    'tirosLibresConvertidos' in arg.estadisticas.tiros && typeof arg.estadisticas.tiros.tirosLibresConvertidos === 'number'
   );
 }
+
 
 
 // **** Export default **** //

@@ -63,14 +63,14 @@ async function agregarPartido(req: IReq<{ partido: IPartido }>, res: IRes) {
         }
 
         // Decodificar el token para obtener la información del usuario
-        const decodedToken = jwt.verify(token, EnvVars.Jwt.Secret) as { usuario: IUsuario };
-        const usuario = decodedToken.usuario;
+        //const decodedToken = jwt.verify(token, EnvVars.Jwt.Secret) as { usuario: IUsuario };
+        //const usuario = decodedToken.usuario;
 
         // Obtener el partido de la solicitud
         const { partido } = req.body;
-
+        const email = "JoaquinBardelli@gmail.com";
         // Llamar al servicio para agregar el partido al usuario
-        await UsuarioService.agregarPartido(usuario.email, partido);
+        await UsuarioService.agregarPartido(email, partido);
 
         return res.status(HttpStatusCodes.OK).json({ message: 'Partido agregado correctamente' });
     } catch (err) {
