@@ -13,7 +13,7 @@ import { get } from 'http';
  
  
 // **** Functions **** //
-async function login(usuario: IUsuario): Promise<string> {
+/*async function login(usuario: IUsuario): Promise<string> {
   //traer los datos de mongo del usuario con ese email  
   const usuarios = await usuarioModel.findOne({ email: usuario.email }).exec();
   console.log("Datos traidos de mongo" + usuarios);
@@ -32,7 +32,7 @@ async function login(usuario: IUsuario): Promise<string> {
     // Aquí puedes continuar con el proceso de login, como generar un token JWT.
     return "Login exitoso";
   }*/
-  if (!bcrypt.compareSync(usuario.password, user.password)) {
+  /*if (!bcrypt.compareSync(usuario.password, user.password)) {
     throw new Error('Contraseña incorrecta');
   }else{
     console.log("Contraseña correcta");
@@ -44,6 +44,26 @@ async function login(usuario: IUsuario): Promise<string> {
     expiresIn: "48h"
   });
   return token;
+}*/
+
+async function login(usuario: IUsuario): Promise<{ token: string }> {
+  const user = await usuarioModel.findOne({ email: usuario.email }).exec();
+  
+  if (!user) {
+    throw new Error('Usuario no encontrado');
+  }
+
+  if (!bcrypt.compareSync(usuario.password, user.password)) {
+    throw new Error('Contraseña incorrecta');
+  }
+
+  const token = jwt.sign(
+    { usuario: user },
+    EnvVars.Jwt.Secret,
+    { expiresIn: "48h" }
+  );
+
+  return { token };
 }
 
 
@@ -66,7 +86,7 @@ async function login(usuario: IUsuario): Promise<string> {
   return token;
 }*/
 
-async function register(usuario: IUsuario): Promise<string> {
+/*async function register(usuario: IUsuario): Promise<string> {
   console.log("Usuario en repo", usuario);
 
   // Busca si el usuario ya existe en la base de datos
@@ -95,15 +115,43 @@ async function register(usuario: IUsuario): Promise<string> {
   });
 
   return token;
+}*/
+
+async function register(usuario: IUsuario): Promise<{ token: string }> {
+  const existingUser = await usuarioModel.findOne({ email: usuario.email }).exec();
+
+  if (existingUser) {
+    throw new Error('Usuario ya existe');
+  }
+
+  const salt = bcrypt.genSaltSync(10);
+  usuario.password = bcrypt.hashSync(usuario.password, salt);
+
+  const newUser = new usuarioModel(usuario);
+  await newUser.save();
+
+  const token = jwt.sign(
+    { usuario: newUser },
+    EnvVars.Jwt.Secret,
+    { expiresIn: "48h" }
+  );
+
+  // Devolver el token al frontend
+  return { token };
 }
+
 
 async function agregarPartido(email: string, partido: IPartido): Promise<void> {
   const usuario = await usuarioModel.findOne({ email }).exec();
   if (!usuario) {
       throw new Error('Usuario no encontrado');
   }
-
-  usuario.jugador.partidos.add(partido);
+  console.log("Partido en repo agregarPartido" + partido);
+  /*const partidosArray = Array.from(usuario.jugador.partidos);
+  partidosArray.push(partido);
+  usuario.jugador.partidos = new Set(partidosArray);*/
+  usuario.jugador.partidos.push(partido);
+  console.log("despues de agregar" + usuario.jugador.partidos);
   await usuario.save();
 }
 /*
@@ -161,7 +209,7 @@ async function getPromedioEstadisticas(usuario: IUsuario): Promise<IEstadisticas
   return calcularPromedioEstadisticas(user.jugador.partidos);
 }
 
-function calcularPromedioEstadisticas(partidos:Set<IPartido>):IEstadisticas{
+function calcularPromedioEstadisticas(partidos:IPartido[]):IEstadisticas{
   let contador = 0;
   const estadisticasPromedio = {
     minutosJugados: 0,

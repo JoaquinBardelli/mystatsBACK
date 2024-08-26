@@ -128,7 +128,6 @@ const partidoSchema = new Mongoose.Schema({
   },
   estadisticas: {
     type: estadisticasSchema,  // Suponiendo que "partidos" es una lista de objetos
-    default: [],
     required: false
   }
 });

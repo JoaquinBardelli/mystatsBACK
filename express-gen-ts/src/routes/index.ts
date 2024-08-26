@@ -74,7 +74,7 @@ userRouter.get(
 
 userRouter.post(
   Paths.Usuarios.AgregarPartido,
-  validate(['partido', Partido.isPartido]),
+  validate(['partidos', Partido.isPartido]),
   UsuarioRoutes.agregarPartido,
 );
 

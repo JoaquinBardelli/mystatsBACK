@@ -17,7 +17,7 @@ export interface IJugador {
   dorsal: number;
   altura: number;
   peso: number;
-  partidos: Set<IPartido>;
+  partidos: IPartido[];
 }
 
 
@@ -34,7 +34,7 @@ function new_(
     dorsal: number,
     altura: number,
     peso: number,
-    partidos: Set<IPartido>,
+    partidos: IPartido[],
     id?: number, // id last cause usually set by db
 ): IJugador {
   return {
@@ -46,7 +46,7 @@ function new_(
     dorsal: (dorsal ?? -1),
     altura: (altura ?? -1),
     peso: (peso ?? -1),
-    partidos: (partidos ?? new Set()),
+    partidos: (partidos ?? []),
   };
 }
 

@@ -38,7 +38,7 @@ function new_(
     password: (password ?? ''),
     created: (created ? new Date(created) : new Date()),
     logeado: (logeado ?? false),
-    jugador: (jugador ?? {id: -1, nombre: '', apellido: '', nacimiento: new Date(), club: '', dorsal: -1, altura: -1, peso: -1, partidos: new Set()}),
+    jugador: (jugador ?? {id: -1, nombre: '', apellido: '', nacimiento: new Date(), club: '', dorsal: -1, altura: -1, peso: -1, partidos: []}),
   };
 }
 

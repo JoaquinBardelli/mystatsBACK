@@ -78,19 +78,9 @@ function isPartido(arg: any): boolean {
     'taponesRealizados' in arg.estadisticas && typeof arg.estadisticas.taponesRealizados === 'number' &&
     'perdidas' in arg.estadisticas && typeof arg.estadisticas.perdidas === 'number' &&
     'recuperaciones' in arg.estadisticas && typeof arg.estadisticas.recuperaciones === 'number' &&
-    'valoracion' in arg.estadisticas && typeof arg.estadisticas.valoracion === 'number' &&
-    'tiros' in arg.estadisticas && typeof arg.estadisticas.tiros === 'object' &&
-    'tirosDeCampo' in arg.estadisticas.tiros && typeof arg.estadisticas.tiros.tirosDeCampo === 'number' &&
-    'tirosDeCampoConvertidos' in arg.estadisticas.tiros && typeof arg.estadisticas.tiros.tirosDeCampoConvertidos === 'number' &&
-    'tirosDeDos' in arg.estadisticas.tiros && typeof arg.estadisticas.tiros.tirosDeDos === 'number' &&
-    'tirosDeDosConvertidos' in arg.estadisticas.tiros && typeof arg.estadisticas.tiros.tirosDeDosConvertidos === 'number' &&
-    'tirosDeTres' in arg.estadisticas.tiros && typeof arg.estadisticas.tiros.tirosDeTres === 'number' &&
-    'tirosDeTresConvertidos' in arg.estadisticas.tiros && typeof arg.estadisticas.tiros.tirosDeTresConvertidos === 'number' &&
-    'tirosLibres' in arg.estadisticas.tiros && typeof arg.estadisticas.tiros.tirosLibres === 'number' &&
-    'tirosLibresConvertidos' in arg.estadisticas.tiros && typeof arg.estadisticas.tiros.tirosLibresConvertidos === 'number'
+    'valoracion' in arg.estadisticas && typeof arg.estadisticas.valoracion === 'number'
   );
 }
-
 
 
 // **** Export default **** //

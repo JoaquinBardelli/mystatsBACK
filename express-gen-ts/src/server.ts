@@ -19,12 +19,12 @@ export const app = express();
 
 const origenesPermitidos = ['http://localhost:3000', 'http://localhost:3001'];
 
-const options: cors.CorsOptions = {
+/*const options: cors.CorsOptions = {
   origin: origenesPermitidos,
-};
+};*/
 
 // Aplicar CORS con opciones específicas
-app.use(cors(options));
+app.use(cors({ origin: origenesPermitidos }));
 
 app.use(express.json());
 app.use('/api', apiRouter);
