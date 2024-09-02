@@ -83,19 +83,48 @@ async function register(req: IReq<{ usuarios: IUsuario }>, res: IRes) {
 
 
 
-async function promedio(req: IReq<{ usuarios: IUsuario }>, res: IRes) {
-    const { usuarios : usuario  } = req.body;
-    console.log(req.body);
-    console.log("Usuario en routes promedio" + usuario);
-    const promedio = await UsuarioService.promedio(usuario);
-    return res.status(HttpStatusCodes.OK).json({ promedio });
+async function promedio(req: IReq, res: IRes) {
+    try {
+        const authHeader = req.headers.authorization;
+        if (!authHeader) {
+            console.log("Token no proporcionado");
+            return res.status(HttpStatusCodes.UNAUTHORIZED).json({ error: 'Token no proporcionado' });
+        }
+
+        // Eliminar la palabra 'Bearer ' del token
+        const token = authHeader.replace('Bearer ', '');
+        //const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjp7Il9pZCI6IjY2ZDVlMDhiODQzNWExZjYzNWJjMWI1NiIsImlkIjoxLCJlbWFpbCI6IjJAZ21haWwuY29tIiwiY3JlYXRlZCI6IjIwMjQtMDktMDJUMTU6NTg6MDMuNzMxWiIsImp1Z2Fkb3IiOnsiaWQiOjEsIm5vbWJyZSI6ImFudG9uIiwiYXBlbGxpZG8iOiJqaXNvbiIsIm5hY2ltaWVudG8iOiIrMjc1NzYwLTAzLTIzVDAzOjAwOjAwLjAwMFoiLCJjbHViIjoia2FraSIsImRvcnNhbCI6MiwiYWx0dXJhIjoyMjIsInBlc28iOjIyLCJwYXJ0aWRvcyI6W3siaWQiOjEsImZlY2hhIjpudWxsLCJhZHZlcnNhcmlvIjoiIiwicHVudG9zUHJvcGlvQ2x1YiI6MCwicHVudG9zQWR2ZXJzYXJpbyI6MCwiZXN0YWRpc3RpY2FzIjp7Im1pbnV0b3NKdWdhZG9zIjowLCJzZWd1bmRvc0p1Z2Fkb3MiOjAsInB1bnRvcyI6MCwicmVib3Rlc09mZW5zaXZvcyI6MCwicmVib3Rlc0RlZmVuc2l2b3MiOjAsImFzaXN0ZW5jaWFzIjowLCJmYWx0YXNDb21ldGlkYXMiOjAsImZhbHRhc1JlY2liaWRhcyI6MCwidGFwb25lc1JlY2liaWRvcyI6MCwicGVyZGlkYXMiOjAsInJlY3VwZXJhY2lvbmVzIjowLCJ2YWxvcmFjaW9uIjowLCJ0aXJvcyI6eyJ0aXJvc0RlQ2FtcG8iOjAsInRpcm9zRGVDYW1wb0NvbnZlcnRpZG9zIjowLCJ0aXJvc0RlRG9zIjowLCJ0aXJvc0RlRG9zQ29udmVydGlkb3MiOjAsInRpcm9zRGVUcmVzIjowLCJ0aXJvc0RlVHJlc0NvbnZlcnRpZG9zIjowLCJ0aXJvc0xpYnJlcyI6MCwidGlyb3NMaWJyZXNDb252ZXJ0aWRvcyI6MCwiX2lkIjoiNjZkNWUwOGI4NDM1YTFmNjM1YmMxYjVhIn0sIl9pZCI6IjY2ZDVlMDhiODQzNWExZjYzNWJjMWI1OSJ9LCJfaWQiOiI2NmQ1ZTA4Yjg0MzVhMWY2MzViYzFiNTgifV0sIl9pZCI6IjY2ZDVlMDhiODQzNWExZjYzNWJjMWI1NyJ9LCJfX3YiOjB9LCJpYXQiOjE3MjUyOTQ0OTQsImV4cCI6MTcyNTQ2NzI5NH0.igsbeDRjJ0Oa-XAZnI3r2fnYpMHK53zIQbzg3_7XowQ";
+        console.log("Token procesado:", token);
+        if (!token) {
+            console.log("Token no proporcionado");
+            return res.status(HttpStatusCodes.UNAUTHORIZED).json({ error: 'Token no proporcionado' });
+        }else{
+            console.log("Token proporcionado");
+        }
+
+        const decodedToken = jwt.verify(token, EnvVars.Jwt.Secret) as { usuario: IUsuario };
+        const usuario = decodedToken.usuario;
+
+        const promedio = await UsuarioService.promedio(usuario);
+        return res.status(HttpStatusCodes.OK).json({ promedio });
+     } catch (err) {
+        console.error('Error al agregar el partido:', err);
+        return res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ error: err.message });
+    }
 }
 
 async function agregarPartido(req: IReq<{ partidos: IPartido }>, res: IRes) {
-    console.log("PRIMERO" + req.body.partidos.estadisticas.rebotesDefensivos);
     try {
         // Obtener el token del encabezado de autorización
-        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjp7Il9pZCI6IjY2Y2NhNzA4MmVhZTg2MWE1MzFmYzA3OSIsImlkIjoxLCJlbWFpbCI6Impvc2V3QGdtYWlsLmNvbSIsImNyZWF0ZWQiOiIyMDI0LTA4LTI2VDE2OjAyOjE1LjkyNVoiLCJqdWdhZG9yIjp7ImlkIjoxLCJub21icmUiOiJqb3NlIiwiYXBlbGxpZG8iOiJnYXJ0ZSIsIm5hY2ltaWVudG8iOiIyMDI0LTA4LTE2VDAwOjAwOjAwLjAwMFoiLCJjbHViIjoieXV5YSIsImRvcnNhbCI6MTExMTEsImFsdHVyYSI6MTIzLCJwZXNvIjoxMjMsInBhcnRpZG9zIjpbeyJpZCI6MSwiZmVjaGEiOm51bGwsImFkdmVyc2FyaW8iOiIiLCJwdW50b3NQcm9waW9DbHViIjowLCJwdW50b3NBZHZlcnNhcmlvIjowLCJlc3RhZGlzdGljYXMiOnsibWludXRvc0p1Z2Fkb3MiOjAsInNlZ3VuZG9zSnVnYWRvcyI6MCwicHVudG9zIjowLCJyZWJvdGVzT2ZlbnNpdm9zIjowLCJyZWJvdGVzRGVmZW5zaXZvcyI6MCwiYXNpc3RlbmNpYXMiOjAsImZhbHRhc0NvbWV0aWRhcyI6MCwiZmFsdGFzUmVjaWJpZGFzIjowLCJ0YXBvbmVzUmVjaWJpZG9zIjowLCJwZXJkaWRhcyI6MCwicmVjdXBlcmFjaW9uZXMiOjAsInZhbG9yYWNpb24iOjAsInRpcm9zIjp7InRpcm9zRGVDYW1wbyI6MCwidGlyb3NEZUNhbXBvQ29udmVydGlkb3MiOjAsInRpcm9zRGVEb3MiOjAsInRpcm9zRGVEb3NDb252ZXJ0aWRvcyI6MCwidGlyb3NEZVRyZXMiOjAsInRpcm9zRGVUcmVzQ29udmVydGlkb3MiOjAsInRpcm9zTGlicmVzIjowLCJ0aXJvc0xpYnJlc0NvbnZlcnRpZG9zIjowLCJfaWQiOiI2NmNjYTcwODJlYWU4NjFhNTMxZmMwN2QifSwiX2lkIjoiNjZjY2E3MDgyZWFlODYxYTUzMWZjMDdjIn0sIl9pZCI6IjY2Y2NhNzA4MmVhZTg2MWE1MzFmYzA3YiJ9XSwiX2lkIjoiNjZjY2E3MDgyZWFlODYxYTUzMWZjMDdhIn0sIl9fdiI6MH0sImlhdCI6MTcyNDY5NDMwMSwiZXhwIjoxNzI0ODY3MTAxfQ.slmYvLVzc_TJQSWY7U3RkyVaZahNiPTQhrP223XrCPE"/*req.headers.authorization?.split(' ')[1]*/;
+        const authHeader = req.headers.authorization;
+        if (!authHeader) {
+            console.log("Token no proporcionado");
+            return res.status(HttpStatusCodes.UNAUTHORIZED).json({ error: 'Token no proporcionado' });
+        }
+
+        // Eliminar la palabra 'Bearer ' del token
+        const token = authHeader.replace('Bearer ', '');
+        console.log("Token procesado:", token);
         if (!token) {
             console.log("Token no proporcionado");
             return res.status(HttpStatusCodes.UNAUTHORIZED).json({ error: 'Token no proporcionado' });
@@ -125,58 +154,42 @@ async function agregarPartido(req: IReq<{ partidos: IPartido }>, res: IRes) {
     }
 }
 
-async function getAll(_: IReq, res: IRes) {
-    const usuarios = await UsuarioService.getAll();
-    return res.status(HttpStatusCodes.OK).json({ usuarios });
+
+async function traerDatosPersonales(req: IReq, res: IRes) {
+    try {
+        const authHeader = req.headers.authorization;
+        if (!authHeader) {
+            console.log("Token no proporcionado");
+            return res.status(HttpStatusCodes.UNAUTHORIZED).json({ error: 'Token no proporcionado' });
+        }
+        const token = authHeader.replace('Bearer ', '');
+        //const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjp7Il9pZCI6IjY2ZDVlMDhiODQzNWExZjYzNWJjMWI1NiIsImlkIjoxLCJlbWFpbCI6IjJAZ21haWwuY29tIiwiY3JlYXRlZCI6IjIwMjQtMDktMDJUMTU6NTg6MDMuNzMxWiIsImp1Z2Fkb3IiOnsiaWQiOjEsIm5vbWJyZSI6ImFudG9uIiwiYXBlbGxpZG8iOiJqaXNvbiIsIm5hY2ltaWVudG8iOiIrMjc1NzYwLTAzLTIzVDAzOjAwOjAwLjAwMFoiLCJjbHViIjoia2FraSIsImRvcnNhbCI6MiwiYWx0dXJhIjoyMjIsInBlc28iOjIyLCJwYXJ0aWRvcyI6W3siaWQiOjEsImZlY2hhIjpudWxsLCJhZHZlcnNhcmlvIjoiIiwicHVudG9zUHJvcGlvQ2x1YiI6MCwicHVudG9zQWR2ZXJzYXJpbyI6MCwiZXN0YWRpc3RpY2FzIjp7Im1pbnV0b3NKdWdhZG9zIjowLCJzZWd1bmRvc0p1Z2Fkb3MiOjAsInB1bnRvcyI6MCwicmVib3Rlc09mZW5zaXZvcyI6MCwicmVib3Rlc0RlZmVuc2l2b3MiOjAsImFzaXN0ZW5jaWFzIjowLCJmYWx0YXNDb21ldGlkYXMiOjAsImZhbHRhc1JlY2liaWRhcyI6MCwidGFwb25lc1JlY2liaWRvcyI6MCwicGVyZGlkYXMiOjAsInJlY3VwZXJhY2lvbmVzIjowLCJ2YWxvcmFjaW9uIjowLCJ0aXJvcyI6eyJ0aXJvc0RlQ2FtcG8iOjAsInRpcm9zRGVDYW1wb0NvbnZlcnRpZG9zIjowLCJ0aXJvc0RlRG9zIjowLCJ0aXJvc0RlRG9zQ29udmVydGlkb3MiOjAsInRpcm9zRGVUcmVzIjowLCJ0aXJvc0RlVHJlc0NvbnZlcnRpZG9zIjowLCJ0aXJvc0xpYnJlcyI6MCwidGlyb3NMaWJyZXNDb252ZXJ0aWRvcyI6MCwiX2lkIjoiNjZkNWUwOGI4NDM1YTFmNjM1YmMxYjVhIn0sIl9pZCI6IjY2ZDVlMDhiODQzNWExZjYzNWJjMWI1OSJ9LCJfaWQiOiI2NmQ1ZTA4Yjg0MzVhMWY2MzViYzFiNTgifV0sIl9pZCI6IjY2ZDVlMDhiODQzNWExZjYzNWJjMWI1NyJ9LCJfX3YiOjB9LCJpYXQiOjE3MjUyOTQ0OTQsImV4cCI6MTcyNTQ2NzI5NH0.igsbeDRjJ0Oa-XAZnI3r2fnYpMHK53zIQbzg3_7XowQ";
+        console.log("Token procesado:", token);
+        if (!token) {
+            console.log("Token no proporcionado");
+            return res.status(HttpStatusCodes.UNAUTHORIZED).json({ error: 'Token no proporcionado' });
+        }else{
+            console.log("Token proporcionado");
+        }
+
+        const decodedToken = jwt.verify(token, EnvVars.Jwt.Secret) as { usuario: IUsuario };
+        const usuario = decodedToken.usuario;
+
+        const datos = await UsuarioService.traerDatosPersonales(usuario);
+        return res.status(HttpStatusCodes.OK).json({ datos });
+     } catch (err) {
+        console.error('Error al agregar el partido:', err);
+        return res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ error: err.message });
+    }
 }
-
-/**
- * Add one usuario.
- */
-async function add(req: IReq<{ usuario: IUsuario }>, res: IRes) {
-    const { usuario } = req.body;
-    await UsuarioService.addOne(usuario);
-    return res.status(HttpStatusCodes.CREATED).end();
-}
-
-/**
- * Update one usuario.
- */
-async function update(req: IReq<{ usuario: IUsuario }>, res: IRes) {
-    const { usuario } = req.body;
-    await UsuarioService.updateOne(usuario);
-    return res.status(HttpStatusCodes.OK).end();
-}
-
-/**
- * Delete one usuario.
- */
-async function delete_(req: IReq, res: IRes) {
-    const id = +req.params.id;
-    await UsuarioService.delete(id);
-    return res.status(HttpStatusCodes.OK).end();
-}
-
-//make this function add IJugador data to the usuario
-async function agregarDatos(req: IReq<{ jugador: IJugador }>, res: IRes) {
-    const { jugador } = req.body;
-    await UsuarioService.agregarDatos(jugador);
-    return res.status(HttpStatusCodes.OK).end();
-}
-
-
 
 
 // **** Export default **** //
 
 export default {
-    getAll,
     promedio,
-    add,
-    update,
-    delete: delete_,
-    agregarDatos,
     login,
     register,
     agregarPartido,
+    traerDatosPersonales
 } as const ;

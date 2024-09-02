@@ -75,7 +75,7 @@ function isPartido(arg: any): boolean {
     'faltasCometidas' in arg.estadisticas && typeof arg.estadisticas.faltasCometidas === 'number' &&
     'faltasRecibidas' in arg.estadisticas && typeof arg.estadisticas.faltasRecibidas === 'number' &&
     'taponesRecibidos' in arg.estadisticas && typeof arg.estadisticas.taponesRecibidos === 'number' &&
-    'taponesRealizados' in arg.estadisticas && typeof arg.estadisticas.taponesRealizados === 'number' &&
+    'taponesCometidos' in arg.estadisticas && typeof arg.estadisticas.taponesCometidos === 'number' &&
     'perdidas' in arg.estadisticas && typeof arg.estadisticas.perdidas === 'number' &&
     'recuperaciones' in arg.estadisticas && typeof arg.estadisticas.recuperaciones === 'number' &&
     'valoracion' in arg.estadisticas && typeof arg.estadisticas.valoracion === 'number'

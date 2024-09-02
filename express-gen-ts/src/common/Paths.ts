@@ -12,5 +12,6 @@ export default {
     Logout: '/logout',
     Promedio: '/promedio',
     AgregarPartido : '/agregarPartido',
+    TraerDatosPersonales : '/traerDatos',
   },
 } as const;

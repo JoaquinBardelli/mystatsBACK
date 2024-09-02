@@ -5,7 +5,7 @@
     "password": "123456",
     "created": "2024-08-12T14:02:29Z",
     "jugador": {
-      "id":1,
+      "id": 1,
       "nombre": "Joaquin",
       "apellido": "Bardelli",
       "nacimiento": "2006-03-29T14:02:29Z",
@@ -13,13 +13,13 @@
       "dorsal": 44,
       "altura": 184,
       "peso": 84,
-      "partidos":{
+      "partidos": {
         "id": 1,
         "fecha": "2024-08-12T14:02:29Z",
         "adversario": "Club Atletico River Plate",
         "puntosPropioClub": 90,
         "puntosAdversario": 80,
-        "estadisticas":{
+        "estadisticas": {
           "minutosJugados": 40,
           "segundosJugados": 0,
           "puntos": 20,
@@ -33,15 +33,15 @@
           "perdidas": 1,
           "recuperaciones": 2,
           "valoracion": 25,
-          "tiros":{
-            "tirosDeCampo":6,
-            "tirosDeCampoConvertidos":4,
-            "tirosDeDos":4,
-            "tirosDeDosConvertidos":3,
-            "tirosDeTres":2,
-            "tirosDeTresConvertidos":1,
-            "tirosLibres":15,
-            "tirosLibresConvertidos":11
+          "tiros": {
+            "tirosDeCampo": 6,
+            "tirosDeCampoConvertidos": 4,
+            "tirosDeDos": 4,
+            "tirosDeDosConvertidos": 3,
+            "tirosDeTres": 2,
+            "tirosDeTresConvertidos": 1,
+            "tirosLibres": 15,
+            "tirosLibresConvertidos": 11
           }
         }
       }

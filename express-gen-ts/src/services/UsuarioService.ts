@@ -35,64 +35,6 @@ function register(usuario: IUsuario): Promise<{ token: string }> {
 function agregarPartido(email:string ,partido: IPartido): Promise<void> {
   return UsuarioRepo.agregarPartido(email, partido);
 }
-/**
- * Get all usuarios.
- */
-function getAll(): Promise<IUsuario[]> {
-  return UsuarioRepo.getAll();
-}
-
-/**
- * Add one usuario.
- */
-function addOne(usuario: IUsuario): Promise<void> {
-  return UsuarioRepo.add(usuario);
-}
-
-/**
- * Update one usuario.
- */
-async function updateOne(usuario: IUsuario): Promise<void> {
-  const persists = await UsuarioRepo.persists(usuario.id);
-  if (!persists) {
-    throw new RouteError(
-      HttpStatusCodes.NOT_FOUND,
-      usuario_NOT_FOUND_ERR,
-    );
-  }
-  // Return usuario
-  return UsuarioRepo.update(usuario);
-}
-
-/**
- * Delete a usuario by their id.
- */
-async function _delete(id: number): Promise<void> {
-  const persists = await UsuarioRepo.persists(id);
-  if (!persists) {
-    throw new RouteError(
-      HttpStatusCodes.NOT_FOUND,
-      usuario_NOT_FOUND_ERR,
-    );
-  }
-  // Delete usuario
-  return UsuarioRepo.delete(id);
-}
-
-/**
- * Add IJugador data to the usuario.
- */
-async function agregarDatos(jugador: IJugador): Promise<void> {
-  const usuario = await UsuarioRepo.getLogeado();
-  if (!usuario) {
-    throw new RouteError(
-      HttpStatusCodes.NOT_FOUND,
-      usuario_NOT_FOUND_ERR,
-    );
-  }
-  usuario.jugador = jugador;
-  return UsuarioRepo.update(usuario);
-}
 
 // **** Promedio **** //
 async function promedio(usuario : IUsuario): Promise<IEstadisticas>{
@@ -100,16 +42,17 @@ async function promedio(usuario : IUsuario): Promise<IEstadisticas>{
   return UsuarioRepo.getPromedioEstadisticas(usuario);
 }
 
+async function traerDatosPersonales(usuario:IUsuario): Promise<IJugador>{
+  const datos = await UsuarioRepo.traerDatosPersonales(usuario);
+  return datos;
+}
+
 // **** Export default **** //
 
 export default {
-  getAll,
-  addOne,
-  updateOne,
-  delete: _delete,
-  agregarDatos,
   login,
   register,
   promedio,
   agregarPartido,
+  traerDatosPersonales,
 } as const;

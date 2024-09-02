@@ -10,6 +10,7 @@ import { IEstadisticas } from '@src/models/Estadisticas';
 import { ITiros } from '@src/models/Tiros';
 import { IPartido } from '@src/models/Partido';
 import { get } from 'http';
+import { IJugador } from '@src/models/Jugador';
  
  
 // **** Functions **** //
@@ -62,6 +63,8 @@ async function login(usuario: IUsuario): Promise<{ token: string }> {
     EnvVars.Jwt.Secret,
     { expiresIn: "48h" }
   );
+
+  console.log("Usuario logeado: " + usuario.email + " con token: " + token);
 
   return { token };
 }
@@ -137,6 +140,7 @@ async function register(usuario: IUsuario): Promise<{ token: string }> {
   );
 
   // Devolver el token al frontend
+  console.log("USUARIO REGISTRADO: " + usuario.email);
   return { token };
 }
 
@@ -238,8 +242,7 @@ function calcularPromedioEstadisticas(partidos:IPartido[]):IEstadisticas{
   };
   
   for(const partido of partidos){
-    console.log(partido.estadisticas);
-    console.log(partido.estadisticas.tiros);
+    console.log(partido.estadisticas.taponesCometidos);
     estadisticasPromedio.minutosJugados += partido.estadisticas.minutosJugados;
     estadisticasPromedio.segundosJugados += partido.estadisticas.segundosJugados;
     estadisticasPromedio.puntos += partido.estadisticas.puntos;
@@ -285,6 +288,7 @@ function calcularPromedioEstadisticas(partidos:IPartido[]):IEstadisticas{
   estadisticasPromedio.tiros.tirosLibres /= contador;
   estadisticasPromedio.tiros.tirosLibresConvertidos /= contador; 
 
+  console.log("Estadisticas promedio" + estadisticasPromedio.taponesCometidos);
   return estadisticasPromedio;
 }
 
@@ -333,75 +337,25 @@ async function persists(id: number): Promise<boolean> {
 /**
 * Get all usuarios.
 */
-async function getAll(): Promise<IUsuario[]> {
-  const db = await orm.openDb();
-  return db.usuarios;
-}
- 
-/**
-* Add one usuario.
-*/
-async function add(usuario: IUsuario): Promise<void> {
-  const db = await orm.openDb();
-  usuario.id = getRandomInt();
-  db.usuarios.push(usuario);
-  return orm.saveDb(db);
-}
- 
-/**
-* Update a usuario.
-*/
-async function update(usuario: IUsuario): Promise<void> {
-  const db = await orm.openDb();
-  for (let i = 0; i < db.usuarios.length; i++) {
-    if (db.usuarios[i].id === usuario.id) {
-      const dbusuario = db.usuarios[i];
-      db.usuarios[i] = {
-        ...dbusuario,
-        email: usuario.email,
-        password: usuario.password,
-      };
-      return orm.saveDb(db);
-    }
-  }
-}
- 
-/**
-* Delete one usuario.
-*/
-async function delete_(id: number): Promise<void> {
-  const db = await orm.openDb();
-  for (let i = 0; i < db.usuarios.length; i++) {
-    if (db.usuarios[i].id === id) {
-      db.usuarios.splice(i, 1);
-      return orm.saveDb(db);
-    }
-  }
-}
 
-async function getLogeado(): Promise<IUsuario | null> {
-    const db = await orm.openDb();
-    for (const usuario of db.usuarios) {
-        if (usuario.logeado) {
-        return usuario;
-        }
-    }
-    return null;
-}
- 
- 
+
+
+async function traerDatosPersonales(usuario:IUsuario): Promise<IJugador> {
+  const user = await usuarioModel.findOne({ email: usuario.email }).exec();
+  if (!user) {
+    throw new Error('Usuario no encontrado');
+  }
+  const jugador = user.jugador;
+  return jugador;
+} 
 // **** Export default **** //
  
 export default {
   getOne,
   persists,
-  getAll,
-  add,
-  update,
-  delete: delete_,
-  getLogeado,
   login,
   register,
   getPromedioEstadisticas,
   agregarPartido,
-} as const
+  traerDatosPersonales,
+} as const;
