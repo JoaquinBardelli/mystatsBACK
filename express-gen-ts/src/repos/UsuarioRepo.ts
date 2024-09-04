@@ -11,8 +11,8 @@ import { ITiros } from '@src/models/Tiros';
 import { IPartido } from '@src/models/Partido';
 import { get } from 'http';
 import { IJugador } from '@src/models/Jugador';
- 
- 
+
+
 // **** Functions **** //
 /*async function login(usuario: IUsuario): Promise<string> {
   //traer los datos de mongo del usuario con ese email  
@@ -33,23 +33,23 @@ import { IJugador } from '@src/models/Jugador';
     // Aquí puedes continuar con el proceso de login, como generar un token JWT.
     return "Login exitoso";
   }*/
-  /*if (!bcrypt.compareSync(usuario.password, user.password)) {
-    throw new Error('Contraseña incorrecta');
-  }else{
-    console.log("Contraseña correcta");
-    console.log("Usuario logeado: " + user);
-  }
-  const token = jwt.sign({ 
-    usuario: user,
-  }, EnvVars.Jwt.Secret, {
-    expiresIn: "48h"
-  });
-  return token;
+/*if (!bcrypt.compareSync(usuario.password, user.password)) {
+  throw new Error('Contraseña incorrecta');
+}else{
+  console.log("Contraseña correcta");
+  console.log("Usuario logeado: " + user);
+}
+const token = jwt.sign({ 
+  usuario: user,
+}, EnvVars.Jwt.Secret, {
+  expiresIn: "48h"
+});
+return token;
 }*/
 
 async function login(usuario: IUsuario): Promise<{ token: string }> {
   const user = await usuarioModel.findOne({ email: usuario.email }).exec();
-  
+
   if (!user) {
     throw new Error('Usuario no encontrado');
   }
@@ -148,7 +148,7 @@ async function register(usuario: IUsuario): Promise<{ token: string }> {
 async function agregarPartido(email: string, partido: IPartido): Promise<void> {
   const usuario = await usuarioModel.findOne({ email }).exec();
   if (!usuario) {
-      throw new Error('Usuario no encontrado');
+    throw new Error('Usuario no encontrado');
   }
   console.log("Partido en repo agregarPartido" + partido);
   /*const partidosArray = Array.from(usuario.jugador.partidos);
@@ -213,7 +213,7 @@ async function getPromedioEstadisticas(usuario: IUsuario): Promise<IEstadisticas
   return calcularPromedioEstadisticas(user.jugador.partidos);
 }
 
-function calcularPromedioEstadisticas(partidos:IPartido[]):IEstadisticas{
+function calcularPromedioEstadisticas(partidos: IPartido[]): IEstadisticas {
   let contador = 0;
   const estadisticasPromedio = {
     minutosJugados: 0,
@@ -240,8 +240,8 @@ function calcularPromedioEstadisticas(partidos:IPartido[]):IEstadisticas{
       tirosLibresConvertidos: 0,
     }
   };
-  
-  for(const partido of partidos){
+
+  for (const partido of partidos) {
     console.log(partido.estadisticas.taponesCometidos);
     estadisticasPromedio.minutosJugados += partido.estadisticas.minutosJugados;
     estadisticasPromedio.segundosJugados += partido.estadisticas.segundosJugados;
@@ -286,13 +286,13 @@ function calcularPromedioEstadisticas(partidos:IPartido[]):IEstadisticas{
   estadisticasPromedio.tiros.tirosDeTres /= contador;
   estadisticasPromedio.tiros.tirosDeTresConvertidos /= contador;
   estadisticasPromedio.tiros.tirosLibres /= contador;
-  estadisticasPromedio.tiros.tirosLibresConvertidos /= contador; 
+  estadisticasPromedio.tiros.tirosLibresConvertidos /= contador;
 
   console.log("Estadisticas promedio" + estadisticasPromedio.taponesCometidos);
   return estadisticasPromedio;
 }
 
-function calcularPorcentajes(tiros:ITiros){
+function calcularPorcentajes(tiros: ITiros) {
   const porcentajes = {
     porcCampo: 0,
     porcDos: 0,
@@ -320,7 +320,7 @@ async function getOne(email: string): Promise<IUsuario | null> {
   }
   return null;
 }
- 
+
 /**
 * See if a usuario with the given id exists.
 */
@@ -333,23 +333,125 @@ async function persists(id: number): Promise<boolean> {
   }
   return false;
 }
- 
+
 /**
 * Get all usuarios.
 */
 
 
 
-async function traerDatosPersonales(usuario:IUsuario): Promise<IJugador> {
+async function traerDatosPersonales(usuario: IUsuario): Promise<IJugador> {
   const user = await usuarioModel.findOne({ email: usuario.email }).exec();
   if (!user) {
     throw new Error('Usuario no encontrado');
   }
   const jugador = user.jugador;
   return jugador;
-} 
+}
+
+async function partidosPorPuntos(usuario: IUsuario): Promise<IPartido[]> {
+  // Buscar el usuario en la base de datos
+  const user = await usuarioModel.findOne({ email: usuario.email }).exec();
+  if (!user) {
+    throw new Error('Usuario no encontrado');
+  }
+
+  // Obtener los partidos del jugador
+  const partidos = user.jugador.partidos;
+
+  // Ordenar los partidos desde el que tuvo más puntos al que tuvo menos
+  //const partidosOrdenados = partidos.sort((a: IPartido, b: IPartido) => b.estadisticas.puntos - a.estadisticas.puntos);
+  if (!user || !user.jugador || !user.jugador.partidos || user.jugador.partidos.length === 0) {
+    return [];
+  }
+
+  // Ordenar los partidos de mayor a menor según los puntos
+  const partidosOrdenados = [...user.jugador.partidos].sort((a, b) => b.estadisticas.puntos - a.estadisticas.puntos);
+  console.log("Partidos ordenados por puntos: ", partidosOrdenados);
+
+  return partidosOrdenados;
+}
+
+async function partidosPorMinutos(usuario: IUsuario): Promise<IPartido[]> {
+  // Buscar el usuario en la base de datos
+  const user = await usuarioModel.findOne({ email: usuario.email }).exec();
+  if (!user) {
+    throw new Error('Usuario no encontrado');
+  }
+
+  const partidos = user.jugador.partidos;
+
+  const partidosOrdenados = user.jugador.partidos.sort((a, b) => {
+    const tiempoA = a.estadisticas.minutosJugados * 60 + a.estadisticas.segundosJugados;
+    const tiempoB = b.estadisticas.minutosJugados * 60 + b.estadisticas.segundosJugados;
+
+    // Ordenar de mayor a menor
+    return tiempoB - tiempoA;
+  });
+  return partidosOrdenados;
+}
+
+async function partidosPorAsistencias(usuario: IUsuario): Promise<IPartido[]> {
+  // Buscar el usuario en la base de datos
+  const user = await usuarioModel.findOne({ email: usuario.email }).exec();
+  if (!user) {
+    throw new Error('Usuario no encontrado');
+  }
+
+  const partidos = user.jugador.partidos;
+
+  const partidosOrdenados = partidos
+    .filter((partido) => partido.estadisticas.asistencias >= 0) // Aseguramos que las asistencias sean válidas
+    .sort((a, b) => b.estadisticas.asistencias - a.estadisticas.asistencias); 
+
+  return partidosOrdenados;
+}
+
+async function partidosPorRebotes(usuario: IUsuario): Promise<IPartido[]> {
+  // Buscar el usuario en la base de datos
+  const user = await usuarioModel.findOne({ email: usuario.email }).exec();
+  if (!user) {
+    throw new Error('Usuario no encontrado');
+  }
+
+  const partidos = user.jugador.partidos;
+
+  // Ordenar los partidos de mayor a menor según la sumatoria de rebotes (ofensivos + defensivos)
+  const partidosOrdenados = partidos
+    .filter((partido) => partido.estadisticas.rebotesOfensivos >= 0 && partido.estadisticas.rebotesDefensivos >= 0) // Aseguramos que los rebotes sean válidos
+    .sort((a, b) => {
+      const rebotesA = a.estadisticas.rebotesOfensivos + a.estadisticas.rebotesDefensivos;
+      const rebotesB = b.estadisticas.rebotesOfensivos + b.estadisticas.rebotesDefensivos;
+
+      // Ordenar de mayor a menor
+      return rebotesB - rebotesA;
+    });
+
+  return partidosOrdenados;
+}
+
+async function partidosPorValoracion(usuario: IUsuario): Promise<IPartido[]> {
+  // Buscar el usuario en la base de datos
+  const user = await usuarioModel.findOne({ email: usuario.email }).exec();
+  if (!user) {
+    throw new Error('Usuario no encontrado');
+  }
+
+  const partidos = user.jugador.partidos;
+
+  // Ordenar los partidos de mayor a menor según la valoración
+  const partidosOrdenados = partidos
+    .filter((partido) => partido.estadisticas.valoracion !== undefined) // Aseguramos que exista una valoración
+    .sort((a, b) => {
+      // Ordenar de mayor a menor
+      return b.estadisticas.valoracion - a.estadisticas.valoracion;
+    });
+
+  return partidosOrdenados;
+}
+
 // **** Export default **** //
- 
+
 export default {
   getOne,
   persists,
@@ -358,4 +460,9 @@ export default {
   getPromedioEstadisticas,
   agregarPartido,
   traerDatosPersonales,
+  partidosPorPuntos,
+  partidosPorMinutos,
+  partidosPorAsistencias,
+  partidosPorRebotes,
+  partidosPorValoracion,
 } as const;

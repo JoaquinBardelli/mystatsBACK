@@ -1,3 +1,5 @@
+import Partido from "@src/models/Partido";
+
 export default {
   Base: '/api',
   Usuarios: {
@@ -13,5 +15,10 @@ export default {
     Promedio: '/promedio',
     AgregarPartido : '/agregarPartido',
     TraerDatosPersonales : '/traerDatos',
+    PartidosPorPuntos : '/partidosPorPuntos',
+    PartidosPorMinutos : '/partidosPorMinutos',
+    PartidosPorAsistencias : '/partidosPorAsistencias',
+    PartidosPorRebotes : '/partidosPorRebotes',
+    PartidosPorValoracion : '/partidosPorValoracion',
   },
 } as const;

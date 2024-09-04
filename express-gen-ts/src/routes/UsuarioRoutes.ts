@@ -183,7 +183,158 @@ async function traerDatosPersonales(req: IReq, res: IRes) {
     }
 }
 
+async function partidosPorPuntos(req: IReq, res: IRes) {
+    try {
+        /*const authHeader = req.headers.authorization;
+        if (!authHeader) {
+            console.log("Token no proporcionado");
+            return res.status(HttpStatusCodes.UNAUTHORIZED).json({ error: 'Token no proporcionado' });
+        }
 
+        // Eliminar la palabra 'Bearer ' del token
+        const token = authHeader.replace('Bearer ', '');
+        console.log("Token procesado:", token);
+        if (!token) {
+            console.log("Token no proporcionado");
+            return res.status(HttpStatusCodes.UNAUTHORIZED).json({ error: 'Token no proporcionado' });
+        }else{
+            console.log("Token proporcionado");
+        }*/
+       const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjp7ImlkIjoxLCJlbWFpbCI6InNlYmFwQGdtYWlsLmNvbSIsImNyZWF0ZWQiOiIyMDI0LTA5LTA0VDE3OjI0OjE0LjE5OVoiLCJqdWdhZG9yIjp7ImlkIjoxLCJub21icmUiOiJzZWJhIiwiYXBlbGxpZG8iOiJwb3NhZG8iLCJuYWNpbWllbnRvIjoiMjAyNC0wOS0wMlQwMDowMDowMC4wMDBaIiwiY2x1YiI6ImZlcnJvIiwiZG9yc2FsIjoxMiwiYWx0dXJhIjoxODAsInBlc28iOjgwLCJwYXJ0aWRvcyI6W3siaWQiOjEsImZlY2hhIjpudWxsLCJhZHZlcnNhcmlvIjoiIiwicHVudG9zUHJvcGlvQ2x1YiI6MCwicHVudG9zQWR2ZXJzYXJpbyI6MCwiZXN0YWRpc3RpY2FzIjp7Im1pbnV0b3NKdWdhZG9zIjowLCJzZWd1bmRvc0p1Z2Fkb3MiOjAsInB1bnRvcyI6MCwicmVib3Rlc09mZW5zaXZvcyI6MCwicmVib3Rlc0RlZmVuc2l2b3MiOjAsImFzaXN0ZW5jaWFzIjowLCJmYWx0YXNDb21ldGlkYXMiOjAsImZhbHRhc1JlY2liaWRhcyI6MCwidGFwb25lc0NvbWV0aWRvcyI6MCwidGFwb25lc1JlY2liaWRvcyI6MCwicGVyZGlkYXMiOjAsInJlY3VwZXJhY2lvbmVzIjowLCJ2YWxvcmFjaW9uIjowLCJ0aXJvcyI6eyJ0aXJvc0RlQ2FtcG8iOjAsInRpcm9zRGVDYW1wb0NvbnZlcnRpZG9zIjowLCJ0aXJvc0RlRG9zIjowLCJ0aXJvc0RlRG9zQ29udmVydGlkb3MiOjAsInRpcm9zRGVUcmVzIjowLCJ0aXJvc0RlVHJlc0NvbnZlcnRpZG9zIjowLCJ0aXJvc0xpYnJlcyI6MCwidGlyb3NMaWJyZXNDb252ZXJ0aWRvcyI6MCwiX2lkIjoiNjZkODk3YmVjNmNhMzBmNDBhMGI2ZDA2In0sIl9pZCI6IjY2ZDg5N2JlYzZjYTMwZjQwYTBiNmQwNSJ9LCJfaWQiOiI2NmQ4OTdiZWM2Y2EzMGY0MGEwYjZkMDQifV0sIl9pZCI6IjY2ZDg5N2JlYzZjYTMwZjQwYTBiNmQwMyJ9LCJfaWQiOiI2NmQ4OTdiZWM2Y2EzMGY0MGEwYjZkMDIiLCJfX3YiOjB9LCJpYXQiOjE3MjU0NzA2NTQsImV4cCI6MTcyNTY0MzQ1NH0.mB3VU4Yf0Ly6yP9xsiB23Z1mLwblYG2Z4QYBGGVOAZE";
+
+        const decodedToken = jwt.verify(token, EnvVars.Jwt.Secret) as { usuario: IUsuario };
+        const usuario = decodedToken.usuario;
+        const partidos = await UsuarioService.partidosPorPuntos(usuario);
+        return res.status(HttpStatusCodes.OK).json({ partidos });
+    
+    } catch (err) {
+        console.error('Error al buscar partidos por puntos:', err);
+        return res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ error: err.message });
+    }
+}
+
+async function partidosPorMinutos(req: IReq, res: IRes) {
+    try {
+        /*const authHeader = req.headers.authorization;
+        if (!authHeader) {
+            console.log("Token no proporcionado");
+            return res.status(HttpStatusCodes.UNAUTHORIZED).json({ error: 'Token no proporcionado' });
+        }
+
+        // Eliminar la palabra 'Bearer ' del token
+        const token = authHeader.replace('Bearer ', '');
+        console.log("Token procesado:", token);
+        if (!token) {
+            console.log("Token no proporcionado");
+            return res.status(HttpStatusCodes.UNAUTHORIZED).json({ error: 'Token no proporcionado' });
+        }else{
+            console.log("Token proporcionado");
+        }*/
+       const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjp7ImlkIjoxLCJlbWFpbCI6InNlYmFwQGdtYWlsLmNvbSIsImNyZWF0ZWQiOiIyMDI0LTA5LTA0VDE3OjI0OjE0LjE5OVoiLCJqdWdhZG9yIjp7ImlkIjoxLCJub21icmUiOiJzZWJhIiwiYXBlbGxpZG8iOiJwb3NhZG8iLCJuYWNpbWllbnRvIjoiMjAyNC0wOS0wMlQwMDowMDowMC4wMDBaIiwiY2x1YiI6ImZlcnJvIiwiZG9yc2FsIjoxMiwiYWx0dXJhIjoxODAsInBlc28iOjgwLCJwYXJ0aWRvcyI6W3siaWQiOjEsImZlY2hhIjpudWxsLCJhZHZlcnNhcmlvIjoiIiwicHVudG9zUHJvcGlvQ2x1YiI6MCwicHVudG9zQWR2ZXJzYXJpbyI6MCwiZXN0YWRpc3RpY2FzIjp7Im1pbnV0b3NKdWdhZG9zIjowLCJzZWd1bmRvc0p1Z2Fkb3MiOjAsInB1bnRvcyI6MCwicmVib3Rlc09mZW5zaXZvcyI6MCwicmVib3Rlc0RlZmVuc2l2b3MiOjAsImFzaXN0ZW5jaWFzIjowLCJmYWx0YXNDb21ldGlkYXMiOjAsImZhbHRhc1JlY2liaWRhcyI6MCwidGFwb25lc0NvbWV0aWRvcyI6MCwidGFwb25lc1JlY2liaWRvcyI6MCwicGVyZGlkYXMiOjAsInJlY3VwZXJhY2lvbmVzIjowLCJ2YWxvcmFjaW9uIjowLCJ0aXJvcyI6eyJ0aXJvc0RlQ2FtcG8iOjAsInRpcm9zRGVDYW1wb0NvbnZlcnRpZG9zIjowLCJ0aXJvc0RlRG9zIjowLCJ0aXJvc0RlRG9zQ29udmVydGlkb3MiOjAsInRpcm9zRGVUcmVzIjowLCJ0aXJvc0RlVHJlc0NvbnZlcnRpZG9zIjowLCJ0aXJvc0xpYnJlcyI6MCwidGlyb3NMaWJyZXNDb252ZXJ0aWRvcyI6MCwiX2lkIjoiNjZkODk3YmVjNmNhMzBmNDBhMGI2ZDA2In0sIl9pZCI6IjY2ZDg5N2JlYzZjYTMwZjQwYTBiNmQwNSJ9LCJfaWQiOiI2NmQ4OTdiZWM2Y2EzMGY0MGEwYjZkMDQifV0sIl9pZCI6IjY2ZDg5N2JlYzZjYTMwZjQwYTBiNmQwMyJ9LCJfaWQiOiI2NmQ4OTdiZWM2Y2EzMGY0MGEwYjZkMDIiLCJfX3YiOjB9LCJpYXQiOjE3MjU0NzA2NTQsImV4cCI6MTcyNTY0MzQ1NH0.mB3VU4Yf0Ly6yP9xsiB23Z1mLwblYG2Z4QYBGGVOAZE";
+
+        const decodedToken = jwt.verify(token, EnvVars.Jwt.Secret) as { usuario: IUsuario };
+        const usuario = decodedToken.usuario;
+        const partidos = await UsuarioService.partidosPorMinutos(usuario);
+        return res.status(HttpStatusCodes.OK).json({ partidos });
+    
+    } catch (err) {
+        console.error('Error al buscar partidos por minutos:', err);
+        return res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ error: err.message });
+    }
+}
+
+async function partidosPorAsistencias(req: IReq, res: IRes) {
+    try {
+        /*const authHeader = req.headers.authorization;
+        if (!authHeader) {
+            console.log("Token no proporcionado");
+            return res.status(HttpStatusCodes.UNAUTHORIZED).json({ error: 'Token no proporcionado' });
+        }
+
+        // Eliminar la palabra 'Bearer ' del token
+        const token = authHeader.replace('Bearer ', '');
+        console.log("Token procesado:", token);
+        if (!token) {
+            console.log("Token no proporcionado");
+            return res.status(HttpStatusCodes.UNAUTHORIZED).json({ error: 'Token no proporcionado' });
+        }else{
+            console.log("Token proporcionado");
+        }*/
+       const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjp7ImlkIjoxLCJlbWFpbCI6InNlYmFwQGdtYWlsLmNvbSIsImNyZWF0ZWQiOiIyMDI0LTA5LTA0VDE3OjI0OjE0LjE5OVoiLCJqdWdhZG9yIjp7ImlkIjoxLCJub21icmUiOiJzZWJhIiwiYXBlbGxpZG8iOiJwb3NhZG8iLCJuYWNpbWllbnRvIjoiMjAyNC0wOS0wMlQwMDowMDowMC4wMDBaIiwiY2x1YiI6ImZlcnJvIiwiZG9yc2FsIjoxMiwiYWx0dXJhIjoxODAsInBlc28iOjgwLCJwYXJ0aWRvcyI6W3siaWQiOjEsImZlY2hhIjpudWxsLCJhZHZlcnNhcmlvIjoiIiwicHVudG9zUHJvcGlvQ2x1YiI6MCwicHVudG9zQWR2ZXJzYXJpbyI6MCwiZXN0YWRpc3RpY2FzIjp7Im1pbnV0b3NKdWdhZG9zIjowLCJzZWd1bmRvc0p1Z2Fkb3MiOjAsInB1bnRvcyI6MCwicmVib3Rlc09mZW5zaXZvcyI6MCwicmVib3Rlc0RlZmVuc2l2b3MiOjAsImFzaXN0ZW5jaWFzIjowLCJmYWx0YXNDb21ldGlkYXMiOjAsImZhbHRhc1JlY2liaWRhcyI6MCwidGFwb25lc0NvbWV0aWRvcyI6MCwidGFwb25lc1JlY2liaWRvcyI6MCwicGVyZGlkYXMiOjAsInJlY3VwZXJhY2lvbmVzIjowLCJ2YWxvcmFjaW9uIjowLCJ0aXJvcyI6eyJ0aXJvc0RlQ2FtcG8iOjAsInRpcm9zRGVDYW1wb0NvbnZlcnRpZG9zIjowLCJ0aXJvc0RlRG9zIjowLCJ0aXJvc0RlRG9zQ29udmVydGlkb3MiOjAsInRpcm9zRGVUcmVzIjowLCJ0aXJvc0RlVHJlc0NvbnZlcnRpZG9zIjowLCJ0aXJvc0xpYnJlcyI6MCwidGlyb3NMaWJyZXNDb252ZXJ0aWRvcyI6MCwiX2lkIjoiNjZkODk3YmVjNmNhMzBmNDBhMGI2ZDA2In0sIl9pZCI6IjY2ZDg5N2JlYzZjYTMwZjQwYTBiNmQwNSJ9LCJfaWQiOiI2NmQ4OTdiZWM2Y2EzMGY0MGEwYjZkMDQifV0sIl9pZCI6IjY2ZDg5N2JlYzZjYTMwZjQwYTBiNmQwMyJ9LCJfaWQiOiI2NmQ4OTdiZWM2Y2EzMGY0MGEwYjZkMDIiLCJfX3YiOjB9LCJpYXQiOjE3MjU0NzA2NTQsImV4cCI6MTcyNTY0MzQ1NH0.mB3VU4Yf0Ly6yP9xsiB23Z1mLwblYG2Z4QYBGGVOAZE";
+
+
+        const decodedToken = jwt.verify(token, EnvVars.Jwt.Secret) as { usuario: IUsuario };
+        const usuario = decodedToken.usuario;
+        const partidos = await UsuarioService.partidosPorAsistencias(usuario);
+        return res.status(HttpStatusCodes.OK).json({ partidos });
+    
+    } catch (err) {
+        console.error('Error al buscar partidos por asistencias:', err);
+        return res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ error: err.message });
+    }
+}
+
+async function partidosPorRebotes(req: IReq, res: IRes) {
+    try {
+        /*const authHeader = req.headers.authorization;
+        if (!authHeader) {
+            console.log("Token no proporcionado");
+            return res.status(HttpStatusCodes.UNAUTHORIZED).json({ error: 'Token no proporcionado' });
+        }
+
+        // Eliminar la palabra 'Bearer ' del token
+        const token = authHeader.replace('Bearer ', '');
+        console.log("Token procesado:", token);
+        if (!token) {
+            console.log("Token no proporcionado");
+            return res.status(HttpStatusCodes.UNAUTHORIZED).json({ error: 'Token no proporcionado' });
+        }else{
+            console.log("Token proporcionado");
+        }*/
+       const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjp7ImlkIjoxLCJlbWFpbCI6InNlYmFwQGdtYWlsLmNvbSIsImNyZWF0ZWQiOiIyMDI0LTA5LTA0VDE3OjI0OjE0LjE5OVoiLCJqdWdhZG9yIjp7ImlkIjoxLCJub21icmUiOiJzZWJhIiwiYXBlbGxpZG8iOiJwb3NhZG8iLCJuYWNpbWllbnRvIjoiMjAyNC0wOS0wMlQwMDowMDowMC4wMDBaIiwiY2x1YiI6ImZlcnJvIiwiZG9yc2FsIjoxMiwiYWx0dXJhIjoxODAsInBlc28iOjgwLCJwYXJ0aWRvcyI6W3siaWQiOjEsImZlY2hhIjpudWxsLCJhZHZlcnNhcmlvIjoiIiwicHVudG9zUHJvcGlvQ2x1YiI6MCwicHVudG9zQWR2ZXJzYXJpbyI6MCwiZXN0YWRpc3RpY2FzIjp7Im1pbnV0b3NKdWdhZG9zIjowLCJzZWd1bmRvc0p1Z2Fkb3MiOjAsInB1bnRvcyI6MCwicmVib3Rlc09mZW5zaXZvcyI6MCwicmVib3Rlc0RlZmVuc2l2b3MiOjAsImFzaXN0ZW5jaWFzIjowLCJmYWx0YXNDb21ldGlkYXMiOjAsImZhbHRhc1JlY2liaWRhcyI6MCwidGFwb25lc0NvbWV0aWRvcyI6MCwidGFwb25lc1JlY2liaWRvcyI6MCwicGVyZGlkYXMiOjAsInJlY3VwZXJhY2lvbmVzIjowLCJ2YWxvcmFjaW9uIjowLCJ0aXJvcyI6eyJ0aXJvc0RlQ2FtcG8iOjAsInRpcm9zRGVDYW1wb0NvbnZlcnRpZG9zIjowLCJ0aXJvc0RlRG9zIjowLCJ0aXJvc0RlRG9zQ29udmVydGlkb3MiOjAsInRpcm9zRGVUcmVzIjowLCJ0aXJvc0RlVHJlc0NvbnZlcnRpZG9zIjowLCJ0aXJvc0xpYnJlcyI6MCwidGlyb3NMaWJyZXNDb252ZXJ0aWRvcyI6MCwiX2lkIjoiNjZkODk3YmVjNmNhMzBmNDBhMGI2ZDA2In0sIl9pZCI6IjY2ZDg5N2JlYzZjYTMwZjQwYTBiNmQwNSJ9LCJfaWQiOiI2NmQ4OTdiZWM2Y2EzMGY0MGEwYjZkMDQifV0sIl9pZCI6IjY2ZDg5N2JlYzZjYTMwZjQwYTBiNmQwMyJ9LCJfaWQiOiI2NmQ4OTdiZWM2Y2EzMGY0MGEwYjZkMDIiLCJfX3YiOjB9LCJpYXQiOjE3MjU0NzA2NTQsImV4cCI6MTcyNTY0MzQ1NH0.mB3VU4Yf0Ly6yP9xsiB23Z1mLwblYG2Z4QYBGGVOAZE";
+
+
+        const decodedToken = jwt.verify(token, EnvVars.Jwt.Secret) as { usuario: IUsuario };
+        const usuario = decodedToken.usuario;
+        const partidos = await UsuarioService.partidosPorRebotes(usuario);
+        return res.status(HttpStatusCodes.OK).json({ partidos });
+    
+    } catch (err) {
+        console.error('Error al buscar partidos por rebotes:', err);
+        return res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ error: err.message });
+    }
+}
+
+async function partidosPorValoracion(req: IReq, res: IRes) {
+    try {
+        /*const authHeader = req.headers.authorization;
+        if (!authHeader) {
+            console.log("Token no proporcionado");
+            return res.status(HttpStatusCodes.UNAUTHORIZED).json({ error: 'Token no proporcionado' });
+        }
+
+        // Eliminar la palabra 'Bearer ' del token
+        const token = authHeader.replace('Bearer ', '');
+        console.log("Token procesado:", token);
+        if (!token) {
+            console.log("Token no proporcionado");
+            return res.status(HttpStatusCodes.UNAUTHORIZED).json({ error: 'Token no proporcionado' });
+        }else{
+            console.log("Token proporcionado");
+        }*/
+       const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjp7ImlkIjoxLCJlbWFpbCI6InNlYmFwQGdtYWlsLmNvbSIsImNyZWF0ZWQiOiIyMDI0LTA5LTA0VDE3OjI0OjE0LjE5OVoiLCJqdWdhZG9yIjp7ImlkIjoxLCJub21icmUiOiJzZWJhIiwiYXBlbGxpZG8iOiJwb3NhZG8iLCJuYWNpbWllbnRvIjoiMjAyNC0wOS0wMlQwMDowMDowMC4wMDBaIiwiY2x1YiI6ImZlcnJvIiwiZG9yc2FsIjoxMiwiYWx0dXJhIjoxODAsInBlc28iOjgwLCJwYXJ0aWRvcyI6W3siaWQiOjEsImZlY2hhIjpudWxsLCJhZHZlcnNhcmlvIjoiIiwicHVudG9zUHJvcGlvQ2x1YiI6MCwicHVudG9zQWR2ZXJzYXJpbyI6MCwiZXN0YWRpc3RpY2FzIjp7Im1pbnV0b3NKdWdhZG9zIjowLCJzZWd1bmRvc0p1Z2Fkb3MiOjAsInB1bnRvcyI6MCwicmVib3Rlc09mZW5zaXZvcyI6MCwicmVib3Rlc0RlZmVuc2l2b3MiOjAsImFzaXN0ZW5jaWFzIjowLCJmYWx0YXNDb21ldGlkYXMiOjAsImZhbHRhc1JlY2liaWRhcyI6MCwidGFwb25lc0NvbWV0aWRvcyI6MCwidGFwb25lc1JlY2liaWRvcyI6MCwicGVyZGlkYXMiOjAsInJlY3VwZXJhY2lvbmVzIjowLCJ2YWxvcmFjaW9uIjowLCJ0aXJvcyI6eyJ0aXJvc0RlQ2FtcG8iOjAsInRpcm9zRGVDYW1wb0NvbnZlcnRpZG9zIjowLCJ0aXJvc0RlRG9zIjowLCJ0aXJvc0RlRG9zQ29udmVydGlkb3MiOjAsInRpcm9zRGVUcmVzIjowLCJ0aXJvc0RlVHJlc0NvbnZlcnRpZG9zIjowLCJ0aXJvc0xpYnJlcyI6MCwidGlyb3NMaWJyZXNDb252ZXJ0aWRvcyI6MCwiX2lkIjoiNjZkODk3YmVjNmNhMzBmNDBhMGI2ZDA2In0sIl9pZCI6IjY2ZDg5N2JlYzZjYTMwZjQwYTBiNmQwNSJ9LCJfaWQiOiI2NmQ4OTdiZWM2Y2EzMGY0MGEwYjZkMDQifV0sIl9pZCI6IjY2ZDg5N2JlYzZjYTMwZjQwYTBiNmQwMyJ9LCJfaWQiOiI2NmQ4OTdiZWM2Y2EzMGY0MGEwYjZkMDIiLCJfX3YiOjB9LCJpYXQiOjE3MjU0NzA2NTQsImV4cCI6MTcyNTY0MzQ1NH0.mB3VU4Yf0Ly6yP9xsiB23Z1mLwblYG2Z4QYBGGVOAZE";
+
+
+        const decodedToken = jwt.verify(token, EnvVars.Jwt.Secret) as { usuario: IUsuario };
+        const usuario = decodedToken.usuario;
+        const partidos = await UsuarioService.partidosPorValoracion(usuario);
+        return res.status(HttpStatusCodes.OK).json({ partidos });
+    
+    } catch (err) {
+        console.error('Error al buscar partidos por valoracion:', err);
+        return res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ error: err.message });
+    }
+}
 // **** Export default **** //
 
 export default {
@@ -191,5 +342,10 @@ export default {
     login,
     register,
     agregarPartido,
-    traerDatosPersonales
+    traerDatosPersonales,
+    partidosPorPuntos,
+    partidosPorMinutos,
+    partidosPorAsistencias,
+    partidosPorRebotes,
+    partidosPorValoracion
 } as const ;

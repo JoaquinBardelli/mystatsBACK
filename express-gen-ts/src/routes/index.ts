@@ -48,6 +48,31 @@ userRouter.get(
   UsuarioRoutes.traerDatosPersonales,
 );
 
+userRouter.get(
+  Paths.Usuarios.PartidosPorPuntos,
+  UsuarioRoutes.partidosPorPuntos,
+);
+
+userRouter.get(
+  Paths.Usuarios.PartidosPorMinutos,
+  UsuarioRoutes.partidosPorMinutos,
+);
+
+userRouter.get(
+  Paths.Usuarios.PartidosPorAsistencias,
+  UsuarioRoutes.partidosPorAsistencias,
+);
+
+userRouter.get(
+  Paths.Usuarios.PartidosPorRebotes,
+  UsuarioRoutes.partidosPorRebotes,
+);
+
+userRouter.get(
+  Paths.Usuarios.PartidosPorValoracion,
+  UsuarioRoutes.partidosPorValoracion,
+);
+
 userRouter.post(
   Paths.Usuarios.AgregarPartido,
   validate(['partidos', Partido.isPartido]),

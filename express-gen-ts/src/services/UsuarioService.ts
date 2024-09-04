@@ -47,6 +47,32 @@ async function traerDatosPersonales(usuario:IUsuario): Promise<IJugador>{
   return datos;
 }
 
+async function partidosPorPuntos(usuario:IUsuario): Promise<IPartido[]>{
+  const partidos = await UsuarioRepo.partidosPorPuntos(usuario);
+  return partidos;
+}
+
+async function partidosPorMinutos(usuario:IUsuario): Promise<IPartido[]>{
+  const partidos = await UsuarioRepo.partidosPorMinutos(usuario);
+  return partidos;
+}
+
+async function partidosPorAsistencias(usuario:IUsuario): Promise<IPartido[]>{
+  const partidos = await UsuarioRepo.partidosPorAsistencias(usuario);
+  return partidos;
+}
+
+async function partidosPorRebotes(usuario:IUsuario): Promise<IPartido[]>{
+  const partidos = await UsuarioRepo.partidosPorRebotes(usuario);
+  return partidos;
+}
+
+async function partidosPorValoracion(usuario:IUsuario): Promise<IPartido[]>{
+  const partidos = await UsuarioRepo.partidosPorValoracion(usuario);
+  return partidos;
+}
+
+
 // **** Export default **** //
 
 export default {
@@ -55,4 +81,9 @@ export default {
   promedio,
   agregarPartido,
   traerDatosPersonales,
+  partidosPorPuntos,
+  partidosPorMinutos,
+  partidosPorAsistencias,
+  partidosPorRebotes,
+  partidosPorValoracion,
 } as const;
