@@ -1,18 +1,17 @@
-import { IUsuario } from '@src/models/Usuario';
-import { getRandomInt } from '@src/util/misc';
-import orm from './MockOrm';
-import { federacionModel, usuarioModel } from './Mongoose';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
-import EnvVars from '@src/common/EnvVars';
-import { token } from 'morgan';
-import { IEstadisticas } from '@src/models/Estadisticas';
-import { ITiros } from '@src/models/Tiros';
-import { IPartido } from '@src/models/Partido';
-import { get } from 'http';
-import { IJugador } from '@src/models/Jugador';
-import { IFederacion } from '@src/models/Federacion';
-
+import { IUsuario } from "@src/models/Usuario";
+import { getRandomInt } from "@src/util/misc";
+import orm from "./MockOrm";
+import { federacionModel, usuarioModel } from "./Mongoose";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import EnvVars from "@src/common/EnvVars";
+import { token } from "morgan";
+import { IEstadisticas } from "@src/models/Estadisticas";
+import { ITiros } from "@src/models/Tiros";
+import { IPartido } from "@src/models/Partido";
+import { get } from "http";
+import { IJugador } from "@src/models/Jugador";
+import { IFederacion } from "@src/models/Federacion";
 
 // **** Functions **** //
 /*async function login(usuario: IUsuario): Promise<string> {
@@ -52,24 +51,21 @@ async function login(usuario: IUsuario): Promise<{ token: string }> {
   const user = await usuarioModel.findOne({ email: usuario.email }).exec();
 
   if (!user) {
-    throw new Error('Usuario no encontrado');
+    throw new Error("Usuario no encontrado");
   }
 
   if (!bcrypt.compareSync(usuario.password, user.password)) {
-    throw new Error('Contraseña incorrecta');
+    throw new Error("Contraseña incorrecta");
   }
 
-  const token = jwt.sign(
-    { usuario: user },
-    EnvVars.Jwt.Secret,
-    { expiresIn: "48h" }
-  );
+  const token = jwt.sign({ usuario: user }, EnvVars.Jwt.Secret, {
+    expiresIn: "48h",
+  });
 
   console.log("Usuario logeado: " + usuario.email + " con token: " + token);
 
   return { token };
 }
-
 
 /*async function register(usuario: IUsuario): Promise<string> {
   console.log("Usuario en repo" + usuario);
@@ -122,10 +118,12 @@ async function login(usuario: IUsuario): Promise<{ token: string }> {
 }*/
 
 async function register(usuario: IUsuario): Promise<{ token: string }> {
-  const existingUser = await usuarioModel.findOne({ email: usuario.email }).exec();
+  const existingUser = await usuarioModel
+    .findOne({ email: usuario.email })
+    .exec();
 
   if (existingUser) {
-    throw new Error('Usuario ya existe');
+    throw new Error("Usuario ya existe");
   }
 
   const salt = bcrypt.genSaltSync(10);
@@ -134,22 +132,19 @@ async function register(usuario: IUsuario): Promise<{ token: string }> {
   const newUser = new usuarioModel(usuario);
   await newUser.save();
 
-  const token = jwt.sign(
-    { usuario: newUser },
-    EnvVars.Jwt.Secret,
-    { expiresIn: "48h" }
-  );
+  const token = jwt.sign({ usuario: newUser }, EnvVars.Jwt.Secret, {
+    expiresIn: "48h",
+  });
 
   // Devolver el token al frontend
   console.log("USUARIO REGISTRADO: " + usuario.email);
   return { token };
 }
 
-
 async function agregarPartido(email: string, partido: IPartido): Promise<void> {
   const usuario = await usuarioModel.findOne({ email }).exec();
   if (!usuario) {
-    throw new Error('Usuario no encontrado');
+    throw new Error("Usuario no encontrado");
   }
   console.log("Partido en repo agregarPartido" + partido);
   /*const partidosArray = Array.from(usuario.jugador.partidos);
@@ -201,7 +196,9 @@ async function agregarPartido(req: Request, res: Response) {
 };
  */
 
-async function getPromedioEstadisticas(usuario: IUsuario): Promise<IEstadisticas> {
+async function getPromedioEstadisticas(
+  usuario: IUsuario
+): Promise<IEstadisticas> {
   console.log("Usuario en repo promedio" + usuario);
   console.log("Usuario en repo promedio" + usuario.email);
   const user = await usuarioModel.findOne({ email: usuario.email }).exec();
@@ -209,7 +206,7 @@ async function getPromedioEstadisticas(usuario: IUsuario): Promise<IEstadisticas
   console.log("Resultado de findone", JSON.stringify(user, null, 2));
 
   if (!user) {
-    throw new Error('Usuario no encontrado');
+    throw new Error("Usuario no encontrado");
   }
   return calcularPromedioEstadisticas(user.jugador.partidos);
 }
@@ -239,32 +236,47 @@ function calcularPromedioEstadisticas(partidos: IPartido[]): IEstadisticas {
       tirosDeTresConvertidos: 0,
       tirosLibres: 0,
       tirosLibresConvertidos: 0,
-    }
+    },
   };
 
   for (const partido of partidos) {
     console.log(partido.estadisticas.taponesCometidos);
     estadisticasPromedio.minutosJugados += partido.estadisticas.minutosJugados;
-    estadisticasPromedio.segundosJugados += partido.estadisticas.segundosJugados;
+    estadisticasPromedio.segundosJugados +=
+      partido.estadisticas.segundosJugados;
     estadisticasPromedio.puntos += partido.estadisticas.puntos;
-    estadisticasPromedio.rebotesOfensivos += partido.estadisticas.rebotesOfensivos;
-    estadisticasPromedio.rebotesDefensivos += partido.estadisticas.rebotesDefensivos;
+    estadisticasPromedio.rebotesOfensivos +=
+      partido.estadisticas.rebotesOfensivos;
+    estadisticasPromedio.rebotesDefensivos +=
+      partido.estadisticas.rebotesDefensivos;
     estadisticasPromedio.asistencias += partido.estadisticas.asistencias;
     estadisticasPromedio.perdidas += partido.estadisticas.perdidas;
     estadisticasPromedio.recuperaciones += partido.estadisticas.recuperaciones;
-    estadisticasPromedio.faltasCometidas += partido.estadisticas.faltasCometidas;
-    estadisticasPromedio.faltasRecibidas += partido.estadisticas.faltasRecibidas;
-    estadisticasPromedio.taponesCometidos += partido.estadisticas.taponesCometidos;
-    estadisticasPromedio.taponesRecibidos += partido.estadisticas.taponesRecibidos;
+    estadisticasPromedio.faltasCometidas +=
+      partido.estadisticas.faltasCometidas;
+    estadisticasPromedio.faltasRecibidas +=
+      partido.estadisticas.faltasRecibidas;
+    estadisticasPromedio.taponesCometidos +=
+      partido.estadisticas.taponesCometidos;
+    estadisticasPromedio.taponesRecibidos +=
+      partido.estadisticas.taponesRecibidos;
     estadisticasPromedio.valoracion += partido.estadisticas.valoracion;
-    estadisticasPromedio.tiros.tirosDeCampo += partido.estadisticas.tiros.tirosDeCampo;
-    estadisticasPromedio.tiros.tirosDeCampoConvertidos += partido.estadisticas.tiros.tirosDeCampoConvertidos;
-    estadisticasPromedio.tiros.tirosDeDos += partido.estadisticas.tiros.tirosDeDos;
-    estadisticasPromedio.tiros.tirosDeDosConvertidos += partido.estadisticas.tiros.tirosDeDosConvertidos;
-    estadisticasPromedio.tiros.tirosDeTres += partido.estadisticas.tiros.tirosDeTres;
-    estadisticasPromedio.tiros.tirosDeTresConvertidos += partido.estadisticas.tiros.tirosDeTresConvertidos;
-    estadisticasPromedio.tiros.tirosLibres += partido.estadisticas.tiros.tirosLibres;
-    estadisticasPromedio.tiros.tirosLibresConvertidos += partido.estadisticas.tiros.tirosLibresConvertidos;
+    estadisticasPromedio.tiros.tirosDeCampo +=
+      partido.estadisticas.tiros.tirosDeCampo;
+    estadisticasPromedio.tiros.tirosDeCampoConvertidos +=
+      partido.estadisticas.tiros.tirosDeCampoConvertidos;
+    estadisticasPromedio.tiros.tirosDeDos +=
+      partido.estadisticas.tiros.tirosDeDos;
+    estadisticasPromedio.tiros.tirosDeDosConvertidos +=
+      partido.estadisticas.tiros.tirosDeDosConvertidos;
+    estadisticasPromedio.tiros.tirosDeTres +=
+      partido.estadisticas.tiros.tirosDeTres;
+    estadisticasPromedio.tiros.tirosDeTresConvertidos +=
+      partido.estadisticas.tiros.tirosDeTresConvertidos;
+    estadisticasPromedio.tiros.tirosLibres +=
+      partido.estadisticas.tiros.tirosLibres;
+    estadisticasPromedio.tiros.tirosLibresConvertidos +=
+      partido.estadisticas.tiros.tirosLibresConvertidos;
     contador++;
   }
   estadisticasPromedio.minutosJugados /= contador;
@@ -307,11 +319,9 @@ function calcularPorcentajes(tiros: ITiros) {
   return porcentajes;
 }
 
-
-
 /**
-* Get one usuario.
-*/
+ * Get one usuario.
+ */
 async function getOne(email: string): Promise<IUsuario | null> {
   const db = await orm.openDb();
   for (const usuario of db.usuarios) {
@@ -323,8 +333,8 @@ async function getOne(email: string): Promise<IUsuario | null> {
 }
 
 /**
-* See if a usuario with the given id exists.
-*/
+ * See if a usuario with the given id exists.
+ */
 async function persists(id: number): Promise<boolean> {
   const db = await orm.openDb();
   for (const usuario of db.usuarios) {
@@ -336,15 +346,13 @@ async function persists(id: number): Promise<boolean> {
 }
 
 /**
-* Get all usuarios.
-*/
-
-
+ * Get all usuarios.
+ */
 
 async function traerDatosPersonales(usuario: IUsuario): Promise<IJugador> {
   const user = await usuarioModel.findOne({ email: usuario.email }).exec();
   if (!user) {
-    throw new Error('Usuario no encontrado');
+    throw new Error("Usuario no encontrado");
   }
   const jugador = user.jugador;
   return jugador;
@@ -354,7 +362,7 @@ async function partidosPorPuntos(usuario: IUsuario): Promise<IPartido[]> {
   // Buscar el usuario en la base de datos
   const user = await usuarioModel.findOne({ email: usuario.email }).exec();
   if (!user) {
-    throw new Error('Usuario no encontrado');
+    throw new Error("Usuario no encontrado");
   }
 
   // Obtener los partidos del jugador
@@ -362,12 +370,19 @@ async function partidosPorPuntos(usuario: IUsuario): Promise<IPartido[]> {
 
   // Ordenar los partidos desde el que tuvo más puntos al que tuvo menos
   //const partidosOrdenados = partidos.sort((a: IPartido, b: IPartido) => b.estadisticas.puntos - a.estadisticas.puntos);
-  if (!user || !user.jugador || !user.jugador.partidos || user.jugador.partidos.length === 0) {
+  if (
+    !user ||
+    !user.jugador ||
+    !user.jugador.partidos ||
+    user.jugador.partidos.length === 0
+  ) {
     return [];
   }
 
   // Ordenar los partidos de mayor a menor según los puntos
-  const partidosOrdenados = [...user.jugador.partidos].sort((a, b) => b.estadisticas.puntos - a.estadisticas.puntos);
+  const partidosOrdenados = [...user.jugador.partidos].sort(
+    (a, b) => b.estadisticas.puntos - a.estadisticas.puntos
+  );
   console.log("Partidos ordenados por puntos: ", partidosOrdenados);
 
   return partidosOrdenados;
@@ -377,14 +392,16 @@ async function partidosPorMinutos(usuario: IUsuario): Promise<IPartido[]> {
   // Buscar el usuario en la base de datos
   const user = await usuarioModel.findOne({ email: usuario.email }).exec();
   if (!user) {
-    throw new Error('Usuario no encontrado');
+    throw new Error("Usuario no encontrado");
   }
 
   const partidos = user.jugador.partidos;
 
   const partidosOrdenados = user.jugador.partidos.sort((a, b) => {
-    const tiempoA = a.estadisticas.minutosJugados * 60 + a.estadisticas.segundosJugados;
-    const tiempoB = b.estadisticas.minutosJugados * 60 + b.estadisticas.segundosJugados;
+    const tiempoA =
+      a.estadisticas.minutosJugados * 60 + a.estadisticas.segundosJugados;
+    const tiempoB =
+      b.estadisticas.minutosJugados * 60 + b.estadisticas.segundosJugados;
 
     // Ordenar de mayor a menor
     return tiempoB - tiempoA;
@@ -396,14 +413,14 @@ async function partidosPorAsistencias(usuario: IUsuario): Promise<IPartido[]> {
   // Buscar el usuario en la base de datos
   const user = await usuarioModel.findOne({ email: usuario.email }).exec();
   if (!user) {
-    throw new Error('Usuario no encontrado');
+    throw new Error("Usuario no encontrado");
   }
 
   const partidos = user.jugador.partidos;
 
   const partidosOrdenados = partidos
     .filter((partido) => partido.estadisticas.asistencias >= 0) // Aseguramos que las asistencias sean válidas
-    .sort((a, b) => b.estadisticas.asistencias - a.estadisticas.asistencias); 
+    .sort((a, b) => b.estadisticas.asistencias - a.estadisticas.asistencias);
 
   return partidosOrdenados;
 }
@@ -412,17 +429,23 @@ async function partidosPorRebotes(usuario: IUsuario): Promise<IPartido[]> {
   // Buscar el usuario en la base de datos
   const user = await usuarioModel.findOne({ email: usuario.email }).exec();
   if (!user) {
-    throw new Error('Usuario no encontrado');
+    throw new Error("Usuario no encontrado");
   }
 
   const partidos = user.jugador.partidos;
 
   // Ordenar los partidos de mayor a menor según la sumatoria de rebotes (ofensivos + defensivos)
   const partidosOrdenados = partidos
-    .filter((partido) => partido.estadisticas.rebotesOfensivos >= 0 && partido.estadisticas.rebotesDefensivos >= 0) // Aseguramos que los rebotes sean válidos
+    .filter(
+      (partido) =>
+        partido.estadisticas.rebotesOfensivos >= 0 &&
+        partido.estadisticas.rebotesDefensivos >= 0
+    ) // Aseguramos que los rebotes sean válidos
     .sort((a, b) => {
-      const rebotesA = a.estadisticas.rebotesOfensivos + a.estadisticas.rebotesDefensivos;
-      const rebotesB = b.estadisticas.rebotesOfensivos + b.estadisticas.rebotesDefensivos;
+      const rebotesA =
+        a.estadisticas.rebotesOfensivos + a.estadisticas.rebotesDefensivos;
+      const rebotesB =
+        b.estadisticas.rebotesOfensivos + b.estadisticas.rebotesDefensivos;
 
       // Ordenar de mayor a menor
       return rebotesB - rebotesA;
@@ -435,7 +458,7 @@ async function partidosPorValoracion(usuario: IUsuario): Promise<IPartido[]> {
   // Buscar el usuario en la base de datos
   const user = await usuarioModel.findOne({ email: usuario.email }).exec();
   if (!user) {
-    throw new Error('Usuario no encontrado');
+    throw new Error("Usuario no encontrado");
   }
 
   const partidos = user.jugador.partidos;
@@ -451,12 +474,14 @@ async function partidosPorValoracion(usuario: IUsuario): Promise<IPartido[]> {
   return partidosOrdenados;
 }
 
-async function getFederaciones(): Promise<IFederacion[]> {
+async function getFederaciones(id: number): Promise<string[]> {
   const federaciones = await federacionModel.find().exec();
   if (!federaciones) {
-    throw new Error('Federaciones no encontradas');
+    throw new Error("Federaciones no encontradas");
   }
-  return federaciones;
+  console.log("CLUBES" + federaciones[id]);
+  const federacion = federaciones[id] as IFederacion;
+  return federacion.clubes;
 }
 
 // **** Export default **** //

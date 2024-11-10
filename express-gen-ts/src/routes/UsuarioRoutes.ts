@@ -336,13 +336,11 @@ async function partidosPorValoracion(req: IReq, res: IRes) {
     }
 }
 
-async function getFederaciones(req: IReq<{id : number}>, res: IRes) {
-    console.log("Entro a getFederaciones");
-    console.log(req.body.id);
-    const id = req.body.id;
+async function getFederaciones(req: IReq, res: IRes) {
+    const id = +req.params.id;
     console.log(id);
     try {
-        const federaciones = await UsuarioService.getFederaciones();
+        const federaciones = await UsuarioService.getFederaciones(id);
         return res.status(HttpStatusCodes.OK).json({ federaciones });
     } catch (err) {
         console.error('Error al buscar federaciones:', err);

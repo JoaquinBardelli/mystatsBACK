@@ -73,8 +73,8 @@ async function partidosPorValoracion(usuario:IUsuario): Promise<IPartido[]>{
   return partidos;
 }
 
-async function getFederaciones(): Promise<IFederacion[]> {
-  return UsuarioRepo.getFederaciones();
+async function getFederaciones(id:number): Promise<string[]> {
+  return UsuarioRepo.getFederaciones(id);
 }
 
 
