@@ -9,6 +9,7 @@ export default {
     AgregarDatos: '/agregarDatos',
     Update: '/update',
     Delete: '/delete/:id',
+    GetFederaciones: '/federaciones/:id',
     Login: '/login',
     Register: '/register',
     Logout: '/logout',

@@ -5,6 +5,7 @@ import Paths from '../common/Paths';
 import Usuario from '@src/models/Usuario';
 import UsuarioRoutes from './UsuarioRoutes';
 import Partido from '@src/models/Partido';
+import Federacion from '@src/models/Federacion';
 
 
 // **** Variables **** //
@@ -19,7 +20,6 @@ const userRouter = Router();
 
 
 
-// Delete one user
 
 
 userRouter.post(
@@ -32,6 +32,11 @@ userRouter.post(
   Paths.Usuarios.Register,
   validate(['usuarios', Usuario.isUsuario]),
   UsuarioRoutes.register,
+);
+
+userRouter.get(
+  Paths.Usuarios.GetFederaciones,
+  UsuarioRoutes.getFederaciones,
 );
 
 userRouter.post(

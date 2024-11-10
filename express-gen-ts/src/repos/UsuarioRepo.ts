@@ -1,7 +1,7 @@
 import { IUsuario } from '@src/models/Usuario';
 import { getRandomInt } from '@src/util/misc';
 import orm from './MockOrm';
-import { usuarioModel } from './Mongoose';
+import { federacionModel, usuarioModel } from './Mongoose';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import EnvVars from '@src/common/EnvVars';
@@ -11,6 +11,7 @@ import { ITiros } from '@src/models/Tiros';
 import { IPartido } from '@src/models/Partido';
 import { get } from 'http';
 import { IJugador } from '@src/models/Jugador';
+import { IFederacion } from '@src/models/Federacion';
 
 
 // **** Functions **** //
@@ -450,6 +451,14 @@ async function partidosPorValoracion(usuario: IUsuario): Promise<IPartido[]> {
   return partidosOrdenados;
 }
 
+async function getFederaciones(): Promise<IFederacion[]> {
+  const federaciones = await federacionModel.find().exec();
+  if (!federaciones) {
+    throw new Error('Federaciones no encontradas');
+  }
+  return federaciones;
+}
+
 // **** Export default **** //
 
 export default {
@@ -465,4 +474,5 @@ export default {
   partidosPorAsistencias,
   partidosPorRebotes,
   partidosPorValoracion,
+  getFederaciones,
 } as const;

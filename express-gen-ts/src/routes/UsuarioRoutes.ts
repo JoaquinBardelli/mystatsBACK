@@ -335,6 +335,20 @@ async function partidosPorValoracion(req: IReq, res: IRes) {
         return res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ error: err.message });
     }
 }
+
+async function getFederaciones(req: IReq<{id : number}>, res: IRes) {
+    console.log("Entro a getFederaciones");
+    console.log(req.body.id);
+    const id = req.body.id;
+    console.log(id);
+    try {
+        const federaciones = await UsuarioService.getFederaciones();
+        return res.status(HttpStatusCodes.OK).json({ federaciones });
+    } catch (err) {
+        console.error('Error al buscar federaciones:', err);
+        return res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ error: err.message });
+    }
+}
 // **** Export default **** //
 
 export default {
@@ -347,5 +361,6 @@ export default {
     partidosPorMinutos,
     partidosPorAsistencias,
     partidosPorRebotes,
-    partidosPorValoracion
+    partidosPorValoracion,
+    getFederaciones,
 } as const ;

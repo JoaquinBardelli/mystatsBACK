@@ -6,6 +6,7 @@ import { IUsuario } from '@src/models/Usuario';
 import { IJugador } from '@src/models/Jugador';
 import { IEstadisticas } from '@src/models/Estadisticas';
 import { IPartido } from '@src/models/Partido';
+import { IFederacion } from '@src/models/Federacion';
 
 
 // **** Variables **** //
@@ -72,6 +73,10 @@ async function partidosPorValoracion(usuario:IUsuario): Promise<IPartido[]>{
   return partidos;
 }
 
+async function getFederaciones(): Promise<IFederacion[]> {
+  return UsuarioRepo.getFederaciones();
+}
+
 
 // **** Export default **** //
 
@@ -86,4 +91,5 @@ export default {
   partidosPorAsistencias,
   partidosPorRebotes,
   partidosPorValoracion,
+  getFederaciones,
 } as const;

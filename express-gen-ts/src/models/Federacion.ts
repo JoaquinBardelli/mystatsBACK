@@ -47,6 +47,7 @@ function from(param: object): IFederacion {
  * See if the param meets criteria to be a user.
  */
 function isFederacion(arg: unknown): boolean {
+    console.log(arg );
     return (
         !!arg &&
         typeof arg === 'object' &&
