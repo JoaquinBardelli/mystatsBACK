@@ -117,7 +117,7 @@ async function login(usuario: IUsuario): Promise<{ token: string }> {
   return token;
 }*/
 
-async function register(usuario: IUsuario): Promise<{ token: string }> {
+/*async function register(usuario: IUsuario): Promise<{ token: string }> {
   const existingUser = await usuarioModel
     .findOne({ email: usuario.email })
     .exec();
@@ -130,6 +130,48 @@ async function register(usuario: IUsuario): Promise<{ token: string }> {
   usuario.password = bcrypt.hashSync(usuario.password, salt);
 
   const newUser = new usuarioModel(usuario);
+  await newUser.save();
+
+  const token = jwt.sign({ usuario: newUser }, EnvVars.Jwt.Secret, {
+    expiresIn: "48h",
+  });
+
+  // Devolver el token al frontend
+  console.log("USUARIO REGISTRADO: " + usuario.email);
+  return { token };
+}*/
+async function register(usuario: IUsuario): Promise<{ token: string }> {
+  const existingUser = await usuarioModel
+    .findOne({ email: usuario.email })
+    .exec();
+
+  if (existingUser) {
+    throw new Error("Usuario ya existe");
+  }
+
+  const salt = bcrypt.genSaltSync(10);
+  usuario.password = bcrypt.hashSync(usuario.password, salt);
+
+  // Aquí no pasamos el campo `partidos` de forma explícita
+  // Solo creamos el nuevo usuario sin partidos
+  const newUser = new usuarioModel({
+    id: usuario.id,
+    email: usuario.email,
+    password: usuario.password,
+    created: new Date(),
+    jugador: {
+      id: usuario.jugador.id,
+      nombre: usuario.jugador.nombre,
+      apellido: usuario.jugador.apellido,
+      nacimiento: usuario.jugador.nacimiento,
+      club: usuario.jugador.club,
+      dorsal: usuario.jugador.dorsal,
+      altura: usuario.jugador.altura,
+      peso: usuario.jugador.peso,
+      partidos: [], // Inicializamos el campo `partidos` como un arreglo vacío
+    },
+  });
+
   await newUser.save();
 
   const token = jwt.sign({ usuario: newUser }, EnvVars.Jwt.Secret, {
@@ -484,6 +526,14 @@ async function getFederaciones(id: number): Promise<string[]> {
   return federacion.clubes;
 }
 
+async function traerCantidadPartidos(usuario: IUsuario): Promise<number> {
+  const user = await usuarioModel.findOne({ email: usuario.email }).exec();
+  if (!user) {
+    throw new Error("Usuario no encontrado");
+  }
+  return user.jugador.partidos.length;
+}
+
 // **** Export default **** //
 
 export default {
@@ -500,4 +550,5 @@ export default {
   partidosPorRebotes,
   partidosPorValoracion,
   getFederaciones,
+  traerCantidadPartidos,
 } as const;

@@ -21,5 +21,6 @@ export default {
     PartidosPorAsistencias : '/partidosPorAsistencias',
     PartidosPorRebotes : '/partidosPorRebotes',
     PartidosPorValoracion : '/partidosPorValoracion',
+    TraerCantidadPartidos: '/cantidadPartidos'
   },
 } as const;

@@ -77,6 +77,10 @@ async function getFederaciones(id:number): Promise<string[]> {
   return UsuarioRepo.getFederaciones(id);
 }
 
+async function traerCantidadPartidos(usuario:IUsuario): Promise<number>{
+  return UsuarioRepo.traerCantidadPartidos(usuario);
+}
+
 
 // **** Export default **** //
 
@@ -92,4 +96,5 @@ export default {
   partidosPorRebotes,
   partidosPorValoracion,
   getFederaciones,
+  traerCantidadPartidos,
 } as const;

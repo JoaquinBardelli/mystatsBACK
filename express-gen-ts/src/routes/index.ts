@@ -1,93 +1,82 @@
-import { Router } from 'express';
-import jetValidator from 'jet-validator';
+import { Router } from "express";
+import jetValidator from "jet-validator";
 
-import Paths from '../common/Paths';
-import Usuario from '@src/models/Usuario';
-import UsuarioRoutes from './UsuarioRoutes';
-import Partido from '@src/models/Partido';
-import Federacion from '@src/models/Federacion';
-
+import Paths from "../common/Paths";
+import Usuario from "@src/models/Usuario";
+import UsuarioRoutes from "./UsuarioRoutes";
+import Partido from "@src/models/Partido";
+import Federacion from "@src/models/Federacion";
 
 // **** Variables **** //
 
 const apiRouter = Router(),
   validate = jetValidator();
 
-
 // ** Add UserRouter ** //
 
 const userRouter = Router();
 
-
-
-
-
 userRouter.post(
   Paths.Usuarios.Login,
-  validate(['usuarios', Usuario.isLogin]),
-  UsuarioRoutes.login,
+  validate(["usuarios", Usuario.isLogin]),
+  UsuarioRoutes.login
 );
 
 userRouter.post(
   Paths.Usuarios.Register,
-  validate(['usuarios', Usuario.isUsuario]),
-  UsuarioRoutes.register,
+  validate(["usuarios", Usuario.isUsuario]),
+  UsuarioRoutes.register
 );
 
-userRouter.get(
-  Paths.Usuarios.GetFederaciones,
-  UsuarioRoutes.getFederaciones,
-);
+userRouter.get(Paths.Usuarios.GetFederaciones, UsuarioRoutes.getFederaciones);
 
-userRouter.post(
-  Paths.Usuarios.Logout,
-);
+userRouter.post(Paths.Usuarios.Logout);
 
-userRouter.get(
-  Paths.Usuarios.Promedio,
-  UsuarioRoutes.promedio,
-);
+userRouter.get(Paths.Usuarios.Promedio, UsuarioRoutes.promedio);
 
 userRouter.get(
   Paths.Usuarios.TraerDatosPersonales,
-  UsuarioRoutes.traerDatosPersonales,
+  UsuarioRoutes.traerDatosPersonales
 );
 
 userRouter.get(
   Paths.Usuarios.PartidosPorPuntos,
-  UsuarioRoutes.partidosPorPuntos,
+  UsuarioRoutes.partidosPorPuntos
 );
 
 userRouter.get(
   Paths.Usuarios.PartidosPorMinutos,
-  UsuarioRoutes.partidosPorMinutos,
+  UsuarioRoutes.partidosPorMinutos
 );
 
 userRouter.get(
   Paths.Usuarios.PartidosPorAsistencias,
-  UsuarioRoutes.partidosPorAsistencias,
+  UsuarioRoutes.partidosPorAsistencias
 );
 
 userRouter.get(
   Paths.Usuarios.PartidosPorRebotes,
-  UsuarioRoutes.partidosPorRebotes,
+  UsuarioRoutes.partidosPorRebotes
 );
 
 userRouter.get(
   Paths.Usuarios.PartidosPorValoracion,
-  UsuarioRoutes.partidosPorValoracion,
+  UsuarioRoutes.partidosPorValoracion
+);
+
+userRouter.get(
+  Paths.Usuarios.TraerCantidadPartidos,
+  UsuarioRoutes.traerCantidadPartidos
 );
 
 userRouter.post(
   Paths.Usuarios.AgregarPartido,
-  validate(['partidos', Partido.isPartido]),
-  UsuarioRoutes.agregarPartido,
+  validate(["partidos", Partido.isPartido]),
+  UsuarioRoutes.agregarPartido
 );
-
 
 // Add UserRouter
 apiRouter.use(Paths.Usuarios.Base, userRouter);
-
 
 // **** Export default **** //
 
