@@ -281,6 +281,10 @@ function calcularPromedioEstadisticas(partidos: IPartido[]): IEstadisticas {
     },
   };
 
+  if (partidos.length === 0) {
+    return estadisticasPromedio;
+  }
+
   for (const partido of partidos) {
     console.log(partido.estadisticas.taponesCometidos);
     estadisticasPromedio.minutosJugados += partido.estadisticas.minutosJugados;
