@@ -16,11 +16,12 @@ export default {
     Promedio: '/promedio',
     AgregarPartido : '/agregarPartido',
     TraerDatosPersonales : '/traerDatos',
-    PartidosPorPuntos : '/partidosPorPuntos',
-    PartidosPorMinutos : '/partidosPorMinutos',
-    PartidosPorAsistencias : '/partidosPorAsistencias',
-    PartidosPorRebotes : '/partidosPorRebotes',
-    PartidosPorValoracion : '/partidosPorValoracion',
-    TraerCantidadPartidos: '/cantidadPartidos'
+    PartidosPorPuntos : '/partidosPorPuntos/:id',
+    PartidosPorMinutos : '/partidosPorMinutos/:id',
+    PartidosPorAsistencias : '/partidosPorAsistencias/:id',
+    PartidosPorRebotes : '/partidosPorRebotes/:id',
+    PartidosPorValoracion : '/partidosPorValoracion/:id',
+    TraerCantidadPartidos: '/cantidadPartidos',
+    TraerFederacion: '/federacion'
   },
 } as const;

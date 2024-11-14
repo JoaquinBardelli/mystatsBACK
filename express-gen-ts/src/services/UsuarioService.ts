@@ -48,28 +48,28 @@ async function traerDatosPersonales(usuario:IUsuario): Promise<IJugador>{
   return datos;
 }
 
-async function partidosPorPuntos(usuario:IUsuario): Promise<IPartido[]>{
-  const partidos = await UsuarioRepo.partidosPorPuntos(usuario);
+async function partidosPorPuntos(usuario:IUsuario, pagina:number): Promise<IPartido[]>{
+  const partidos = await UsuarioRepo.partidosPorPuntos(usuario, pagina);
   return partidos;
 }
 
-async function partidosPorMinutos(usuario:IUsuario): Promise<IPartido[]>{
-  const partidos = await UsuarioRepo.partidosPorMinutos(usuario);
+async function partidosPorMinutos(usuario:IUsuario, pagina:number): Promise<IPartido[]>{
+  const partidos = await UsuarioRepo.partidosPorMinutos(usuario, pagina);
   return partidos;
 }
 
-async function partidosPorAsistencias(usuario:IUsuario): Promise<IPartido[]>{
-  const partidos = await UsuarioRepo.partidosPorAsistencias(usuario);
+async function partidosPorAsistencias(usuario:IUsuario, pagina:number): Promise<IPartido[]>{
+  const partidos = await UsuarioRepo.partidosPorAsistencias(usuario, pagina);
   return partidos;
 }
 
-async function partidosPorRebotes(usuario:IUsuario): Promise<IPartido[]>{
-  const partidos = await UsuarioRepo.partidosPorRebotes(usuario);
+async function partidosPorRebotes(usuario:IUsuario, pagina:number): Promise<IPartido[]>{
+  const partidos = await UsuarioRepo.partidosPorRebotes(usuario, pagina);
   return partidos;
 }
 
-async function partidosPorValoracion(usuario:IUsuario): Promise<IPartido[]>{
-  const partidos = await UsuarioRepo.partidosPorValoracion(usuario);
+async function partidosPorValoracion(usuario:IUsuario, pagina:number): Promise<IPartido[]>{
+  const partidos = await UsuarioRepo.partidosPorValoracion(usuario, pagina);
   return partidos;
 }
 
@@ -79,6 +79,10 @@ async function getFederaciones(id:number): Promise<string[]> {
 
 async function traerCantidadPartidos(usuario:IUsuario): Promise<number>{
   return UsuarioRepo.traerCantidadPartidos(usuario);
+}
+
+async function traerFederacion(usuario:IUsuario): Promise<IFederacion>{
+  return UsuarioRepo.traerFederacion(usuario);
 }
 
 
@@ -97,4 +101,5 @@ export default {
   partidosPorValoracion,
   getFederaciones,
   traerCantidadPartidos,
+  traerFederacion
 } as const;

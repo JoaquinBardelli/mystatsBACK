@@ -404,7 +404,7 @@ async function traerDatosPersonales(usuario: IUsuario): Promise<IJugador> {
   return jugador;
 }
 
-async function partidosPorPuntos(usuario: IUsuario): Promise<IPartido[]> {
+async function partidosPorPuntos(usuario: IUsuario, pagina: number): Promise<IPartido[]> {
   // Buscar el usuario en la base de datos
   const user = await usuarioModel.findOne({ email: usuario.email }).exec();
   if (!user) {
@@ -434,7 +434,7 @@ async function partidosPorPuntos(usuario: IUsuario): Promise<IPartido[]> {
   return partidosOrdenados;
 }
 
-async function partidosPorMinutos(usuario: IUsuario): Promise<IPartido[]> {
+async function partidosPorMinutos(usuario: IUsuario, pagina: number): Promise<IPartido[]> {
   // Buscar el usuario en la base de datos
   const user = await usuarioModel.findOne({ email: usuario.email }).exec();
   if (!user) {
@@ -455,7 +455,7 @@ async function partidosPorMinutos(usuario: IUsuario): Promise<IPartido[]> {
   return partidosOrdenados;
 }
 
-async function partidosPorAsistencias(usuario: IUsuario): Promise<IPartido[]> {
+async function partidosPorAsistencias(usuario: IUsuario, pagina: number): Promise<IPartido[]> {
   // Buscar el usuario en la base de datos
   const user = await usuarioModel.findOne({ email: usuario.email }).exec();
   if (!user) {
@@ -471,7 +471,7 @@ async function partidosPorAsistencias(usuario: IUsuario): Promise<IPartido[]> {
   return partidosOrdenados;
 }
 
-async function partidosPorRebotes(usuario: IUsuario): Promise<IPartido[]> {
+async function partidosPorRebotes(usuario: IUsuario, pagina: number): Promise<IPartido[]> {
   // Buscar el usuario en la base de datos
   const user = await usuarioModel.findOne({ email: usuario.email }).exec();
   if (!user) {
@@ -500,7 +500,7 @@ async function partidosPorRebotes(usuario: IUsuario): Promise<IPartido[]> {
   return partidosOrdenados;
 }
 
-async function partidosPorValoracion(usuario: IUsuario): Promise<IPartido[]> {
+async function partidosPorValoracion(usuario: IUsuario, pagina: number): Promise<IPartido[]> {
   // Buscar el usuario en la base de datos
   const user = await usuarioModel.findOne({ email: usuario.email }).exec();
   if (!user) {
@@ -538,6 +538,18 @@ async function traerCantidadPartidos(usuario: IUsuario): Promise<number> {
   return user.jugador.partidos.length;
 }
 
+async function traerFederacion(usuario: IUsuario): Promise<IFederacion> {
+  const user = await usuarioModel.findOne({ email: usuario.email }).exec();
+  if (!user) {
+    throw new Error("Usuario no encontrado");
+  }
+  const federacion = await federacionModel.findOne({ clubes: user.jugador.club }).exec();
+  if (!federacion) {
+    throw new Error("Federación no encontrada");
+  }
+  return federacion;
+}
+
 // **** Export default **** //
 
 export default {
@@ -555,4 +567,5 @@ export default {
   partidosPorValoracion,
   getFederaciones,
   traerCantidadPartidos,
+  traerFederacion,
 } as const;
