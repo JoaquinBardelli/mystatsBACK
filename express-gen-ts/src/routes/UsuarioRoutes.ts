@@ -364,6 +364,7 @@ async function partidosPorRebotes(req: IReq, res: IRes) {
 
 async function partidosPorValoracion(req: IReq, res: IRes) {
   const pagina = +req.params.id;
+  console.log("Pagina:", pagina);
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader) {

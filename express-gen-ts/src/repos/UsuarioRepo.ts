@@ -500,7 +500,7 @@ async function partidosPorRebotes(usuario: IUsuario, pagina: number): Promise<IP
   return partidosOrdenados;
 }
 
-async function partidosPorValoracion(usuario: IUsuario, pagina: number): Promise<IPartido[]> {
+/*async function partidosPorValoracion(usuario: IUsuario, pagina: number): Promise<IPartido[]> {
   // Buscar el usuario en la base de datos
   const user = await usuarioModel.findOne({ email: usuario.email }).exec();
   if (!user) {
@@ -518,7 +518,28 @@ async function partidosPorValoracion(usuario: IUsuario, pagina: number): Promise
     });
 
   return partidosOrdenados;
+}*/
+async function partidosPorValoracion(usuario: IUsuario, pagina: number): Promise<IPartido[]> {
+  const resultadosPorPagina = 9;
+  const salto = (pagina - 1) * resultadosPorPagina;
+
+  // Buscar el usuario en la base de datos y traer solo los partidos paginados
+  const user = await usuarioModel
+    .findOne({ email: usuario.email }, { "jugador.partidos": { $slice: [salto, resultadosPorPagina] } })
+    .exec();
+
+  if (!user || !user.jugador.partidos) {
+    throw new Error("Usuario o partidos no encontrados");
+  }
+
+  // Ordenar los partidos dentro del rango obtenido
+  const partidosOrdenados = user.jugador.partidos
+    .filter((partido) => partido.estadisticas.valoracion !== undefined)
+    .sort((a, b) => b.estadisticas.valoracion - a.estadisticas.valoracion);
+
+  return partidosOrdenados;
 }
+
 
 async function getFederaciones(id: number): Promise<string[]> {
   const federaciones = await federacionModel.find().exec();
