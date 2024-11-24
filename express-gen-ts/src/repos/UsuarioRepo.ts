@@ -405,100 +405,105 @@ async function traerDatosPersonales(usuario: IUsuario): Promise<IJugador> {
 }
 
 async function partidosPorPuntos(usuario: IUsuario, pagina: number): Promise<IPartido[]> {
-  // Buscar el usuario en la base de datos
-  const user = await usuarioModel.findOne({ email: usuario.email }).exec();
-  if (!user) {
-    throw new Error("Usuario no encontrado");
+  const resultadosPorPagina = 9;
+  const salto = (pagina - 1) * resultadosPorPagina;
+
+  // Buscar los partidos paginados ordenados por puntos
+  const user = await usuarioModel
+    .findOne(
+      { email: usuario.email },
+      { "jugador.partidos": { $slice: [salto, resultadosPorPagina] } }
+    )
+    .exec();
+
+  if (!user || !user.jugador.partidos) {
+    throw new Error("Usuario o partidos no encontrados");
   }
 
-  // Obtener los partidos del jugador
-  const partidos = user.jugador.partidos;
-
-  // Ordenar los partidos desde el que tuvo más puntos al que tuvo menos
-  //const partidosOrdenados = partidos.sort((a: IPartido, b: IPartido) => b.estadisticas.puntos - a.estadisticas.puntos);
-  if (
-    !user ||
-    !user.jugador ||
-    !user.jugador.partidos ||
-    user.jugador.partidos.length === 0
-  ) {
-    return [];
-  }
-
-  // Ordenar los partidos de mayor a menor según los puntos
-  const partidosOrdenados = [...user.jugador.partidos].sort(
+  return user.jugador.partidos.sort(
     (a, b) => b.estadisticas.puntos - a.estadisticas.puntos
   );
-  console.log("Partidos ordenados por puntos: ", partidosOrdenados);
-
-  return partidosOrdenados;
 }
 
 async function partidosPorMinutos(usuario: IUsuario, pagina: number): Promise<IPartido[]> {
-  // Buscar el usuario en la base de datos
-  const user = await usuarioModel.findOne({ email: usuario.email }).exec();
-  if (!user) {
-    throw new Error("Usuario no encontrado");
+  const resultadosPorPagina = 9;
+  const salto = (pagina - 1) * resultadosPorPagina;
+
+  // Buscar los partidos paginados ordenados por minutos jugados
+  const user = await usuarioModel
+    .findOne(
+      { email: usuario.email },
+      { "jugador.partidos": { $slice: [salto, resultadosPorPagina] } }
+    )
+    .exec();
+
+  if (!user || !user.jugador.partidos) {
+    throw new Error("Usuario o partidos no encontrados");
   }
 
-  const partidos = user.jugador.partidos;
-
-  const partidosOrdenados = user.jugador.partidos.sort((a, b) => {
+  return user.jugador.partidos.sort((a, b) => {
     const tiempoA =
       a.estadisticas.minutosJugados * 60 + a.estadisticas.segundosJugados;
     const tiempoB =
       b.estadisticas.minutosJugados * 60 + b.estadisticas.segundosJugados;
 
-    // Ordenar de mayor a menor
-    return tiempoB - tiempoA;
+    return tiempoB - tiempoA; // Ordenar de mayor a menor
   });
-  return partidosOrdenados;
 }
 
 async function partidosPorAsistencias(usuario: IUsuario, pagina: number): Promise<IPartido[]> {
-  // Buscar el usuario en la base de datos
-  const user = await usuarioModel.findOne({ email: usuario.email }).exec();
-  if (!user) {
-    throw new Error("Usuario no encontrado");
+  const resultadosPorPagina = 9;
+  const salto = (pagina - 1) * resultadosPorPagina;
+
+  // Buscar los partidos paginados ordenados por asistencias
+  const user = await usuarioModel
+    .findOne(
+      { email: usuario.email },
+      { "jugador.partidos": { $slice: [salto, resultadosPorPagina] } }
+    )
+    .exec();
+
+  if (!user || !user.jugador.partidos) {
+    throw new Error("Usuario o partidos no encontrados");
   }
 
-  const partidos = user.jugador.partidos;
-
-  const partidosOrdenados = partidos
-    .filter((partido) => partido.estadisticas.asistencias >= 0) // Aseguramos que las asistencias sean válidas
+  return user.jugador.partidos
+    .filter((partido) => partido.estadisticas.asistencias >= 0)
     .sort((a, b) => b.estadisticas.asistencias - a.estadisticas.asistencias);
-
-  return partidosOrdenados;
 }
 
 async function partidosPorRebotes(usuario: IUsuario, pagina: number): Promise<IPartido[]> {
-  // Buscar el usuario en la base de datos
-  const user = await usuarioModel.findOne({ email: usuario.email }).exec();
-  if (!user) {
-    throw new Error("Usuario no encontrado");
+  const resultadosPorPagina = 9;
+  const salto = (pagina - 1) * resultadosPorPagina;
+
+  // Buscar los partidos paginados ordenados por rebotes
+  const user = await usuarioModel
+    .findOne(
+      { email: usuario.email },
+      { "jugador.partidos": { $slice: [salto, resultadosPorPagina] } }
+    )
+    .exec();
+
+  if (!user || !user.jugador.partidos) {
+    throw new Error("Usuario o partidos no encontrados");
   }
 
-  const partidos = user.jugador.partidos;
-
-  // Ordenar los partidos de mayor a menor según la sumatoria de rebotes (ofensivos + defensivos)
-  const partidosOrdenados = partidos
+  return user.jugador.partidos
     .filter(
       (partido) =>
         partido.estadisticas.rebotesOfensivos >= 0 &&
         partido.estadisticas.rebotesDefensivos >= 0
-    ) // Aseguramos que los rebotes sean válidos
+    )
     .sort((a, b) => {
       const rebotesA =
         a.estadisticas.rebotesOfensivos + a.estadisticas.rebotesDefensivos;
       const rebotesB =
         b.estadisticas.rebotesOfensivos + b.estadisticas.rebotesDefensivos;
 
-      // Ordenar de mayor a menor
-      return rebotesB - rebotesA;
+      return rebotesB - rebotesA; // Ordenar de mayor a menor
     });
-
-  return partidosOrdenados;
 }
+
 
 /*async function partidosPorValoracion(usuario: IUsuario, pagina: number): Promise<IPartido[]> {
   // Buscar el usuario en la base de datos
