@@ -5,12 +5,8 @@ FROM node:20-alpine as build
 WORKDIR /app
 
 # Copia los archivos del package.json y package-lock.json desde express-gen-ts/
-COPY mystatsBACK/express-gen-ts/package.json ./express-gen-ts/
-COPY mystatsBACK/express-gen-ts/package-lock.json ./express-gen-ts/
-
-# Copia los archivos del package.json y package-lock.json desde la raíz del proyecto
-COPY mystatsBACK/package.json ./
-COPY mystatsBACK/package-lock.json ./
+COPY express-gen-ts/package.json ./express-gen-ts/
+COPY express-gen-ts/package-lock.json ./express-gen-ts/
 
 # Instala las dependencias del proyecto
 RUN npm ci
