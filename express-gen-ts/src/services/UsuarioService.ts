@@ -85,10 +85,13 @@ async function traerFederacion(usuario:IUsuario): Promise<IFederacion>{
   return UsuarioRepo.traerFederacion(usuario);
 }
 
-
+async function get(): Promise<IUsuario[]> {
+  return UsuarioRepo.Get();
+}
 // **** Export default **** //
 
 export default {
+  get,
   login,
   register,
   promedio,

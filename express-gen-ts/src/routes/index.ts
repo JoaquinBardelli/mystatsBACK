@@ -28,6 +28,8 @@ userRouter.post(
   UsuarioRoutes.register
 );
 
+userRouter.get(Paths.Usuarios.Get, UsuarioRoutes.get);
+
 userRouter.get(Paths.Usuarios.GetFederaciones, UsuarioRoutes.getFederaciones);
 
 userRouter.post(Paths.Usuarios.Logout);

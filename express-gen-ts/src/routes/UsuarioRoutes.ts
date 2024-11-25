@@ -13,6 +13,18 @@ import jwt from "jsonwebtoken";
 /**
  * Get all usuarios.
  */
+async function get(req: IReq, res: IRes) {
+  try {
+    const usuarios = await UsuarioService.get();
+    return res.status(HttpStatusCodes.OK).json({ usuarios });
+  } catch (err) {
+    console.error("Error al obtener los usuarios:", err);
+    return res
+      .status(HttpStatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: err.message });
+  }
+}
+
 
 async function login(req: IReq<{ usuarios: IUsuario }>, res: IRes) {
   const { usuarios: usuario } = req.body;
@@ -493,6 +505,7 @@ async function traerFederacion(req: IReq, res: IRes) {
 // **** Export default **** //
 
 export default {
+  get,
   promedio,
   login,
   register,

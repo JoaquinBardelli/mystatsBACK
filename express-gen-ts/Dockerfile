@@ -1,26 +1,31 @@
-# Usa una imagen base de Node.js
-FROM node:18
+FROM node:20-alpine as build
 
-# Crea un directorio de trabajo en el contenedor
-WORKDIR /usr/src/app
-
-# Copia los archivos package.json y package-lock.json al contenedor
-COPY package*.json ./
-
-# Instala las dependencias, incluyendo los módulos nativos
-RUN npm install
-
-# Copia el resto del código de la aplicación al directorio de trabajo
+WORKDIR /app
+COPY package.json ./
+COPY package-lock.json ./
+RUN npm ci
 COPY . .
-
-# Elimina el módulo bcrypt existente para forzar su reinstalación en el contenedor
-RUN npm rebuild bcrypt --build-from-source
-
-# Compila el código TypeScript a JavaScript
 RUN npm run build
 
-# Expone el puerto en el que la aplicación escuchará
-EXPOSE 3000
+FROM node:20-alpine as production
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
 
-# Comando para ejecutar la aplicación
-CMD ["npm", "run", "start"]
+WORKDIR /app
+
+COPY package.json ./
+RUN npm install --only=production
+
+COPY --from=build /app/dist ./dist
+
+ENV PORT=3000
+ENV HOST=0.0.0.0
+ENV NODE_ENV=production
+ENV JET_LOGGER_MODE=CONSOLE
+ENV JET_LOGGER_FILEPATH=jet-logger.log
+ENV JET_LOGGER_TIMESTAMP=TRUE
+ENV JET_LOGGER_FORMAT=LINE
+
+CMD ["node", "dist/index.js"]
+
+EXPOSE 3000

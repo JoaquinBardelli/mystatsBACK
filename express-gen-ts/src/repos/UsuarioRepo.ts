@@ -535,9 +535,15 @@ async function traerFederacion(usuario: IUsuario): Promise<IFederacion> {
   return federacion;
 }
 
+async function Get (): Promise<IUsuario[]> {
+  const users = await usuarioModel.find().exec();
+  return users;
+}
+
 // **** Export default **** //
 
 export default {
+  Get,
   getOne,
   persists,
   login,
