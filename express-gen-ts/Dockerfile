@@ -1,40 +1,31 @@
-# Etapa de construcción
-FROM node:20-alpine as build
+ROM node:20-alpine as build
 
-# Define el directorio de trabajo en el contenedor
 WORKDIR /app
-
-# Copia el package.json y package-lock.json desde express-gen-ts
-COPY express-gen-ts/package.json ./express-gen-ts/
-COPY express-gen-ts/package-lock.json ./express-gen-ts/
-
-# Instala las dependencias
+COPY package.json ./
+COPY package-lock.json ./
 RUN npm ci
-
-# Copia el resto del código de express-gen-ts
-COPY express-gen-ts ./express-gen-ts/
-
-# Ejecuta el build
-WORKDIR /app/express-gen-ts
+COPY . .
 RUN npm run build
 
-# Etapa de producción
 FROM node:20-alpine as production
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
 
-# Define el directorio de trabajo en producción
 WORKDIR /app
 
-# Copia el package.json de express-gen-ts para instalar solo las dependencias de producción
-COPY express-gen-ts/package.json ./express-gen-ts/
+COPY package.json ./
 RUN npm install --only=production
 
-# Copia los archivos construidos
-COPY --from=build /app/express-gen-ts/dist ./express-gen-ts/dist
+COPY --from=build /app/dist ./dist
 
-# Configura las variables de entorno
-ENV NODE_ENV=production
 ENV PORT=3000
+ENV HOST=0.0.0.0
+ENV NODE_ENV=production
+ENV JET_LOGGER_MODE=CONSOLE
+ENV JET_LOGGER_FILEPATH=jet-logger.log
+ENV JET_LOGGER_TIMESTAMP=TRUE
+ENV JET_LOGGER_FORMAT=LINE
+
+CMD ["node", "dist/index.js"]
 
 EXPOSE 3000
-
-CMD ["node", "express-gen-ts/dist/index.js"]
