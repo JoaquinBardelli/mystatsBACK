@@ -11,12 +11,6 @@ COPY express-gen-ts/package-lock.json ./express-gen-ts/
 # Instala las dependencias del proyecto
 RUN npm ci
 
-# Copia todo el código fuente de express-gen-ts
-COPY mystatsBACK/express-gen-ts ./express-gen-ts/
-
-# Si tienes otro código fuente en la raíz, también debes copiarlo
-COPY mystatsBACK ./  # Copia el resto del proyecto (si necesario)
-
 # Ejecuta el build (si es necesario)
 WORKDIR /app/express-gen-ts
 RUN npm run build
