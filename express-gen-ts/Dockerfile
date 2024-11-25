@@ -1,10 +1,13 @@
+# Dockerfile
 FROM node:20-alpine as build
 
 WORKDIR /app
-COPY package.json ./
-COPY package-lock.json ./
+
+# Ajusta las rutas de los archivos
+COPY express-gen-ts/package.json ./
+COPY express-gen-ts/package-lock.json ./
 RUN npm ci
-COPY . .
+COPY express-gen-ts . .
 RUN npm run build
 
 FROM node:20-alpine as production
@@ -13,7 +16,8 @@ ENV NODE_ENV=${NODE_ENV}
 
 WORKDIR /app
 
-COPY package.json ./
+# Ajusta las rutas de los archivos para producción
+COPY express-gen-ts/package.json ./
 RUN npm install --only=production
 
 COPY --from=build /app/dist ./dist
