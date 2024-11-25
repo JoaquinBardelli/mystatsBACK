@@ -408,87 +408,68 @@ async function partidosPorPuntos(usuario: IUsuario, pagina: number): Promise<IPa
   const resultadosPorPagina = 9;
   const salto = (pagina - 1) * resultadosPorPagina;
 
-  // Buscar los partidos paginados ordenados por puntos
-  const user = await usuarioModel
-    .findOne(
-      { email: usuario.email },
-      { "jugador.partidos": { $slice: [salto, resultadosPorPagina] } }
-    )
-    .exec();
-
+  // Recuperar todos los partidos del usuario
+  const user = await usuarioModel.findOne({ email: usuario.email }).exec();
   if (!user || !user.jugador.partidos) {
     throw new Error("Usuario o partidos no encontrados");
   }
 
-  return user.jugador.partidos.sort(
+  // Ordenar los partidos por puntos
+  const partidosOrdenados = user.jugador.partidos.sort(
     (a, b) => b.estadisticas.puntos - a.estadisticas.puntos
   );
+
+  // Aplicar paginación
+  return partidosOrdenados.slice(salto, salto + resultadosPorPagina);
 }
 
 async function partidosPorMinutos(usuario: IUsuario, pagina: number): Promise<IPartido[]> {
   const resultadosPorPagina = 9;
   const salto = (pagina - 1) * resultadosPorPagina;
 
-  // Buscar los partidos paginados ordenados por minutos jugados
-  const user = await usuarioModel
-    .findOne(
-      { email: usuario.email },
-      { "jugador.partidos": { $slice: [salto, resultadosPorPagina] } }
-    )
-    .exec();
-
+  const user = await usuarioModel.findOne({ email: usuario.email }).exec();
   if (!user || !user.jugador.partidos) {
     throw new Error("Usuario o partidos no encontrados");
   }
 
-  return user.jugador.partidos.sort((a, b) => {
-    const tiempoA =
-      a.estadisticas.minutosJugados * 60 + a.estadisticas.segundosJugados;
-    const tiempoB =
-      b.estadisticas.minutosJugados * 60 + b.estadisticas.segundosJugados;
-
-    return tiempoB - tiempoA; // Ordenar de mayor a menor
+  // Ordenar los partidos por tiempo jugado (minutos y segundos)
+  const partidosOrdenados = user.jugador.partidos.sort((a, b) => {
+    const tiempoA = a.estadisticas.minutosJugados * 60 + a.estadisticas.segundosJugados;
+    const tiempoB = b.estadisticas.minutosJugados * 60 + b.estadisticas.segundosJugados;
+    return tiempoB - tiempoA;
   });
+
+  return partidosOrdenados.slice(salto, salto + resultadosPorPagina);
 }
 
 async function partidosPorAsistencias(usuario: IUsuario, pagina: number): Promise<IPartido[]> {
   const resultadosPorPagina = 9;
   const salto = (pagina - 1) * resultadosPorPagina;
 
-  // Buscar los partidos paginados ordenados por asistencias
-  const user = await usuarioModel
-    .findOne(
-      { email: usuario.email },
-      { "jugador.partidos": { $slice: [salto, resultadosPorPagina] } }
-    )
-    .exec();
-
+  const user = await usuarioModel.findOne({ email: usuario.email }).exec();
   if (!user || !user.jugador.partidos) {
     throw new Error("Usuario o partidos no encontrados");
   }
 
-  return user.jugador.partidos
+  // Ordenar los partidos por asistencias
+  const partidosOrdenados = user.jugador.partidos
     .filter((partido) => partido.estadisticas.asistencias >= 0)
     .sort((a, b) => b.estadisticas.asistencias - a.estadisticas.asistencias);
+
+  return partidosOrdenados.slice(salto, salto + resultadosPorPagina);
 }
 
 async function partidosPorRebotes(usuario: IUsuario, pagina: number): Promise<IPartido[]> {
   const resultadosPorPagina = 9;
   const salto = (pagina - 1) * resultadosPorPagina;
 
-  // Buscar los partidos paginados ordenados por rebotes
-  const user = await usuarioModel
-    .findOne(
-      { email: usuario.email },
-      { "jugador.partidos": { $slice: [salto, resultadosPorPagina] } }
-    )
-    .exec();
-
+  const user = await usuarioModel.findOne({ email: usuario.email }).exec();
   if (!user || !user.jugador.partidos) {
     throw new Error("Usuario o partidos no encontrados");
   }
 
-  return user.jugador.partidos
+  // Ordenar los partidos por rebotes (suma de ofensivos y defensivos)
+  const partidosOrdenados = user.jugador.partidos
     .filter(
       (partido) =>
         partido.estadisticas.rebotesOfensivos >= 0 &&
@@ -499,51 +480,29 @@ async function partidosPorRebotes(usuario: IUsuario, pagina: number): Promise<IP
         a.estadisticas.rebotesOfensivos + a.estadisticas.rebotesDefensivos;
       const rebotesB =
         b.estadisticas.rebotesOfensivos + b.estadisticas.rebotesDefensivos;
-
-      return rebotesB - rebotesA; // Ordenar de mayor a menor
+      return rebotesB - rebotesA;
     });
+
+  return partidosOrdenados.slice(salto, salto + resultadosPorPagina);
 }
 
-
-/*async function partidosPorValoracion(usuario: IUsuario, pagina: number): Promise<IPartido[]> {
-  // Buscar el usuario en la base de datos
-  const user = await usuarioModel.findOne({ email: usuario.email }).exec();
-  if (!user) {
-    throw new Error("Usuario no encontrado");
-  }
-
-  const partidos = user.jugador.partidos;
-
-  // Ordenar los partidos de mayor a menor según la valoración
-  const partidosOrdenados = partidos
-    .filter((partido) => partido.estadisticas.valoracion !== undefined) // Aseguramos que exista una valoración
-    .sort((a, b) => {
-      // Ordenar de mayor a menor
-      return b.estadisticas.valoracion - a.estadisticas.valoracion;
-    });
-
-  return partidosOrdenados;
-}*/
 async function partidosPorValoracion(usuario: IUsuario, pagina: number): Promise<IPartido[]> {
   const resultadosPorPagina = 9;
   const salto = (pagina - 1) * resultadosPorPagina;
 
-  // Buscar el usuario en la base de datos y traer solo los partidos paginados
-  const user = await usuarioModel
-    .findOne({ email: usuario.email }, { "jugador.partidos": { $slice: [salto, resultadosPorPagina] } })
-    .exec();
-
+  const user = await usuarioModel.findOne({ email: usuario.email }).exec();
   if (!user || !user.jugador.partidos) {
     throw new Error("Usuario o partidos no encontrados");
   }
 
-  // Ordenar los partidos dentro del rango obtenido
+  // Ordenar los partidos por valoración
   const partidosOrdenados = user.jugador.partidos
     .filter((partido) => partido.estadisticas.valoracion !== undefined)
     .sort((a, b) => b.estadisticas.valoracion - a.estadisticas.valoracion);
 
-  return partidosOrdenados;
+  return partidosOrdenados.slice(salto, salto + resultadosPorPagina);
 }
+
 
 
 async function getFederaciones(id: number): Promise<string[]> {
