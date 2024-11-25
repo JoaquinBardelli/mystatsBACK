@@ -8,8 +8,8 @@ on:
     branches: [ "main" ]
 
 env:
-  REGISTRY: ghcr.io  # Registra la imagen en GitHub Container Registry
-  IMAGE_NAME: ${{ github.repository }}  # Nombre de la imagen será el nombre del repositorio
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   build:
@@ -44,7 +44,7 @@ jobs:
         id: build-and-push
         uses: docker/build-push-action@v2
         with:
-          context: .  # El contexto es la raíz del repositorio
+          context: ./mystatsBACK  # Cambiar el contexto a mystatsBACK
           file: mystatsBACK/express-gen-ts/Dockerfile  # Ruta del Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
