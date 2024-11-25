@@ -1,36 +1,39 @@
-# Usa la imagen base de Node.js
+# Etapa de construcción
 FROM node:20-alpine as build
 
-# Define el directorio de trabajo para la etapa de construcción
+# Define el directorio de trabajo para la construcción dentro de express-gen-ts
 WORKDIR /app
 
-# Copia los archivos del package.json y package-lock.json desde express-gen-ts/
+# Copia los archivos package.json y package-lock.json desde express-gen-ts
 COPY express-gen-ts/package.json ./express-gen-ts/
 COPY express-gen-ts/package-lock.json ./express-gen-ts/
 
 # Instala las dependencias del proyecto
 RUN npm ci
 
-# Ejecuta el build (si es necesario)
+# Copia todo el código fuente de express-gen-ts
+COPY express-gen-ts ./express-gen-ts/
+
+# Ejecuta el build
 WORKDIR /app/express-gen-ts
 RUN npm run build
 
-# Para la etapa de producción, usa una imagen más ligera
+# Etapa de producción
 FROM node:20-alpine as production
 
+# Define el directorio de trabajo para producción
 WORKDIR /app
 
-# Copia los archivos necesarios para producción
-COPY mystatsBACK/package.json ./
+# Copia el package.json de express-gen-ts
+COPY express-gen-ts/package.json ./express-gen-ts/
 RUN npm install --only=production
 
-# Copia los archivos construidos desde la etapa de construcción
+# Copia los archivos construidos desde la etapa de build
 COPY --from=build /app/express-gen-ts/dist ./express-gen-ts/dist
 
-# Configura las variables de entorno y puertos
+# Configura las variables de entorno
 ENV NODE_ENV=production
 ENV PORT=3000
 
-# Expone el puerto y ejecuta el servicio
 EXPOSE 3000
 CMD ["node", "express-gen-ts/dist/index.js"]
