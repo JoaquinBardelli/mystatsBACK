@@ -9,16 +9,7 @@ import HttpStatusCodes from "@src/common/HttpStatusCodes";
 import Paths from "@src/common/Paths";
 import apiCb from "spec/support/apiCb";
 import { TApiCb } from "spec/types/misc";
-// Mock de mongoose
 import mongoose from "mongoose";
-
-jest.mock('mongoose', () => ({
-  connect: jest.fn(),
-  disconnect: jest.fn(),
-  model: jest.fn().mockReturnValue({
-    find: jest.fn().mockResolvedValue([]), // Simula una respuesta vacía de la base de datos
-  }),
-}));
 
 // **** Tests **** //
 
@@ -27,22 +18,21 @@ describe("Usuario", () => {
 
   beforeAll((done) => {
     agent = supertest.agent(app);
+    
+    
     done();
   });
-
   afterAll(async () => {
-    // Aquí no es necesario desconectar ya que estamos mockeando mongoose
     await mongoose.disconnect();
   });
-
   // **** User Tests **** //
 
-  describe(`GET: ${
+  describe(GET: ${
     Paths.Base + Paths.Usuarios.Base + Paths.Usuarios.Get
-  }`, () => {
+  }, () => {
     const api = (cb: TApiCb) =>
       agent
-        .get(Paths.Base + Paths.Usuarios.Base + Paths.Usuarios.Get)
+        .get( Paths.Base + Paths.Usuarios.Base + Paths.Usuarios.Get)
         .end(apiCb(cb));
 
     it("should return status 200.", (done) => {
