@@ -22,9 +22,6 @@ describe("Usuario", () => {
     
     done();
   });
-  afterAll(async () => {
-    await mongoose.disconnect();
-  });
   // **** User Tests **** //
 
   describe(`GET: ${
