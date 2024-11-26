@@ -32,28 +32,29 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
+          cache-dependency-path: ./express-gen-ts/package-lock.json
 
       - name: Install wait-for-it
         run: sudo apt-get install -y wait-for-it
 
       - name: Install dependencies
-        run: npm ci
         working-directory: ./express-gen-ts
+        run: npm ci
 
       - name: Wait for MongoDB to be ready
         run: |
           wait-for-it localhost:27017 --timeout=30 --strict -- echo "MongoDB is ready"
 
       - name: Lint code
-        run: npm run lint
         working-directory: ./express-gen-ts
+        run: npm run lint
 
       - name: Build project
-        run: npm run build --if-present
         working-directory: ./express-gen-ts
+        run: npm run build --if-present
 
       - name: Run tests
+        working-directory: ./express-gen-ts
         env:
           MONGO_URI: mongodb://localhost:27017/mystats
         run: npm run test:no-reloading
-        working-directory: ./express-gen-ts
