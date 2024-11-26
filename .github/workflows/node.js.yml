@@ -24,29 +24,32 @@ jobs:
           --health-retries 5
 
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Install dependencies
-      run: npm ci
-      working-directory: ./express-gen-ts
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
 
-    - name: Wait for MongoDB to be ready
-      run: |
-        sudo apt-get install -y wait-for-it
-        wait-for-it localhost:27017 --timeout=30 --strict -- echo "MongoDB is ready"
+      - name: Install wait-for-it
+        run: sudo apt-get install -y wait-for-it
 
-    - name: Run build
-      run: npm run build --if-present
-      working-directory: ./express-gen-ts
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./express-gen-ts
 
-    - name: Run tests
-      env:
-        MONGO_URI: mongodb://localhost:27017/testdb
-      run: npm run test:no-reloading
-      working-directory: ./express-gen-ts
+      - name: Wait for MongoDB to be ready
+        run: |
+          wait-for-it localhost:27017 --timeout=30 --strict -- echo "MongoDB is ready"
+
+      - name: Build project
+        run: npm run build --if-present
+        working-directory: ./express-gen-ts
+
+      - name: Run tests
+        env:
+          MONGO_URI: mongodb://localhost:27017/testdb
+        run: npm run test:no-reloading
+        working-directory: ./express-gen-ts
