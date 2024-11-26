@@ -535,8 +535,9 @@ async function traerFederacion(usuario: IUsuario): Promise<IFederacion> {
   return federacion;
 }
 
-async function Get (): Promise<IUsuario[]> {
-  const users = await usuarioModel.find().exec();
+async function Get(): Promise<IUsuario[]> {
+  const db = await orm.openDb();
+  const users = db.usuarios;
   return users;
 }
 
