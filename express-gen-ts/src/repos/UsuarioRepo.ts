@@ -404,7 +404,10 @@ async function traerDatosPersonales(usuario: IUsuario): Promise<IJugador> {
   return jugador;
 }
 
-async function partidosPorPuntos(usuario: IUsuario, pagina: number): Promise<IPartido[]> {
+async function partidosPorPuntos(
+  usuario: IUsuario,
+  pagina: number
+): Promise<IPartido[]> {
   const resultadosPorPagina = 9;
   const salto = (pagina - 1) * resultadosPorPagina;
 
@@ -423,7 +426,10 @@ async function partidosPorPuntos(usuario: IUsuario, pagina: number): Promise<IPa
   return partidosOrdenados.slice(salto, salto + resultadosPorPagina);
 }
 
-async function partidosPorMinutos(usuario: IUsuario, pagina: number): Promise<IPartido[]> {
+async function partidosPorMinutos(
+  usuario: IUsuario,
+  pagina: number
+): Promise<IPartido[]> {
   const resultadosPorPagina = 9;
   const salto = (pagina - 1) * resultadosPorPagina;
 
@@ -434,15 +440,20 @@ async function partidosPorMinutos(usuario: IUsuario, pagina: number): Promise<IP
 
   // Ordenar los partidos por tiempo jugado (minutos y segundos)
   const partidosOrdenados = user.jugador.partidos.sort((a, b) => {
-    const tiempoA = a.estadisticas.minutosJugados * 60 + a.estadisticas.segundosJugados;
-    const tiempoB = b.estadisticas.minutosJugados * 60 + b.estadisticas.segundosJugados;
+    const tiempoA =
+      a.estadisticas.minutosJugados * 60 + a.estadisticas.segundosJugados;
+    const tiempoB =
+      b.estadisticas.minutosJugados * 60 + b.estadisticas.segundosJugados;
     return tiempoB - tiempoA;
   });
 
   return partidosOrdenados.slice(salto, salto + resultadosPorPagina);
 }
 
-async function partidosPorAsistencias(usuario: IUsuario, pagina: number): Promise<IPartido[]> {
+async function partidosPorAsistencias(
+  usuario: IUsuario,
+  pagina: number
+): Promise<IPartido[]> {
   const resultadosPorPagina = 9;
   const salto = (pagina - 1) * resultadosPorPagina;
 
@@ -459,7 +470,10 @@ async function partidosPorAsistencias(usuario: IUsuario, pagina: number): Promis
   return partidosOrdenados.slice(salto, salto + resultadosPorPagina);
 }
 
-async function partidosPorRebotes(usuario: IUsuario, pagina: number): Promise<IPartido[]> {
+async function partidosPorRebotes(
+  usuario: IUsuario,
+  pagina: number
+): Promise<IPartido[]> {
   const resultadosPorPagina = 9;
   const salto = (pagina - 1) * resultadosPorPagina;
 
@@ -486,7 +500,10 @@ async function partidosPorRebotes(usuario: IUsuario, pagina: number): Promise<IP
   return partidosOrdenados.slice(salto, salto + resultadosPorPagina);
 }
 
-async function partidosPorValoracion(usuario: IUsuario, pagina: number): Promise<IPartido[]> {
+async function partidosPorValoracion(
+  usuario: IUsuario,
+  pagina: number
+): Promise<IPartido[]> {
   const resultadosPorPagina = 9;
   const salto = (pagina - 1) * resultadosPorPagina;
 
@@ -502,8 +519,6 @@ async function partidosPorValoracion(usuario: IUsuario, pagina: number): Promise
 
   return partidosOrdenados.slice(salto, salto + resultadosPorPagina);
 }
-
-
 
 async function getFederaciones(id: number): Promise<string[]> {
   const federaciones = await federacionModel.find().exec();
@@ -528,15 +543,18 @@ async function traerFederacion(usuario: IUsuario): Promise<IFederacion> {
   if (!user) {
     throw new Error("Usuario no encontrado");
   }
-  const federacion = await federacionModel.findOne({ clubes: user.jugador.club }).exec();
+  const federacion = await federacionModel
+    .findOne({ clubes: user.jugador.club })
+    .exec();
   if (!federacion) {
     throw new Error("Federación no encontrada");
   }
   return federacion;
 }
 
-async function Get (): Promise<IUsuario[]> {
-  const users = await usuarioModel.find().exec();
+async function Get(): Promise<IUsuario[]> {
+  const db = await orm.openDb();
+  const users = db.usuarios;
   return users;
 }
 
