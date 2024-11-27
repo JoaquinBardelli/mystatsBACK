@@ -27,9 +27,9 @@ describe("Usuario", () => {
   });
   // **** User Tests **** //
 
-  describe(GET: ${
+  describe(`GET: ${
     Paths.Base + Paths.Usuarios.Base + Paths.Usuarios.Get
-  }, () => {
+  }`, () => {
     const api = (cb: TApiCb) =>
       agent
         .get( Paths.Base + Paths.Usuarios.Base + Paths.Usuarios.Get)
