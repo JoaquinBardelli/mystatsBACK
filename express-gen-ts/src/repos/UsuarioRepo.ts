@@ -100,9 +100,10 @@ async function login(usuario: IUsuario): Promise<{ token: string }> {
 
     // Extraer información necesaria para el token
 
-
     // Crear token con información mínima
-    const token = jwt.sign({ email : user.email}, EnvVars.Jwt.Secret, { expiresIn: "3h" });
+    const token = jwt.sign({ email: user.email }, EnvVars.Jwt.Secret, {
+      expiresIn: "3h",
+    });
 
     console.log(`Usuario logeado: ${user.email} con token: ${token}`);
 
@@ -284,10 +285,7 @@ async function agregarPartido(req: Request, res: Response) {
 };
  */
 
-async function getPromedioEstadisticas(
-  email : string
-): Promise<IEstadisticas> {
- 
+async function getPromedioEstadisticas(email: string): Promise<IEstadisticas> {
   const user = await usuarioModel.findOne({ email }).exec();
   console.log("Resultado de findone" + user);
   console.log("Resultado de findone", JSON.stringify(user, null, 2));
@@ -440,7 +438,7 @@ async function persists(id: number): Promise<boolean> {
  * Get all usuarios.
  */
 
-async function traerDatosPersonales(email : string): Promise<IJugador> {
+async function traerDatosPersonales(email: string): Promise<IJugador> {
   const user = await usuarioModel.findOne({ email }).exec();
   if (!user) {
     throw new Error("Usuario no encontrado");
@@ -450,7 +448,7 @@ async function traerDatosPersonales(email : string): Promise<IJugador> {
 }
 
 async function partidosPorPuntos(
-  email : string,
+  email: string,
   pagina: number
 ): Promise<IPartido[]> {
   const resultadosPorPagina = 9;
@@ -472,7 +470,7 @@ async function partidosPorPuntos(
 }
 
 async function partidosPorMinutos(
-  email : string,
+  email: string,
   pagina: number
 ): Promise<IPartido[]> {
   const resultadosPorPagina = 9;
@@ -496,7 +494,7 @@ async function partidosPorMinutos(
 }
 
 async function partidosPorAsistencias(
-  email : string,
+  email: string,
   pagina: number
 ): Promise<IPartido[]> {
   const resultadosPorPagina = 9;
@@ -516,7 +514,7 @@ async function partidosPorAsistencias(
 }
 
 async function partidosPorRebotes(
-  email : string,
+  email: string,
   pagina: number
 ): Promise<IPartido[]> {
   const resultadosPorPagina = 9;
@@ -546,7 +544,7 @@ async function partidosPorRebotes(
 }
 
 async function partidosPorValoracion(
-  email : string,
+  email: string,
   pagina: number
 ): Promise<IPartido[]> {
   const resultadosPorPagina = 9;
@@ -577,15 +575,15 @@ async function getFederaciones(id: number): Promise<string[]> {
 
 async function traerCantidadPartidos(email: string): Promise<number> {
   console.log("USUARIO REPO CANT  " + email);
-  const user = await usuarioModel.findOne({email}).exec();
+  const user = await usuarioModel.findOne({ email }).exec();
   if (!user) {
     throw new Error("Usuario no encontrado");
   }
   return user.jugador.partidos.length;
 }
 
-async function traerFederacion(email : string): Promise<IFederacion> {
-  const user = await usuarioModel.findOne({ email}).exec();
+async function traerFederacion(email: string): Promise<IFederacion> {
+  const user = await usuarioModel.findOne({ email }).exec();
   if (!user) {
     throw new Error("Usuario no encontrado");
   }
