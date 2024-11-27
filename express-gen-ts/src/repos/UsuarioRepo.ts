@@ -12,6 +12,7 @@ import { IPartido } from "@src/models/Partido";
 import { get } from "http";
 import { IJugador } from "@src/models/Jugador";
 import { IFederacion } from "@src/models/Federacion";
+import e from "cors";
 
 // **** Functions **** //
 /*async function login(usuario: IUsuario): Promise<string> {
@@ -47,7 +48,7 @@ const token = jwt.sign({
 return token;
 }*/
 
-async function login(usuario: IUsuario): Promise<{ token: string }> {
+/*async function login(usuario: IUsuario): Promise<{ token: string }> {
   const user = await usuarioModel.findOne({ email: usuario.email }).exec();
 
   if (!user) {
@@ -65,6 +66,51 @@ async function login(usuario: IUsuario): Promise<{ token: string }> {
   console.log("Usuario logeado: " + usuario.email + " con token: " + token);
 
   return { token };
+}*/
+async function login(usuario: IUsuario): Promise<{ token: string }> {
+  try {
+    // Verificar si el secreto JWT está configurado
+    if (!EnvVars.Jwt.Secret) {
+      throw new Error("JWT Secret no está configurado");
+    }
+
+    console.log("Buscando usuario con email:", usuario.email);
+
+    // Buscar el usuario en la base de datos por email
+    const user = await usuarioModel.findOne({ email: usuario.email }).exec();
+
+    if (!user) {
+      console.error("Usuario no encontrado");
+      throw new Error("Credenciales inválidas");
+    }
+
+    console.log("Usuario encontrado, verificando contraseña...");
+
+    // Comparar contraseñas
+    const isPasswordCorrect = bcrypt.compareSync(
+      usuario.password,
+      user.password
+    );
+    if (!isPasswordCorrect) {
+      console.error("Contraseña incorrecta");
+      throw new Error("Credenciales inválidas");
+    }
+
+    console.log("Contraseña verificada, creando token...");
+
+    // Extraer información necesaria para el token
+
+
+    // Crear token con información mínima
+    const token = jwt.sign({ email : user.email}, EnvVars.Jwt.Secret, { expiresIn: "3h" });
+
+    console.log(`Usuario logeado: ${user.email} con token: ${token}`);
+
+    return { token };
+  } catch (error) {
+    console.error("Error en el login:", error.message);
+    throw new Error("Error al iniciar sesión. Verifique sus credenciales.");
+  }
 }
 
 /*async function register(usuario: IUsuario): Promise<string> {
@@ -239,11 +285,10 @@ async function agregarPartido(req: Request, res: Response) {
  */
 
 async function getPromedioEstadisticas(
-  usuario: IUsuario
+  email : string
 ): Promise<IEstadisticas> {
-  console.log("Usuario en repo promedio" + usuario);
-  console.log("Usuario en repo promedio" + usuario.email);
-  const user = await usuarioModel.findOne({ email: usuario.email }).exec();
+ 
+  const user = await usuarioModel.findOne({ email }).exec();
   console.log("Resultado de findone" + user);
   console.log("Resultado de findone", JSON.stringify(user, null, 2));
 
@@ -395,8 +440,8 @@ async function persists(id: number): Promise<boolean> {
  * Get all usuarios.
  */
 
-async function traerDatosPersonales(usuario: IUsuario): Promise<IJugador> {
-  const user = await usuarioModel.findOne({ email: usuario.email }).exec();
+async function traerDatosPersonales(email : string): Promise<IJugador> {
+  const user = await usuarioModel.findOne({ email }).exec();
   if (!user) {
     throw new Error("Usuario no encontrado");
   }
@@ -405,14 +450,14 @@ async function traerDatosPersonales(usuario: IUsuario): Promise<IJugador> {
 }
 
 async function partidosPorPuntos(
-  usuario: IUsuario,
+  email : string,
   pagina: number
 ): Promise<IPartido[]> {
   const resultadosPorPagina = 9;
   const salto = (pagina - 1) * resultadosPorPagina;
 
   // Recuperar todos los partidos del usuario
-  const user = await usuarioModel.findOne({ email: usuario.email }).exec();
+  const user = await usuarioModel.findOne({ email }).exec();
   if (!user || !user.jugador.partidos) {
     throw new Error("Usuario o partidos no encontrados");
   }
@@ -427,13 +472,13 @@ async function partidosPorPuntos(
 }
 
 async function partidosPorMinutos(
-  usuario: IUsuario,
+  email : string,
   pagina: number
 ): Promise<IPartido[]> {
   const resultadosPorPagina = 9;
   const salto = (pagina - 1) * resultadosPorPagina;
 
-  const user = await usuarioModel.findOne({ email: usuario.email }).exec();
+  const user = await usuarioModel.findOne({ email }).exec();
   if (!user || !user.jugador.partidos) {
     throw new Error("Usuario o partidos no encontrados");
   }
@@ -451,13 +496,13 @@ async function partidosPorMinutos(
 }
 
 async function partidosPorAsistencias(
-  usuario: IUsuario,
+  email : string,
   pagina: number
 ): Promise<IPartido[]> {
   const resultadosPorPagina = 9;
   const salto = (pagina - 1) * resultadosPorPagina;
 
-  const user = await usuarioModel.findOne({ email: usuario.email }).exec();
+  const user = await usuarioModel.findOne({ email }).exec();
   if (!user || !user.jugador.partidos) {
     throw new Error("Usuario o partidos no encontrados");
   }
@@ -471,13 +516,13 @@ async function partidosPorAsistencias(
 }
 
 async function partidosPorRebotes(
-  usuario: IUsuario,
+  email : string,
   pagina: number
 ): Promise<IPartido[]> {
   const resultadosPorPagina = 9;
   const salto = (pagina - 1) * resultadosPorPagina;
 
-  const user = await usuarioModel.findOne({ email: usuario.email }).exec();
+  const user = await usuarioModel.findOne({ email }).exec();
   if (!user || !user.jugador.partidos) {
     throw new Error("Usuario o partidos no encontrados");
   }
@@ -501,13 +546,13 @@ async function partidosPorRebotes(
 }
 
 async function partidosPorValoracion(
-  usuario: IUsuario,
+  email : string,
   pagina: number
 ): Promise<IPartido[]> {
   const resultadosPorPagina = 9;
   const salto = (pagina - 1) * resultadosPorPagina;
 
-  const user = await usuarioModel.findOne({ email: usuario.email }).exec();
+  const user = await usuarioModel.findOne({ email }).exec();
   if (!user || !user.jugador.partidos) {
     throw new Error("Usuario o partidos no encontrados");
   }
@@ -530,16 +575,17 @@ async function getFederaciones(id: number): Promise<string[]> {
   return federacion.clubes;
 }
 
-async function traerCantidadPartidos(usuario: IUsuario): Promise<number> {
-  const user = await usuarioModel.findOne({ email: usuario.email }).exec();
+async function traerCantidadPartidos(email: string): Promise<number> {
+  console.log("USUARIO REPO CANT  " + email);
+  const user = await usuarioModel.findOne({email}).exec();
   if (!user) {
     throw new Error("Usuario no encontrado");
   }
   return user.jugador.partidos.length;
 }
 
-async function traerFederacion(usuario: IUsuario): Promise<IFederacion> {
-  const user = await usuarioModel.findOne({ email: usuario.email }).exec();
+async function traerFederacion(email : string): Promise<IFederacion> {
+  const user = await usuarioModel.findOne({ email}).exec();
   if (!user) {
     throw new Error("Usuario no encontrado");
   }

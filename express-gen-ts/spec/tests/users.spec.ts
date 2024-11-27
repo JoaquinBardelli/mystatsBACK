@@ -7,8 +7,6 @@ import Usuario from "@src/models/Usuario";
 import { IUsuario } from "@src/models/Usuario";
 import HttpStatusCodes from "@src/common/HttpStatusCodes";
 import Paths from "@src/common/Paths";
-import apiCb from "spec/support/apiCb";
-import { TApiCb } from "spec/types/misc";
 import mongoose from "mongoose";
 
 // **** Tests **** //
@@ -16,30 +14,21 @@ import mongoose from "mongoose";
 describe("Usuario", () => {
   let agent: TestAgent<Test>;
 
-  beforeAll((done) => {
+  beforeAll(async () => {
     agent = supertest.agent(app);
-    
-    
-    done();
   });
+
   afterAll(async () => {
-    await mongoose.disconnect();
+    // Cerrar correctamente la conexión con la base de datos
+    await mongoose.connection.close();
   });
+
   // **** User Tests **** //
 
-  describe(`GET: ${
-    Paths.Base + Paths.Usuarios.Base + Paths.Usuarios.Get
-  }`, () => {
-    const api = (cb: TApiCb) =>
-      agent
-        .get( Paths.Base + Paths.Usuarios.Base + Paths.Usuarios.Get)
-        .end(apiCb(cb));
-
-    it("should return status 200.", (done) => {
-      api((res) => {
-        expect(res.status).toBe(HttpStatusCodes.OK);
-        done();
-      });
+  describe(`GET: ${Paths.Base + Paths.Usuarios.Base + Paths.Usuarios.Get}`, () => {
+    it("should return status 200.", async () => {
+      const res = await agent.get(Paths.Base + Paths.Usuarios.Base + Paths.Usuarios.Get);
+      expect(res.status).toBe(HttpStatusCodes.OK);
     }, 20000);
   });
 });

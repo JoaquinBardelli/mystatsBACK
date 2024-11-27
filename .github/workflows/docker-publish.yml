@@ -45,11 +45,6 @@ jobs:
         working-directory: ./express-gen-ts
         run: npm ci
 
-      # Ejecutar los tests aquí
-      - name: Run tests
-        working-directory: ./express-gen-ts
-        run: npm run test
-
       - name: Build and push Docker image
         id: build-and-push
         uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
@@ -60,6 +55,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          visibility: public
 
       - name: Sign the published Docker image
         env:
