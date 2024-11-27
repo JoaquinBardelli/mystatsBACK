@@ -18,21 +18,21 @@ describe("Usuario", () => {
 
   beforeAll((done) => {
     agent = supertest.agent(app);
-    
-    
     done();
   });
-  afterAll(async () => {
-    await mongoose.disconnect();
+
+  afterAll(async (done) => {
+    // Asegúrate de cerrar correctamente la conexión con la base de datos
+    await mongoose.connection.close();
+    done();
   }, 20000);
+
   // **** User Tests **** //
 
-  describe(`GET: ${
-    Paths.Base + Paths.Usuarios.Base + Paths.Usuarios.Get
-  }`, () => {
+  describe(`GET: ${Paths.Base + Paths.Usuarios.Base + Paths.Usuarios.Get}`, () => {
     const api = (cb: TApiCb) =>
       agent
-        .get( Paths.Base + Paths.Usuarios.Base + Paths.Usuarios.Get)
+        .get(Paths.Base + Paths.Usuarios.Base + Paths.Usuarios.Get)
         .end(apiCb(cb));
 
     it("should return status 200.", (done) => {
