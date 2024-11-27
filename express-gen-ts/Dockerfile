@@ -16,19 +16,19 @@ FROM node:20-alpine as production
 
 WORKDIR /my-app
 
-# Copiar tsconfig.json para que tsconfig-paths pueda resolver rutas
+# Copiar archivos necesarios para producción
 COPY --from=build /my-app/tsconfig.json ./tsconfig.json
-
-# Copiar los archivos necesarios para producción
 COPY --from=build /my-app/dist ./dist
 COPY --from=build /my-app/node_modules ./node_modules
 COPY --from=build /my-app/package.json ./package.json
-COPY --from=build /my-app/env ./env
 
 # Configuración de entorno
 ENV PORT=3000
 ENV HOST=0.0.0.0
 ENV NODE_ENV=production
+
+# Reducir dependencias a solo producción
+RUN npm prune --production
 
 # Ejecutar usando tsconfig-paths
 CMD ["node", "-r", "tsconfig-paths/register", "dist/index.js"]
