@@ -1,4 +1,4 @@
-import supertest, { Test } from "supertest";
+ import supertest, { Test } from "supertest";
 import TestAgent from "supertest/lib/agent";
 import insertUrlParams from "inserturlparams";
 
@@ -10,30 +10,22 @@ import Paths from "@src/common/Paths";
 import apiCb from "spec/support/apiCb";
 import { TApiCb } from "spec/types/misc";
 import mongoose from "mongoose";
-import { MongoMemoryServer } from 'mongodb-memory-server';
 
 // **** Tests **** //
 
 describe("Usuario", () => {
   let agent: TestAgent<Test>;
-  let mongoServer: MongoMemoryServer;
 
-  beforeAll(async () => {
-    // Inicia el servidor de MongoDB en memoria para las pruebas
-    mongoServer = await MongoMemoryServer.create();
-    const mongoUri = mongoServer.getUri();
-
-    // Conéctate a la base de datos en memoria
-    await mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
-
+  beforeAll((done) => {
     agent = supertest.agent(app);
+    done();
   });
 
-  afterAll(async () => {
-    // Cierra la conexión con la base de datos y detiene el servidor en memoria
+  afterAll(async (done) => {
+    // Asegúrate de cerrar correctamente la conexión con la base de datos
     await mongoose.connection.close();
-    await mongoServer.stop();
-  });
+    done();
+  }, 20000);
 
   // **** User Tests **** //
 
