@@ -3,8 +3,8 @@ FROM node:20-alpine as build
 
 WORKDIR /my-app
 
-# Instalar dependencias
-COPY package.json package-lock.json ./ 
+# Copiar configuraciones y dependencias
+COPY package.json package-lock.json tsconfig.json ./
 RUN npm ci
 
 # Copiar código fuente y construir
@@ -16,22 +16,21 @@ FROM node:20-alpine as production
 
 WORKDIR /my-app
 
-# Copiar archivos desde la etapa de build
+# Copiar tsconfig.json para que tsconfig-paths pueda resolver rutas
+COPY --from=build /my-app/tsconfig.json ./tsconfig.json
+
+# Copiar los archivos necesarios para producción
 COPY --from=build /my-app/dist ./dist
 COPY --from=build /my-app/node_modules ./node_modules
 COPY --from=build /my-app/package.json ./package.json
 COPY --from=build /my-app/env ./env
 
-# Configuración de Entorno
+# Configuración de entorno
 ENV PORT=3000
 ENV HOST=0.0.0.0
 ENV NODE_ENV=production
-ENV JET_LOGGER_MODE=CONSOLE
-ENV JET_LOGGER_FILEPATH=jet-logger.log
-ENV JET_LOGGER_TIMESTAMP=TRUE
-ENV JET_LOGGER_FORMAT=LINE
 
-# Usar tsconfig-paths y ejecutar la app
+# Ejecutar usando tsconfig-paths
 CMD ["node", "-r", "tsconfig-paths/register", "dist/index.js"]
 
 EXPOSE 3000
