@@ -10,22 +10,30 @@ import Paths from "@src/common/Paths";
 import apiCb from "spec/support/apiCb";
 import { TApiCb } from "spec/types/misc";
 import mongoose from "mongoose";
+import { MongoMemoryServer } from 'mongodb-memory-server';
 
 // **** Tests **** //
 
 describe("Usuario", () => {
   let agent: TestAgent<Test>;
+  let mongoServer: MongoMemoryServer;
 
-  beforeAll((done) => {
+  beforeAll(async () => {
+    // Inicia el servidor de MongoDB en memoria para las pruebas
+    mongoServer = await MongoMemoryServer.create();
+    const mongoUri = mongoServer.getUri();
+
+    // Conéctate a la base de datos en memoria
+    await mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
+
     agent = supertest.agent(app);
-    done();
   });
 
-  afterAll(async (done) => {
-    // Asegúrate de cerrar correctamente la conexión con la base de datos
+  afterAll(async () => {
+    // Cierra la conexión con la base de datos y detiene el servidor en memoria
     await mongoose.connection.close();
-    done();
-  }, 20000);
+    await mongoServer.stop();
+  });
 
   // **** User Tests **** //
 
