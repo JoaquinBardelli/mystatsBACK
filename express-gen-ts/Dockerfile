@@ -7,6 +7,9 @@ WORKDIR /my-app
 COPY package.json package-lock.json tsconfig.json ./
 RUN npm ci
 
+# Copiar el archivo de entorno, si existe, al contenedor
+COPY ./env/development.env ./env/development.env
+
 # Copiar código fuente y construir
 COPY . .
 RUN npm run build
@@ -21,6 +24,7 @@ COPY --from=build /my-app/tsconfig.json ./tsconfig.json
 COPY --from=build /my-app/dist ./dist
 COPY --from=build /my-app/node_modules ./node_modules
 COPY --from=build /my-app/package.json ./package.json
+COPY --from=build /my-app/env/development.env ./env/development.env
 
 # Configuración de entorno
 ENV PORT=3000
