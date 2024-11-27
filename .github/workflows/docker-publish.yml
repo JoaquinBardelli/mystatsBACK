@@ -48,7 +48,7 @@ jobs:
       # Ejecutar los tests aquí
       - name: Run tests
         working-directory: ./express-gen-ts
-        run: npm run test:no-reloading
+        run: npm run test
 
       - name: Build and push Docker image
         id: build-and-push
