@@ -14,7 +14,7 @@ export interface IUsuario {
   email: string;
   password: string;
   created: Date;
-  admin?: boolean;
+  admin: boolean;
   jugador: IJugador;
 }
 

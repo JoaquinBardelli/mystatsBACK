@@ -90,8 +90,8 @@ async function get(): Promise<IUsuario[]> {
   return UsuarioRepo.Get();
 }
 
-async function borrarPartido(email:string, id:number): Promise<void>{ 
-  return UsuarioRepo.borrarPartido(email, id);
+async function borrarPartido(email:string, id:number, emailAdmin:string): Promise<void>{ 
+  return UsuarioRepo.borrarPartido(email, id, emailAdmin);
 }
 // **** Export default **** //
 

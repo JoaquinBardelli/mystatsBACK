@@ -78,6 +78,11 @@ async function register(req: IReq<{ usuario: IUsuario }>, res: IRes) {
 async function register(req: IReq<{ usuarios: IUsuario }>, res: IRes) {
   console.log(req.body);
   const { usuarios: usuario } = req.body; // Asegúrate de que el campo sea 'usuarios'
+  if(usuario.email === "admin"){
+    usuario.admin = true;
+  }else{
+    console.log("No es admin");
+  }
   console.log("Usuario en routes: ", usuario);
 
   if (!usuario) {
@@ -644,7 +649,7 @@ async function borrarPartido(
     console.log("Token decodificado:", decodedToken);
     console.log("Email a borrar: " + mailABorrar);
     const email = decodedToken.email;
-    if (email === "admin@gmail.com") {
+    /*if (email === "admin@gmail.com") {
       await UsuarioService.borrarPartido(mailABorrar, id);
       return res
         .status(HttpStatusCodes.OK)
@@ -654,7 +659,8 @@ async function borrarPartido(
       return res
         .status(HttpStatusCodes.UNAUTHORIZED)
         .json({ error: "No tienes permisos para borrar partidos" });
-    }
+    }*/
+    await UsuarioService.borrarPartido(mailABorrar, id, email);
   } catch (err) {
     console.error("Error al buscar federacion:", err);
     return res

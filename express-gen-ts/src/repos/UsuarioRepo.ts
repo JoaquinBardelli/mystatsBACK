@@ -602,7 +602,19 @@ async function Get(): Promise<IUsuario[]> {
   return users;
 }
 
-async function borrarPartido(email: string, id: number): Promise<void> {
+async function borrarPartido(email: string, id: number, emailAdmin:string): Promise<void> {
+  const admin = await usuarioModel.findOne({ email: emailAdmin }).lean().exec();
+  if (!admin) {
+    throw new Error("Admin no encontrado");
+  }
+  console.log("ADMIN ENCONTRADO: " + admin);
+  console.log("ADMIN: " + admin.admin);
+  if (!admin.admin) {
+    throw new Error("No tienes permisos para borrar partidos");
+  }else{
+    console.log("Admin encontrado");
+  }
+
   const user = await usuarioModel.findOne({ email }).exec();
   console.log("ID DEL PARTIDO: " + id);
 
