@@ -24,7 +24,7 @@ COPY --from=build /my-app/tsconfig.json ./tsconfig.json
 COPY --from=build /my-app/dist ./dist
 COPY --from=build /my-app/node_modules ./node_modules
 COPY --from=build /my-app/package.json ./package.json
-COPY --from=build /my-app/env/development.env ./env/development.env
+COPY --from=build /my-app/env/ ./env/
 
 # Configuración de entorno
 ENV PORT=3000
