@@ -22,6 +22,7 @@ export default {
     PartidosPorRebotes : '/partidosPorRebotes/:id',
     PartidosPorValoracion : '/partidosPorValoracion/:id',
     TraerCantidadPartidos: '/cantidadPartidos',
-    TraerFederacion: '/federacion'
+    TraerFederacion: '/federacion',
+    BorrarPartido: '/borrar/:id'
   },
 } as const;

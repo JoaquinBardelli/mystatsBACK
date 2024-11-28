@@ -77,10 +77,9 @@ userRouter.post(
   UsuarioRoutes.agregarPartido
 );
 
-userRouter.get(
-  Paths.Usuarios.TraerFederacion,
-  UsuarioRoutes.traerFederacion
-);
+userRouter.get(Paths.Usuarios.TraerFederacion, UsuarioRoutes.traerFederacion);
+
+userRouter.post(Paths.Usuarios.BorrarPartido, UsuarioRoutes.borrarPartido);
 
 // Add UserRouter
 apiRouter.use(Paths.Usuarios.Base, userRouter);

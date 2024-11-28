@@ -26,7 +26,6 @@ async function get(req: IReq, res: IRes) {
   }
 }
 
-
 async function login(req: IReq<{ usuarios: IUsuario }>, res: IRes) {
   console.log("LOGEANDO USUARIO");
   const { usuarios: usuario } = req.body;
@@ -106,35 +105,37 @@ async function promedio(req: IReq, res: IRes) {
   console.log(req.query);
   try {
     const authHeader = req.headers.authorization;
-  
+
     if (!authHeader) {
       console.log("Token no proporcionado");
       return res
         .status(HttpStatusCodes.UNAUTHORIZED)
         .json({ error: "Token no proporcionado" });
     }
-  
+
     // Eliminar la palabra 'Bearer ' del token
     const token = authHeader.replace("Bearer ", "").trim();
     console.log("Token procesado:", token);
-  
+
     if (!token) {
       console.log("Token no proporcionado tras limpiar");
       return res
         .status(HttpStatusCodes.UNAUTHORIZED)
         .json({ error: "Token no proporcionado" });
     }
-  
+
     // Decodificar el token
-    const decodedToken = jwt.verify(token, EnvVars.Jwt.Secret) as { email: string };
-  
+    const decodedToken = jwt.verify(token, EnvVars.Jwt.Secret) as {
+      email: string;
+    };
+
     if (!decodedToken || !decodedToken.email) {
       console.error("Token inválido o falta el email");
       return res
         .status(HttpStatusCodes.UNAUTHORIZED)
         .json({ error: "Token inválido o falta el email" });
     }
-  
+
     console.log("Token decodificado:", decodedToken);
     const email = decodedToken.email;
     const promedio = await UsuarioService.promedio(email);
@@ -150,35 +151,37 @@ async function promedio(req: IReq, res: IRes) {
 async function agregarPartido(req: IReq<{ partidos: IPartido }>, res: IRes) {
   try {
     const authHeader = req.headers.authorization;
-  
+
     if (!authHeader) {
       console.log("Token no proporcionado");
       return res
         .status(HttpStatusCodes.UNAUTHORIZED)
         .json({ error: "Token no proporcionado" });
     }
-  
+
     // Eliminar la palabra 'Bearer ' del token
     const token = authHeader.replace("Bearer ", "").trim();
     console.log("Token procesado:", token);
-  
+
     if (!token) {
       console.log("Token no proporcionado tras limpiar");
       return res
         .status(HttpStatusCodes.UNAUTHORIZED)
         .json({ error: "Token no proporcionado" });
     }
-  
+
     // Decodificar el token
-    const decodedToken = jwt.verify(token, EnvVars.Jwt.Secret) as { email: string };
-  
+    const decodedToken = jwt.verify(token, EnvVars.Jwt.Secret) as {
+      email: string;
+    };
+
     if (!decodedToken || !decodedToken.email) {
       console.error("Token inválido o falta el email");
       return res
         .status(HttpStatusCodes.UNAUTHORIZED)
         .json({ error: "Token inválido o falta el email" });
     }
-  
+
     console.log("Token decodificado:", decodedToken);
     const email = decodedToken.email;
     //console.log("email en routes agregarPartido routes" + email);
@@ -206,35 +209,37 @@ async function agregarPartido(req: IReq<{ partidos: IPartido }>, res: IRes) {
 async function traerDatosPersonales(req: IReq, res: IRes) {
   try {
     const authHeader = req.headers.authorization;
-  
+
     if (!authHeader) {
       console.log("Token no proporcionado");
       return res
         .status(HttpStatusCodes.UNAUTHORIZED)
         .json({ error: "Token no proporcionado" });
     }
-  
+
     // Eliminar la palabra 'Bearer ' del token
     const token = authHeader.replace("Bearer ", "").trim();
     console.log("Token procesado:", token);
-  
+
     if (!token) {
       console.log("Token no proporcionado tras limpiar");
       return res
         .status(HttpStatusCodes.UNAUTHORIZED)
         .json({ error: "Token no proporcionado" });
     }
-  
+
     // Decodificar el token
-    const decodedToken = jwt.verify(token, EnvVars.Jwt.Secret) as { email: string };
-  
+    const decodedToken = jwt.verify(token, EnvVars.Jwt.Secret) as {
+      email: string;
+    };
+
     if (!decodedToken || !decodedToken.email) {
       console.error("Token inválido o falta el email");
       return res
         .status(HttpStatusCodes.UNAUTHORIZED)
         .json({ error: "Token inválido o falta el email" });
     }
-  
+
     console.log("Token decodificado:", decodedToken);
     const email = decodedToken.email;
 
@@ -252,35 +257,37 @@ async function partidosPorPuntos(req: IReq, res: IRes) {
   const pagina = +req.params.id;
   try {
     const authHeader = req.headers.authorization;
-  
+
     if (!authHeader) {
       console.log("Token no proporcionado");
       return res
         .status(HttpStatusCodes.UNAUTHORIZED)
         .json({ error: "Token no proporcionado" });
     }
-  
+
     // Eliminar la palabra 'Bearer ' del token
     const token = authHeader.replace("Bearer ", "").trim();
     console.log("Token procesado:", token);
-  
+
     if (!token) {
       console.log("Token no proporcionado tras limpiar");
       return res
         .status(HttpStatusCodes.UNAUTHORIZED)
         .json({ error: "Token no proporcionado" });
     }
-  
+
     // Decodificar el token
-    const decodedToken = jwt.verify(token, EnvVars.Jwt.Secret) as { email: string };
-  
+    const decodedToken = jwt.verify(token, EnvVars.Jwt.Secret) as {
+      email: string;
+    };
+
     if (!decodedToken || !decodedToken.email) {
       console.error("Token inválido o falta el email");
       return res
         .status(HttpStatusCodes.UNAUTHORIZED)
         .json({ error: "Token inválido o falta el email" });
     }
-  
+
     console.log("Token decodificado:", decodedToken);
     const email = decodedToken.email;
     const partidos = await UsuarioService.partidosPorPuntos(email, pagina);
@@ -297,35 +304,37 @@ async function partidosPorMinutos(req: IReq, res: IRes) {
   const pagina = +req.params.id;
   try {
     const authHeader = req.headers.authorization;
-  
+
     if (!authHeader) {
       console.log("Token no proporcionado");
       return res
         .status(HttpStatusCodes.UNAUTHORIZED)
         .json({ error: "Token no proporcionado" });
     }
-  
+
     // Eliminar la palabra 'Bearer ' del token
     const token = authHeader.replace("Bearer ", "").trim();
     console.log("Token procesado:", token);
-  
+
     if (!token) {
       console.log("Token no proporcionado tras limpiar");
       return res
         .status(HttpStatusCodes.UNAUTHORIZED)
         .json({ error: "Token no proporcionado" });
     }
-  
+
     // Decodificar el token
-    const decodedToken = jwt.verify(token, EnvVars.Jwt.Secret) as { email: string };
-  
+    const decodedToken = jwt.verify(token, EnvVars.Jwt.Secret) as {
+      email: string;
+    };
+
     if (!decodedToken || !decodedToken.email) {
       console.error("Token inválido o falta el email");
       return res
         .status(HttpStatusCodes.UNAUTHORIZED)
         .json({ error: "Token inválido o falta el email" });
     }
-  
+
     console.log("Token decodificado:", decodedToken);
     const email = decodedToken.email;
     const partidos = await UsuarioService.partidosPorMinutos(email, pagina);
@@ -342,35 +351,37 @@ async function partidosPorAsistencias(req: IReq, res: IRes) {
   const pagina = +req.params.id;
   try {
     const authHeader = req.headers.authorization;
-  
+
     if (!authHeader) {
       console.log("Token no proporcionado");
       return res
         .status(HttpStatusCodes.UNAUTHORIZED)
         .json({ error: "Token no proporcionado" });
     }
-  
+
     // Eliminar la palabra 'Bearer ' del token
     const token = authHeader.replace("Bearer ", "").trim();
     console.log("Token procesado:", token);
-  
+
     if (!token) {
       console.log("Token no proporcionado tras limpiar");
       return res
         .status(HttpStatusCodes.UNAUTHORIZED)
         .json({ error: "Token no proporcionado" });
     }
-  
+
     // Decodificar el token
-    const decodedToken = jwt.verify(token, EnvVars.Jwt.Secret) as { email: string };
-  
+    const decodedToken = jwt.verify(token, EnvVars.Jwt.Secret) as {
+      email: string;
+    };
+
     if (!decodedToken || !decodedToken.email) {
       console.error("Token inválido o falta el email");
       return res
         .status(HttpStatusCodes.UNAUTHORIZED)
         .json({ error: "Token inválido o falta el email" });
     }
-  
+
     console.log("Token decodificado:", decodedToken);
     const email = decodedToken.email;
     const partidos = await UsuarioService.partidosPorAsistencias(email, pagina);
@@ -387,35 +398,37 @@ async function partidosPorRebotes(req: IReq, res: IRes) {
   const pagina = +req.params.id;
   try {
     const authHeader = req.headers.authorization;
-  
+
     if (!authHeader) {
       console.log("Token no proporcionado");
       return res
         .status(HttpStatusCodes.UNAUTHORIZED)
         .json({ error: "Token no proporcionado" });
     }
-  
+
     // Eliminar la palabra 'Bearer ' del token
     const token = authHeader.replace("Bearer ", "").trim();
     console.log("Token procesado:", token);
-  
+
     if (!token) {
       console.log("Token no proporcionado tras limpiar");
       return res
         .status(HttpStatusCodes.UNAUTHORIZED)
         .json({ error: "Token no proporcionado" });
     }
-  
+
     // Decodificar el token
-    const decodedToken = jwt.verify(token, EnvVars.Jwt.Secret) as { email: string };
-  
+    const decodedToken = jwt.verify(token, EnvVars.Jwt.Secret) as {
+      email: string;
+    };
+
     if (!decodedToken || !decodedToken.email) {
       console.error("Token inválido o falta el email");
       return res
         .status(HttpStatusCodes.UNAUTHORIZED)
         .json({ error: "Token inválido o falta el email" });
     }
-  
+
     console.log("Token decodificado:", decodedToken);
     const email = decodedToken.email;
     const partidos = await UsuarioService.partidosPorRebotes(email, pagina);
@@ -433,35 +446,37 @@ async function partidosPorValoracion(req: IReq, res: IRes) {
   console.log("Pagina:", pagina);
   try {
     const authHeader = req.headers.authorization;
-  
+
     if (!authHeader) {
       console.log("Token no proporcionado");
       return res
         .status(HttpStatusCodes.UNAUTHORIZED)
         .json({ error: "Token no proporcionado" });
     }
-  
+
     // Eliminar la palabra 'Bearer ' del token
     const token = authHeader.replace("Bearer ", "").trim();
     console.log("Token procesado:", token);
-  
+
     if (!token) {
       console.log("Token no proporcionado tras limpiar");
       return res
         .status(HttpStatusCodes.UNAUTHORIZED)
         .json({ error: "Token no proporcionado" });
     }
-  
+
     // Decodificar el token
-    const decodedToken = jwt.verify(token, EnvVars.Jwt.Secret) as { email: string };
-  
+    const decodedToken = jwt.verify(token, EnvVars.Jwt.Secret) as {
+      email: string;
+    };
+
     if (!decodedToken || !decodedToken.email) {
       console.error("Token inválido o falta el email");
       return res
         .status(HttpStatusCodes.UNAUTHORIZED)
         .json({ error: "Token inválido o falta el email" });
     }
-  
+
     console.log("Token decodificado:", decodedToken);
     const email = decodedToken.email;
     const partidos = await UsuarioService.partidosPorValoracion(email, pagina);
@@ -491,35 +506,37 @@ async function getFederaciones(req: IReq, res: IRes) {
 async function traerCantidadPartidos(req: IReq, res: IRes) {
   try {
     const authHeader = req.headers.authorization;
-  
+
     if (!authHeader) {
       console.log("Token no proporcionado");
       return res
         .status(HttpStatusCodes.UNAUTHORIZED)
         .json({ error: "Token no proporcionado" });
     }
-  
+
     // Eliminar la palabra 'Bearer ' del token
     const token = authHeader.replace("Bearer ", "").trim();
     console.log("Token procesado:", token);
-  
+
     if (!token) {
       console.log("Token no proporcionado tras limpiar");
       return res
         .status(HttpStatusCodes.UNAUTHORIZED)
         .json({ error: "Token no proporcionado" });
     }
-  
+
     // Decodificar el token
-    const decodedToken = jwt.verify(token, EnvVars.Jwt.Secret) as { email: string };
-  
+    const decodedToken = jwt.verify(token, EnvVars.Jwt.Secret) as {
+      email: string;
+    };
+
     if (!decodedToken || !decodedToken.email) {
       console.error("Token inválido o falta el email");
       return res
         .status(HttpStatusCodes.UNAUTHORIZED)
         .json({ error: "Token inválido o falta el email" });
     }
-  
+
     console.log("Token decodificado:", decodedToken);
     const email = decodedToken.email;
     const partidos = await UsuarioService.traerCantidadPartidos(email);
@@ -535,41 +552,109 @@ async function traerCantidadPartidos(req: IReq, res: IRes) {
 async function traerFederacion(req: IReq, res: IRes) {
   const id = +req.params.id;
   console.log(id);
+
   try {
     const authHeader = req.headers.authorization;
-  
+
     if (!authHeader) {
       console.log("Token no proporcionado");
       return res
         .status(HttpStatusCodes.UNAUTHORIZED)
         .json({ error: "Token no proporcionado" });
     }
-  
+
     // Eliminar la palabra 'Bearer ' del token
     const token = authHeader.replace("Bearer ", "").trim();
     console.log("Token procesado:", token);
-  
+
     if (!token) {
       console.log("Token no proporcionado tras limpiar");
       return res
         .status(HttpStatusCodes.UNAUTHORIZED)
         .json({ error: "Token no proporcionado" });
     }
-  
+
     // Decodificar el token
-    const decodedToken = jwt.verify(token, EnvVars.Jwt.Secret) as { email: string };
-  
+    const decodedToken = jwt.verify(token, EnvVars.Jwt.Secret) as {
+      email: string;
+    };
+
     if (!decodedToken || !decodedToken.email) {
       console.error("Token inválido o falta el email");
       return res
         .status(HttpStatusCodes.UNAUTHORIZED)
         .json({ error: "Token inválido o falta el email" });
     }
-  
+
     console.log("Token decodificado:", decodedToken);
     const email = decodedToken.email;
     const federacion = await UsuarioService.traerFederacion(email);
     return res.status(HttpStatusCodes.OK).json({ federacion });
+  } catch (err) {
+    console.error("Error al buscar federacion:", err);
+    return res
+      .status(HttpStatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: err.message });
+  }
+}
+
+async function borrarPartido(
+  req: IReq<{ id: number; email: string }>,
+  res: IRes
+) {
+  console.log(req.params);
+  console.log(req.body);
+  const id = req.body.id;
+  const mailABorrar = req.body.email;
+
+  console.log(id);
+  try {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader) {
+      console.log("Token no proporcionado");
+      return res
+        .status(HttpStatusCodes.UNAUTHORIZED)
+        .json({ error: "Token no proporcionado" });
+    }
+
+    // Eliminar la palabra 'Bearer ' del token
+    const token = authHeader.replace("Bearer ", "").trim();
+    console.log("Token procesado:", token);
+
+    if (!token) {
+      console.log("Token no proporcionado tras limpiar");
+      return res
+        .status(HttpStatusCodes.UNAUTHORIZED)
+        .json({ error: "Token no proporcionado" });
+    }
+
+    // Decodificar el token
+    const decodedToken = jwt.verify(token, EnvVars.Jwt.Secret) as {
+      email: string;
+    };
+
+    if (!decodedToken || !decodedToken.email) {
+      console.error("Token inválido o falta el email");
+      return res
+        .status(HttpStatusCodes.UNAUTHORIZED)
+        .json({ error: "Token inválido o falta el email" });
+    }
+
+    console.log("Token decodificado:", decodedToken);
+    console.log("Email a borrar: " + mailABorrar);
+    const email = decodedToken.email;
+    if (email === "admin@gmail.com") {
+      await UsuarioService.borrarPartido(mailABorrar, id);
+      return res
+        .status(HttpStatusCodes.OK)
+        .json({ message: "Partido borrado correctamente" });
+    }else{
+      console.log("No tienes permisos para borrar partidos");
+      return res
+        .status(HttpStatusCodes.UNAUTHORIZED)
+        .json({ error: "No tienes permisos para borrar partidos" });
+    }
   } catch (err) {
     console.error("Error al buscar federacion:", err);
     return res
@@ -594,4 +679,5 @@ export default {
   getFederaciones,
   traerCantidadPartidos,
   traerFederacion,
+  borrarPartido,
 } as const;

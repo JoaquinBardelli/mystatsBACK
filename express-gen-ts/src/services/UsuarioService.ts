@@ -89,6 +89,10 @@ async function traerFederacion(email : string): Promise<IFederacion>{
 async function get(): Promise<IUsuario[]> {
   return UsuarioRepo.Get();
 }
+
+async function borrarPartido(email:string, id:number): Promise<void>{ 
+  return UsuarioRepo.borrarPartido(email, id);
+}
 // **** Export default **** //
 
 export default {
@@ -105,5 +109,6 @@ export default {
   partidosPorValoracion,
   getFederaciones,
   traerCantidadPartidos,
-  traerFederacion
+  traerFederacion,
+  borrarPartido
 } as const;

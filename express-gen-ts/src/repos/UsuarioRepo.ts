@@ -602,6 +602,39 @@ async function Get(): Promise<IUsuario[]> {
   return users;
 }
 
+async function borrarPartido(email: string, id: number): Promise<void> {
+  const user = await usuarioModel.findOne({ email }).exec();
+  console.log("ID DEL PARTIDO: " + id);
+
+  if (!user) {
+    throw new Error("Usuario no encontrado");
+  }
+
+  const partidos = user.jugador.partidos;
+  console.log("PARTIDOS: ", partidos);
+
+  // Convertir `id` a número para asegurar la comparación correcta
+  const partidoId = +id; // Si `id` es string, conviértelo a número
+
+  // Buscar el índice del partido con el ID especificado
+  const index = partidos.findIndex((partido) => partido.id === partidoId);
+  console.log("INDEX encontrado: " + index);
+
+  // Si el partido no existe (index === -1), lanzar un error
+  if (index === -1) {
+    throw new Error("Partido no encontrado");
+  }
+
+  console.log("PARTIDO A BORRAR: ", partidos[index]);
+
+  // Eliminar el partido del arreglo
+  partidos.splice(index, 1);
+
+  // Guardar el usuario después de modificar el arreglo de partidos
+  await user.save();
+
+  console.log("Partido borrado correctamente");
+}
 // **** Export default **** //
 
 export default {
@@ -621,4 +654,5 @@ export default {
   getFederaciones,
   traerCantidadPartidos,
   traerFederacion,
+  borrarPartido,
 } as const;

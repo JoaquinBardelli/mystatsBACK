@@ -14,7 +14,7 @@ export interface IUsuario {
   email: string;
   password: string;
   created: Date;
-  logeado?: boolean;
+  admin?: boolean;
   jugador: IJugador;
 }
 
@@ -28,7 +28,7 @@ function new_(
   email?: string,
   password?: string,
   created?: Date,
-  logeado?: boolean,
+  admin?: boolean,
   jugador?: IJugador,
   id?: number, // id last cause usually set by db
 ): IUsuario {
@@ -37,7 +37,7 @@ function new_(
     email: (email ?? ''),
     password: (password ?? ''),
     created: (created ? new Date(created) : new Date()),
-    logeado: (logeado ?? false),
+    admin: (admin ?? false),
     jugador: (jugador ?? {id: -1, nombre: '', apellido: '', nacimiento: new Date(), club: '', dorsal: -1, altura: -1, peso: -1, partidos: []}),
   };
 }
@@ -50,7 +50,7 @@ function from(param: object): IUsuario {
     throw new Error(INVALID_CONSTRUCTOR_PARAM);
   }
   const p = param as IUsuario;
-  return new_(p.email, p.password, p.created,p.logeado, p.jugador, p.id);
+  return new_(p.email, p.password, p.created,p.admin, p.jugador, p.id);
 }
 
 /**
