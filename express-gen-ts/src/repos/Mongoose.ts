@@ -205,7 +205,7 @@ const federacionSchema: Schema = new Mongoose.Schema({
  * Fetch the json from the file.
  */
 const db: Connection = Mongoose.createConnection(
-  "mongodb://host.docker.internal:27017/mystats"
+  "mongodb://mongodb:27017/mystats"
 );
 
 export const usuarioModel = db.model<IUsuario>("usuarios", usuarioSchema);
