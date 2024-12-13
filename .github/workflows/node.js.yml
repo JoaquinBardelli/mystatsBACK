@@ -2,7 +2,7 @@ name: Node.js CI
 
 on:
   pull_request:
-    branches: [ "main", "QA", "Dev" ]
+    branches: [ "main", "qa", "dev" ]
 
 jobs:
   build:
