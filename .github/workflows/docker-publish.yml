@@ -2,7 +2,7 @@ name: Docker
 
 on:
   pull_request:
-    branches: [ "main", "QA", "Dev" ]
+    branches: [ "main", "qa", "dev" ]
 
 env:
   REGISTRY: ghcr.io
